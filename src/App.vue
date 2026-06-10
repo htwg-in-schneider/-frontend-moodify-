@@ -14,6 +14,7 @@ watch(isAuthenticated, (loggedIn) => {
   if (!loggedIn) return
 
 
+  
   const role = 'user' 
 
   if (role === 'admin') {
