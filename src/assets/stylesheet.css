@@ -1,0 +1,630 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,500;0,700;1,400;1,600;1,700&display=swap');
+
+:root {
+  --dark: #3E4A62;
+  --green: #C3D0C2;
+  --pink: #fee5fd;
+}
+
+
+
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+⁠⁠{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Quicksand', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body, html {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--dark);
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img {
+  width: 100%;
+  display: block;
+}
+
+
+
+.hero-section {
+  background-color: white;
+}
+
+.hero-section .section-content {
+  min-height: calc(100vh - 88px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(32px, 6vw, 90px);
+  padding: clamp(48px, 7vw, 100px) 24px;
+}
+
+.hero-details,
+.hero-image {
+  flex: 1;
+}
+
+.hero-section .hero-details .subtitle {
+  max-width: 760px;
+  font-size: clamp(2.4rem, 6vw, 3.75rem);
+  line-height: 1.08;
+  font-weight: bold;
+  color: var(--dark);
+ 
+
+}
+
+.hero-section .hero-details .description {
+  max-width: 680px;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.7;
+  margin-top: 24px;
+  
+  color: #6C6979;
+}
+
+.hero-section .section-content .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 23px;
+  margin-top: 34px;
+  
+}
+
+.hero-section .section-content .button,
+.btn,
+.frame2-button,
+.frame3-button,
+.frame4-button,
+.affirmation-button {
+  background-color: var(--green);
+  color: var(--dark);
+  padding: 12px 24px;
+  border-radius: 80px;
+  transition: 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  font-weight: 700;
+}
+
+.hero-section .section-content .button:hover,
+.btn:hover,
+.frame3-button:hover,
+.frame4-button:hover,
+.affirmation-button:hover {
+
+  color: white;
+}
+
+.hero-image {
+  max-width: 350px;
+  margin-right: 100px;
+}
+
+.frame2-box {
+  background-image: url(yellow.png);
+  background-size: cover;
+  background-position: center;
+  background-color: rgb(255, 243, 209);
+  width: 100%;
+  height: 900px;
+  padding: 80px 20px;
+}
+
+.frame2-title,
+.frame4-title,
+.section-title,
+.affirmation-title,
+.vision-text h2 {
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 2.625rem);
+  line-height: 1.15;
+  margin-bottom: 50px;
+}
+
+.frame2-box .display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 6vw, 60px);
+  flex-wrap: wrap;
+}
+
+.frame2-image {
+  width: min(100%, 400px);
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 80px;
+}
+
+.frame2-box2 {
+  width: min(100%, 400px);
+  background-color: white;
+  border-radius: 80px;
+  padding: 50px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.box2-title {
+  margin-bottom: 20px;
+}
+
+.frame2-description {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.frame2-button {
+  display: inline-block;
+  margin-top: 30px;
+}
+
+.frame3-box {
+  background-image: url(pink.png);
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  min-height: 760px;
+  padding: clamp(70px, 8vw, 120px) 24px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: clamp(28px, 6vw, 80px);
+}
+
+.frame3-box .ohne-bild {
+  max-width: 620px;
+}
+
+.frame3-title {
+  font-size: clamp(2rem, 5vw, 2.5rem);
+}
+
+.frame3-text {
+  margin-top: 20px;
+  font-size: 20px;
+  line-height: 1.7;
+}
+
+.frame3-button {
+  margin-top: 20px;
+  color: white;
+}
+
+.frame3-image {
+  width: min(100%, 350px);
+  max-height: 700px;
+  object-fit: contain;
+}
+
+.frame4-box {
+  padding: 300px 20px;
+  
+}
+
+.box4 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 6vw, 80px);
+  flex-wrap: wrap;
+}
+
+.frame4-subtitle {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.frame4-description {
+  max-width: 400px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.frame4-button {
+  color: white;
+}
+
+.wheel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wheel {
+  width: clamp(240px, 45vw, 320px);
+  height: clamp(240px, 45vw, 320px);
+  border-radius: 50%;
+  background: conic-gradient(
+    #ffb3d9 0deg 24deg,
+    #ffe08a 24deg 48deg,
+    #a8f0ea 48deg 72deg,
+    #b6c9ff 72deg 96deg,
+    #c7f0a2 96deg 120deg,
+    #ffd4a8 120deg 144deg,
+    #dfb6ff 144deg 168deg,
+    #a8efff 168deg 192deg,
+    #ffc5a6 192deg 216deg,
+    #bee59c 216deg 240deg,
+    #ffd4f1 240deg 264deg,
+    #c8d2ff 264deg 288deg,
+    #ffe08a 288deg 312deg,
+    #b6f0e4 312deg 336deg,
+    #ffc1cf 336deg 360deg
+  );
+  position: relative;
+  box-shadow: 0 10px 30px rgba(91, 63, 143, 0.12);
+  border: 10px solid #f4f0fb;
+}
+
+.wheel::before {
+  content: "Spin";
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #2f2f39;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.3rem;
+  display: grid;
+  place-items: center;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.wheel::after {
+  content: "";
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 28px solid #5a3f8f;
+}
+
+.center {
+  display: none;
+}
+
+.vision-section {
+  height: 900px;
+}
+
+.vision-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 80px;
+
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.vision-left .as {
+  position: relative;
+  width: 400px;
+  height: 600px; 
+}
+
+
+
+.vision-text {
+  flex: 1;
+  min-width: 320px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vision-text h2 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 700;
+}
+
+.vision-text p {
+  line-height: 1.7;
+  color: #6c6979;
+  max-width: 500px;
+}
+
+.vision-text button {
+  width: fit-content;
+  padding: 12px 24px;
+  border-radius: 999px;
+}
+
+
+
+.affirmation-section {
+  margin-top: clamp(90px, 12vw, 180px);
+  background-image: url( pink.png);
+  width: 100%;
+  height: 900px;
+  background-size: cover;
+  background-position: center;
+  padding: clamp(70px, 8vw, 120px) 24px;
+}
+
+.affirmation-title {
+  margin-bottom: 70px;
+}
+
+.affirmation-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(28px, 6vw, 120px);
+  flex-wrap: wrap;
+}
+
+.affirmation-textbox {
+  width: min(100%, 480px);
+}
+
+.affirmation-text {
+  font-size: 20px;
+  line-height: 1.7;
+  color: #222;
+  margin-bottom: 50px;
+}
+
+.affirmation-button {
+  color: white;
+  padding: 18px 70px;
+}
+
+.affirmation-image {
+  width: min(100%, 500px);
+  border-radius: 40px;
+}
+
+.testimonials {
+  padding-top: 100px;
+  padding-bottom: 100px;
+  padding-left: 10px;
+margin-right: 30px;
+}
+
+.testimonial-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.testimonial {
+  flex: 1 1 260px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(91, 63, 143, 0.12);
+}
+
+.stars {
+  color: #f0be3d;
+  margin-bottom: 10px;
+  letter-spacing: 2px;
+}
+
+.testimonial p {
+  color: #6c6473;
+  margin-bottom: 14px;
+  font-size: 0.96rem;
+  line-height: 1.7;
+}
+
+.testimonial strong {
+  font-size: 0.95rem;
+  color: #43354e;
+}
+
+.center-btn {
+  text-align: center;
+  margin-top: clamp(50px, 8vw, 110px);
+}
+
+footer {
+  background-color: var(--pink);
+  color: #fff;
+  text-align: center;
+  padding: clamp(70px, 12vw, 160px) 24px;
+  margin-top: 30px;
+}
+
+footer h4 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+footer p {
+  opacity: 0.9;
+}
+
+@media (max-width: 900px) {
+  .navbar :where(#menu-close-button, #menu-open-button) {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--dark);
+  }
+
+  .navbar .nav-menu {
+    position: fixed;
+    width: min(82vw, 320px);
+    height: 100vh;
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 90px 30px 30px;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.12);
+    transition: left 0.3s ease;
+  }
+
+  body.show-mobile-menu .nav-menu {
+    left: 0;
+  }
+
+  .navbar #menu-close-button {
+    position: absolute;
+    top: 29px;
+    right: 28px;
+  }
+
+  .navbar .nav-menu .nav-link,
+  .navbar .nav-menu .nav-link2 {
+    font-size: 1.1rem;
+    padding: 12px 16px;
+  }
+
+  .hero-section .section-content,
+  .frame3-box,
+  .affirmation-content,
+  .vision-grid {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-image {
+    order: -1;
+    max-width: 340px;
+  }
+
+  .buttons {
+    justify-content: center;
+  }
+
+  .frame3-image {
+    order: -1;
+    max-width: 260px;
+  }
+
+  .frame4-description {
+    margin-inline: auto;
+  }
+
+  .vision-text h2 {
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  header .navbar {
+    min-height: 76px;
+    padding-inline: 18px;
+  }
+
+  .navbar .nav-logo h2 {
+    font-size: 1.45rem;
+  }
+
+  .hero-section .section-content,
+  .frame2-box,
+  .frame4-box,
+  .testimonials {
+    padding-inline: 18px;
+  }
+
+  .hero-section .section-content {
+    padding-top: 38px;
+  }
+
+  .hero-section .hero-details .subtitle br {
+    display: none;
+  }
+
+  .hero-section .section-content .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-section .section-content .button,
+  .btn,
+  .frame2-button,
+  .frame3-button,
+  .frame4-button,
+  .affirmation-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .frame2-box .display {
+    flex-direction: column;
+  }
+
+  .frame2-box2 {
+    border-radius: 36px;
+    padding: 30px 22px;
+  }
+
+  .frame2-image {
+    border-radius: 36px;
+  }
+
+  .frame3-box {
+    min-height: auto;
+    padding-inline: 18px;
+  }
+
+  .wheel {
+    border-width: 8px;
+  }
+
+  .wheel::before {
+    width: 72px;
+    height: 72px;
+    font-size: 1rem;
+  }
+
+  .affirmation-button {
+    padding-inline: 24px;
+  }
+
+  .testimonial-grid {
+    flex-direction: column;
+  }
+}
+
+
+
+
+ 
+
+

@@ -1,0 +1,58 @@
+{
+  "challenges": [
+    {
+      "title": "5 Minuten Atmen",
+      "description": "Beruhige dich bewusst und konzentriere dich nur auf deine Atmung.",
+      "category": "entspannung",
+      "difficulty": "hard",
+      "id": "1"
+    },
+    {
+      "title": "Spaziergang",
+      "description": "Gehe 10 Minuten an die frische Luft ohne Handy.",
+      "category": "ablenkung",
+      "difficulty": "easy",
+      "id": "3"
+    },
+    {
+      "id": "4",
+      "title": "Deep Focus Session",
+      "description": "Arbeite 25 Minuten ohne Ablenkung an einer Aufgabe.",
+      "category": "fokus",
+      "difficulty": "medium",
+      "done": false,
+      "reviews": []
+    },
+    {
+      "id": "5",
+      "title": "Digital Detox",
+      "description": "30 Minuten kein Handy oder Social Media nutzen.",
+      "category": "ablenkung",
+      "difficulty": "medium",
+      "done": false,
+      "reviews": []
+    },
+    {
+      "id": "6",
+      "title": "Meditation",
+      "description": "10 Minuten geführte Meditation durchführen.",
+      "category": "entspannung",
+      "difficulty": "easy",
+      "reviews": [
+        {
+          "id": 1,
+          "text": "Hat mir sehr geholfen!",
+          "user": "Anna"
+        }
+      ]
+    },
+    {
+      "title": "Schwere Challenge: Kein Handy morgens",
+      "description": "1 Stunde nach dem Aufstehen kein Handy benutzen.",
+      "category": "motivation",
+      "difficulty": "hard",
+      "id": "8"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
