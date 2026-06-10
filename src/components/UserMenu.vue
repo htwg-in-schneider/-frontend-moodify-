@@ -13,6 +13,7 @@ function handleLogin() {
   loginWithRedirect()
 }
 
+
 function handleLogout() {
   logout({
     logoutParams: {
