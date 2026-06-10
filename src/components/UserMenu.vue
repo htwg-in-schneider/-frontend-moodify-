@@ -24,6 +24,7 @@ function handleLogout() {
 }
 </script>
 
+
 <template>
   <div class="user-menu">
 

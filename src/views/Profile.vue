@@ -19,6 +19,9 @@ const { user, isAuthenticated, idTokenClaims } = useAuth0()
       <hr />
 
 
+
+
+      
       <h3>Debug Info (Auth0)</h3>
       <pre>{{ user }}</pre>
 

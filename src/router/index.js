@@ -18,6 +18,9 @@ import Profile from '../views/Profile.vue'
 
 
 
+
+
+
 function adminGuard(to, from, next) {
   const { user, isAuthenticated } = useAuth0()
 
