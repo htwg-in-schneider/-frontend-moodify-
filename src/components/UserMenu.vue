@@ -25,7 +25,7 @@ function handleLogout() {
 <template>
   <div class="user-menu">
 
-    <!-- NOT LOGGED IN -->
+   
     <button
       v-if="!isAuthenticated"
       class="btn login"
