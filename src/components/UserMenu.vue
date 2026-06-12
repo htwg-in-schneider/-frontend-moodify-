@@ -2,18 +2,12 @@
 import { useAuth0 } from '@auth0/auth0-vue'
 import { useRouter } from 'vue-router'
 
-const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0()
+const { user, isAuthenticated, logout } = useAuth0()
 const router = useRouter()
 
 function goProfile() {
   router.push('/profile')
 }
-
-function handleLogin() {
-  loginWithRedirect()
-}
-
-
 
 function handleLogout() {
   logout({
@@ -24,45 +18,31 @@ function handleLogout() {
 }
 </script>
 
-
 <template>
-  <div class="user-menu">
-
-   
-    <button
-      v-if="!isAuthenticated"
-      class="btn login"
-      @click="handleLogin"
-    >
-      Login
-    </button>
+  <div v-if="isAuthenticated" class="user-menu">
 
 
-    <div v-else class="logged">
+<img
+  v-if="user?.picture"
+  :src="user.picture"
+  class="avatar"
+  alt="User Avatar"
+  @click="goProfile"
+  title="Profil öffnen"
+/>
 
-  
-      <img
-        v-if="user?.picture"
-        :src="user.picture"
-        class="avatar"
-        alt="User Avatar"
-        @click="goProfile"
-        title="Profil öffnen"
-      />
+<div class="info">
 
-      <div class="info">
+  <span class="email">
+    {{ user?.email }}
+  </span>
 
-        <span class="email">
-          {{ user?.email }}
-        </span>
+  <button class="btn logout" @click="handleLogout">
+    Logout
+  </button>
 
-        <button class="btn logout" @click="handleLogout">
-          Logout
-        </button>
+</div>
 
-      </div>
-
-    </div>
 
   </div>
 </template>
@@ -106,11 +86,6 @@ function handleLogout() {
   cursor: pointer;
   font-weight: 600;
   transition: 0.2s;
-}
-
-.login {
-  background: #ff8fa3;
-  color: white;
 }
 
 .logout {

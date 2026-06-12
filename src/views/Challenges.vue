@@ -1,7 +1,19 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 import ChallengeFilter from '@/components/ChallengeFilter.vue'
 
+const { user } = useAuth0()
+
+const router = useRouter()
+
+const role = computed(() => {
+  return user.value?.['https://your-app/roles']?.[0] || 'user'
+})
+
+
+/* DATA */
 const challenges = ref([])
 
 const filter = ref({
@@ -9,33 +21,56 @@ const filter = ref({
   category: ''
 })
 
+/* MODALS */
+const showSuccess = ref(false)
+const showError = ref(false)
+const message = ref('')
+
+/* FILTER */
 function handleFilterChange(data) {
   filter.value = data
 }
-/* LOAD DATA */
+
+/* LOAD */
 async function loadChallenges() {
   const res = await fetch('http://localhost:3000/challenges')
-challenges.value = await res.json()
+  challenges.value = await res.json()
 }
 
-/* DELETE */
+/* NAVIGATION */
+function openDetail(id) {
+  router.push({ name: 'challenge-detail', params: { id } })
+}
+
+/* DELETE (ADMIN ONLY) */
 async function deleteChallenge(id) {
   try {
     const res = await fetch(`http://localhost:3000/challenges/${id}`, {
       method: 'DELETE'
     })
 
-    if (!res.ok) throw new Error()
+    if (!res.ok) {
+      message.value = 'Fehler beim Löschen'
+      showError.value = true
+      return
+    }
 
-    alert("Challenge gelöscht 🗑️")
-    loadChallenges()
+    message.value = 'Challenge gelöscht 🗑️'
+    showSuccess.value = true
+
+    await loadChallenges()
+
+    setTimeout(() => {
+      showSuccess.value = false
+    }, 1200)
 
   } catch {
-    alert("Fehler beim Löschen ❌")
+    message.value = 'Server nicht erreichbar'
+    showError.value = true
   }
 }
 
-
+/* FILTERED LIST */
 const filteredChallenges = computed(() => {
   return challenges.value.filter(c => {
     const search = filter.value.search.toLowerCase()
@@ -50,33 +85,52 @@ const filteredChallenges = computed(() => {
     return matchesSearch && matchesCategory
   })
 })
+
 onMounted(loadChallenges)
 </script>
 
 <template>
   <main class="challenges">
 
-    <h1>Challenges✨</h1>
-
-  
 
 
-    <!-- CREATE BUTTON -->
+    <p>ROLE: {{ role }}</p>
+
+    <!-- SUCCESS MODAL -->
+    <div v-if="showSuccess" class="overlay">
+      <div class="modal">
+        <div class="icon">✔</div>
+        <h2>Erfolgreich</h2>
+        <p>{{ message }}</p>
+      </div>
+    </div>
+
+    <!-- ERROR MODAL -->
+    <div v-if="showError" class="overlay" @click="showError = false">
+      <div class="modal error">
+        <div class="icon">✖</div>
+        <h2>Fehler</h2>
+        <p>{{ message }}</p>
+      </div>
+    </div>
+
+    <h1>Challenges ✨</h1>
+
+    <!-- CREATE (ALLE USER) -->
     <RouterLink to="/challenges/create" class="btn create">
       + Neue Challenge
     </RouterLink>
 
-
     <ChallengeFilter @filter-change="handleFilterChange" />
-    <!-- LIST -->
+
     <div class="challenge-grid">
 
-    <RouterLink
-  v-for="c in filteredChallenges"
-  :key="c.id"
-  :to="{ name: 'challenge-detail', params: { id: c.id } }"
-  class="challenge-card"
-    >
+      <div
+        v-for="c in filteredChallenges"
+        :key="c.id"
+        class="challenge-card"
+        @click="openDetail(c.id)"
+      >
 
         <h2>{{ c.title }}</h2>
         <p>{{ c.description }}</p>
@@ -86,26 +140,28 @@ onMounted(loadChallenges)
 
         <div class="actions">
 
+          <!-- ADMIN ONLY -->
           <RouterLink
+            v-if="role === 'admin'"
             :to="{ name: 'challenge-edit', params: { id: c.id } }"
             class="btn"
+            @click.stop
           >
             Bearbeiten
           </RouterLink>
 
           <button
-  class="btn delete"
-  @click.stop.prevent="deleteChallenge(c.id)"
->
-  Löschen
-</button>
+            v-if="role === 'admin'"
+            class="btn delete"
+            @click.stop="deleteChallenge(c.id)"
+          >
+            Löschen
+          </button>
 
         </div>
 
-      
+      </div>
 
-  </RouterLink>
-  
     </div>
 
   </main>
@@ -114,14 +170,6 @@ onMounted(loadChallenges)
 <style scoped>
 .challenges {
   padding: 40px;
-}
-
-
-.search {
-  padding: 10px;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 300px;
 }
 
 .btn {
@@ -137,7 +185,6 @@ onMounted(loadChallenges)
 
 .create {
   margin-bottom: 20px;
-  display: inline-block;
 }
 
 .delete {
@@ -151,23 +198,18 @@ onMounted(loadChallenges)
 }
 
 .challenge-card {
-  all: unset;
-  display: block;
-  cursor: pointer;
-
   background: white;
   border-radius: 18px;
   padding: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-
-  color: inherit;
-
   transition: 0.2s;
+  cursor: pointer;
 }
 
 .challenge-card:hover {
   transform: translateY(-4px);
 }
+
 .tag {
   font-size: 12px;
   background: #eee;
@@ -180,5 +222,34 @@ onMounted(loadChallenges)
   display: flex;
   gap: 10px;
   margin-top: 10px;
+}
+
+/* MODAL */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  width: 320px;
+}
+
+.modal.error .icon {
+  color: #e74c3c;
+}
+
+.icon {
+  font-size: 40px;
+  color: green;
+  margin-bottom: 10px;
 }
 </style>

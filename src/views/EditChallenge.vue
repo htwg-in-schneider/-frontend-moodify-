@@ -1,6 +1,24 @@
 <template>
   <main class="page">
 
+
+    <div v-if="showSuccess" class="overlay">
+      <div class="modal">
+        <div class="icon">✔</div>
+        <h2>Gespeichert!</h2>
+        <p>Deine Änderungen wurden übernommen</p>
+      </div>
+    </div>
+
+
+    <div v-if="showError" class="overlay" @click="showError = false">
+      <div class="modal error">
+        <div class="icon">✖</div>
+        <h2>Fehler</h2>
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
+
     <div class="form-wrapper">
 
       <header class="header">
@@ -12,16 +30,12 @@
 
         <div class="field">
           <label>Titel</label>
-          <input v-model="title" placeholder="z.B. Fokus Challenge" />
+          <input v-model="title" />
         </div>
 
         <div class="field">
           <label>Beschreibung</label>
-          <textarea
-            v-model="description"
-            rows="4"
-            placeholder="Was soll geändert werden?"
-          />
+          <textarea v-model="description" rows="4"></textarea>
         </div>
 
         <div class="row">
@@ -40,15 +54,15 @@
             <label>Schwierigkeit</label>
             <select v-model="difficulty">
               <option value="easy">Easy</option>
-              <option value="medium">Mittel</option>
-              <option value="hard">Schwer</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
             </select>
           </div>
 
         </div>
 
-        <button class="btn" @click="updateChallenge">
-          Änderungen speichern
+        <button class="btn" @click="updateChallenge" :disabled="loading">
+          {{ loading ? 'Speichern...' : 'Änderungen speichern' }}
         </button>
 
       </section>
@@ -59,20 +73,89 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
+
+const id = route.params.id
 
 const title = ref('')
 const description = ref('')
-const category = ref('motivation')
-const difficulty = ref('easy')
+const category = ref('')
+const difficulty = ref('')
 
-function updateChallenge() {
-  console.log('updated:', {
-    title: title.value,
-    description: description.value,
-    category: category.value,
-    difficulty: difficulty.value
-  })
+const showSuccess = ref(false)
+const showError = ref(false)
+const errorMessage = ref('')
+const loading = ref(false)
+
+// 🔄 LOAD EXISTING DATA (PRE-FILL FORM)
+async function loadChallenge() {
+  try {
+    const res = await fetch(`http://localhost:3000/challenges/${id}`)
+    if (!res.ok) throw new Error()
+
+    const data = await res.json()
+
+    title.value = data.title
+    description.value = data.description
+    category.value = data.category
+    difficulty.value = data.difficulty
+
+  } catch {
+    errorMessage.value = 'Challenge konnte nicht geladen werden.'
+    showError.value = true
+  }
+}
+
+onMounted(loadChallenge)
+
+
+async function updateChallenge() {
+
+  if (!title.value.trim() || !description.value.trim()) {
+    errorMessage.value = 'Titel und Beschreibung dürfen nicht leer sein.'
+    showError.value = true
+    return
+  }
+
+  loading.value = true
+
+  try {
+    const res = await fetch(`http://localhost:3000/challenges/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: title.value,
+        description: description.value,
+        category: category.value,
+        difficulty: difficulty.value
+      })
+    })
+
+    if (!res.ok) {
+      errorMessage.value = 'Speichern fehlgeschlagen.'
+      showError.value = true
+      return
+    }
+
+    showSuccess.value = true
+
+    setTimeout(() => {
+      showSuccess.value = false
+      router.push('/challenges')
+    }, 1200)
+
+  } catch {
+    errorMessage.value = 'Server nicht erreichbar.'
+    showError.value = true
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -89,7 +172,6 @@ function updateChallenge() {
 .form-wrapper {
   width: 100%;
   max-width: 640px;
-  animation: fadeUp 0.4s ease;
 }
 
 .header {
@@ -100,7 +182,6 @@ function updateChallenge() {
   font-size: 32px;
   font-weight: 800;
   margin: 0;
-  letter-spacing: -0.5px;
 }
 
 .header p {
@@ -120,36 +201,18 @@ function updateChallenge() {
   gap: 6px;
 }
 
-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #6b7280;
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 input,
 textarea,
 select {
-  width: 100%;
   padding: 14px;
   border-radius: 14px;
   border: 1px solid #e5e7eb;
-  font-size: 15px;
-  background: white;
-  transition: 0.2s;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 4px rgba(99,102,241,0.12);
-}
-
-.row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
 }
 
 .btn {
@@ -161,21 +224,37 @@ select:focus {
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.btn:hover {
-  transform: translateY(-2px);
+.btn:disabled {
+  opacity: 0.6;
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* MODAL */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  width: 320px;
+}
+
+.modal.error .icon {
+  color: #e74c3c;
+}
+
+.icon {
+  font-size: 40px;
+  color: green;
+  margin-bottom: 10px;
 }
 </style>

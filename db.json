@@ -1,13 +1,6 @@
 {
   "challenges": [
     {
-      "title": "5 Minuten Atmen",
-      "description": "Beruhige dich bewusst und konzentriere dich nur auf deine Atmung.",
-      "category": "entspannung",
-      "difficulty": "hard",
-      "id": "1"
-    },
-    {
       "title": "Spaziergang",
       "description": "Gehe 10 Minuten an die frische Luft ohne Handy.",
       "category": "ablenkung",
@@ -52,6 +45,13 @@
       "category": "motivation",
       "difficulty": "hard",
       "id": "8"
+    },
+    {
+      "title": "kok",
+      "description": "mo",
+      "category": "motivation",
+      "difficulty": "easy",
+      "id": "uOBV7Tqfquw"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

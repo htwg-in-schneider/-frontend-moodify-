@@ -4,6 +4,14 @@ import { useRouter } from 'vue-router'
 import logo from '@/assets/logo.png'
 import UserMenu from './UserMenu.vue'
 
+import { useAuth0 } from '@auth0/auth0-vue'
+
+const { isAuthenticated, loginWithRedirect } = useAuth0()
+
+function handleLogin() {
+  loginWithRedirect()
+}
+
 const router = useRouter()
 
 const isOpen = ref(false)
@@ -73,7 +81,12 @@ function goToReviews() {
         </li>
 
         <li><a @click="goToReviews">Reviews</a></li>
-        <li><a @click="go('/joinus')">Join</a></li>
+      
+        <li v-if="!isAuthenticated">
+  <button class="login-btn" @click="handleLogin">
+    Login
+  </button>
+</li>
         
 
       </ul>
@@ -96,22 +109,21 @@ function goToReviews() {
 
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
 }
-
 .logo img {
   height: 60px;
 }
 
-/* NAV */
+
 .nav {
+  flex: 1;
   display: flex;
+  justify-content: center;
   gap: 20px;
   list-style: none;
 }
-
 .nav a,
 .nav button {
   font-weight: 700;
@@ -119,6 +131,15 @@ function goToReviews() {
   background: none;
   border: none;
   cursor: pointer;
+}
+
+.login-btn {
+  font-weight: 700;
+  font-size: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
 }
 
 
@@ -185,4 +206,3 @@ function goToReviews() {
   }
 }
 </style>
-

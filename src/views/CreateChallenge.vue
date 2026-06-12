@@ -1,22 +1,85 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const title = ref('')
 const description = ref('')
 const category = ref('motivation')
 const difficulty = ref('easy')
 
-function createChallenge() {
-  console.log({
-    title: title.value,
-    description: description.value,
-    category: category.value,
-    difficulty: difficulty.value
-  })
+const showModal = ref(false)
+const errorModal = ref(false)
+const errorMessage = ref('')
+
+async function createChallenge() {
+
+  if (
+    !title.value.trim() ||
+    !description.value.trim() ||
+    !category.value ||
+    !difficulty.value
+  ) {
+    errorMessage.value = 'Bitte fülle alle Felder aus.'
+    errorModal.value = true
+    return
+  }
+
+  try {
+    const res = await fetch('http://localhost:3000/challenges', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: title.value,
+        description: description.value,
+        category: category.value,
+        difficulty: difficulty.value
+      })
+    })
+
+    if (!res.ok) {
+      errorMessage.value = 'Fehler beim Speichern der Challenge.'
+      errorModal.value = true
+      return
+    }
+
+    showModal.value = true
+
+    setTimeout(() => {
+      showModal.value = false
+      router.push('/challenges')
+    }, 1200)
+
+  } catch (err) {
+    errorMessage.value = 'Server nicht erreichbar.'
+    errorModal.value = true
+  }
 }
 </script>
+
 <template>
   <main class="page">
+
+
+    <div v-if="showModal" class="overlay">
+      <div class="modal">
+        <div class="icon">✔</div>
+        <h2>Challenge erstellt!</h2>
+        <p>Deine Challenge wurde erfolgreich gespeichert</p>
+      </div>
+    </div>
+
+  
+    <div v-if="errorModal" class="overlay" @click="errorModal = false">
+      <div class="modal error">
+        <div class="icon">✖</div>
+        <h2>Fehler</h2>
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
 
     <div class="form-wrapper">
 
@@ -29,16 +92,12 @@ function createChallenge() {
 
         <div class="field">
           <label>Titel</label>
-          <input v-model="title" placeholder="z.B. Fokus Challenge" />
+          <input v-model="title" />
         </div>
 
         <div class="field">
           <label>Beschreibung</label>
-          <textarea
-            v-model="description"
-            rows="4"
-            placeholder="Was soll gemacht werden?"
-          />
+          <textarea v-model="description" rows="4"></textarea>
         </div>
 
         <div class="row">
@@ -46,6 +105,7 @@ function createChallenge() {
           <div class="field">
             <label>Kategorie</label>
             <select v-model="category">
+              <option disabled value="">Bitte wählen</option>
               <option value="motivation">Motivation</option>
               <option value="entspannung">Entspannung</option>
               <option value="fokus">Fokus</option>
@@ -57,8 +117,8 @@ function createChallenge() {
             <label>Schwierigkeit</label>
             <select v-model="difficulty">
               <option value="easy">Easy</option>
-              <option value="medium">Mittel</option>
-              <option value="hard">Schwer</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
             </select>
           </div>
 
@@ -71,107 +131,54 @@ function createChallenge() {
       </section>
 
     </div>
-
   </main>
 </template>
 
 <style scoped>
-
-/* 🌈 BACKGROUND (macht sofort “App Feeling”) */
 .page {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-
-  /* leicht nach oben statt perfekt center */
-  align-items: flex-start;
-
-  padding-top: 90px;
-
-  background: linear-gradient(
-    180deg,
-    #f5f7fb 0%,
-    #eef2ff 100%
-  );
+  align-items: center;
+  background: #fff;
+  padding: 20px;
 }
 
-/* 🧠 WRAPPER */
 .form-wrapper {
   width: 100%;
-  max-width: 640px;
-
-  /* "floating card feel" */
-  animation: fadeUp 0.4s ease;
+  max-width: 700px;
+  padding: 40px;
+  border-radius: 24px;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
 }
 
-/* ✨ HEADER */
 .header {
-  margin-bottom: 28px;
+  text-align: center;
+  margin-bottom: 25px;
 }
 
-.header h1 {
-  font-size: 32px;
-  font-weight: 800;
-  margin: 0;
-  letter-spacing: -0.5px;
-}
-
-.header p {
-  margin: 6px 0 0;
-  color: #6b7280;
-}
-
-/* FORM */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-/* FIELD */
 .field {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  margin-bottom: 12px;
 }
 
-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #6b7280;
-}
-
-/* INPUT STYLE (clean SaaS style) */
-input,
-textarea,
-select {
-  width: 100%;
+input, textarea, select {
   padding: 14px;
   border-radius: 14px;
   border: 1px solid #e5e7eb;
-  font-size: 15px;
-  background: white;
-  transition: 0.2s;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 4px rgba(99,102,241,0.12);
-}
-
-/* 2 COL ROW */
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
 
-/* BUTTON */
 .btn {
-  margin-top: 8px;
+  width: 100%;
   padding: 14px;
   border-radius: 14px;
   border: none;
@@ -179,23 +186,47 @@ select:focus {
   color: white;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
+  margin-top: 10px;
 }
 
-.btn:hover {
-  background: #C3D0C2;
-  transform: translateY(-2px);
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
-/* ✨ ANIMATION (macht es sofort "premium") */
-@keyframes fadeUp {
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  width: 320px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+  animation: pop 0.2s ease;
+}
+
+.modal.error .icon {
+  color: #e74c3c;
+}
+
+.icon {
+  font-size: 40px;
+  color: green;
+  margin-bottom: 10px;
+}
+
+@keyframes pop {
   from {
+    transform: scale(0.9);
     opacity: 0;
-    transform: translateY(12px);
   }
   to {
+    transform: scale(1);
     opacity: 1;
-    transform: translateY(0);
   }
 }
 </style>

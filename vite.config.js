@@ -13,7 +13,8 @@ export default defineConfig({
   base: '/-frontend-moodify-/',
 
   server: {
-    port: 5173
+    port: 5173,
+      strictPort: true
   },
 
   resolve: {
