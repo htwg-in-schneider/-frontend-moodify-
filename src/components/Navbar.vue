@@ -3,16 +3,18 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import logo from '@/assets/logo.png'
 import UserMenu from './UserMenu.vue'
-
 import { useAuth0 } from '@auth0/auth0-vue'
 
-const { isAuthenticated, loginWithRedirect } = useAuth0()
+const auth0 = useAuth0()
+const router = useRouter()
 
 function handleLogin() {
-  loginWithRedirect()
+ auth0.loginWithRedirect({
+  appState: {
+    target: '/callback'
+  }
+})
 }
-
-const router = useRouter()
 
 const isOpen = ref(false)
 const showFeatures = ref(false)
@@ -82,7 +84,7 @@ function goToReviews() {
 
         <li><a @click="goToReviews">Reviews</a></li>
       
-        <li v-if="!isAuthenticated">
+       <li v-if="!auth0.isAuthenticated.value">
   <button class="login-btn" @click="handleLogin">
     Login
   </button>
