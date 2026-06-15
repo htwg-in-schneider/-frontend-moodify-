@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const challenges = ref([])
 
@@ -14,6 +17,10 @@ async function deleteChallenge(id) {
   })
 
   loadChallenges()
+}
+
+function editChallenge(id) {
+  router.push(`/challenges/${id}/edit`)
 }
 
 onMounted(loadChallenges)
@@ -33,7 +40,9 @@ onMounted(loadChallenges)
         <h3>{{ c.title }}</h3>
         <p>{{ c.description }}</p>
 
-        <button class="edit">Edit</button>
+       <button class="edit" @click="editChallenge(c.id)">
+  Edit
+</button>
         <button class="delete" @click="deleteChallenge(c.id)">
           Delete
         </button>

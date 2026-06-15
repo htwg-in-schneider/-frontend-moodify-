@@ -1,20 +1,13 @@
 import { defineStore } from 'pinia'
+import { useAuth0 } from '@auth0/auth0-vue'
 
-export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    isLoggedIn: false,
-    user: null
-  }),
+export const useAuthStore = defineStore('auth', () => {
+  const auth0 = useAuth0()
 
-  actions: {
-    login(name){
-      this.isLoggedIn = true
-      this.user = name
-    },
-
-    logout() {
-      this.isLoggedIn = false
-      this.user = null
-    }
+  return {
+    isLoggedIn: auth0.isAuthenticated,
+    user: auth0.user,
+    login: auth0.loginWithRedirect,
+    logout: auth0.logout
   }
 })

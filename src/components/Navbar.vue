@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import logo from '@/assets/logo.png'
 import UserMenu from './UserMenu.vue'
@@ -9,11 +9,19 @@ const auth0 = useAuth0()
 const router = useRouter()
 
 function handleLogin() {
- auth0.loginWithRedirect({
-  appState: {
-    target: '/callback'
-  }
+  auth0.loginWithRedirect()
+}
+
+const isAuthenticated = computed(() => auth0.isAuthenticated.value)
+
+const roles = computed(() => {
+  return auth0.user.value?.['https://your-app.example.com/roles'] ?? []
 })
+
+const isAdmin = computed(() => roles.value.includes('admin'))
+
+function go(path) {
+  router.push(path)
 }
 
 const isOpen = ref(false)
@@ -32,11 +40,6 @@ function toggleFeatures() {
   showFeatures.value = !showFeatures.value
 }
 
-function go(path) {
-  closeMenu()
-  router.push(path)
-}
-
 function goToReviews() {
   closeMenu()
 
@@ -53,22 +56,18 @@ function goToReviews() {
   <header class="header">
     <nav class="navbar">
 
-
       <div class="logo">
         <img :src="logo" />
       </div>
 
-  
       <button class="open-btn" @click="openMenu">☰</button>
 
- 
       <ul class="nav" :class="{ open: isOpen }">
 
         <button class="close-btn" @click="closeMenu">✕</button>
 
         <li><a @click="go('/')">Home</a></li>
 
-     
         <li class="dropdown-wrap">
           <button @click="toggleFeatures">
             Features
@@ -83,17 +82,30 @@ function goToReviews() {
         </li>
 
         <li><a @click="goToReviews">Reviews</a></li>
-      
-       <li v-if="!auth0.isAuthenticated.value">
-  <button class="login-btn" @click="handleLogin">
-    Login
-  </button>
-</li>
-        
+
+        <!--  USER BUTTON -->
+        <li v-if="isAuthenticated && !isAdmin">
+          <button class="login-btn" @click="go('/dashboard')">
+            Dashboard
+          </button>
+        </li>
+
+        <!-- ADMIN BUTTON -->
+        <li v-if="isAuthenticated && isAdmin">
+          <button class="login-btn" @click="go('/admin')">
+            Admin
+          </button>
+        </li>
+
+        <!-- LOGIN BUTTON -->
+        <li v-if="!isAuthenticated">
+          <button class="login-btn" @click="handleLogin">
+            Login
+          </button>
+        </li>
 
       </ul>
 
-  
       <UserMenu />
 
     </nav>
@@ -101,6 +113,7 @@ function goToReviews() {
 </template>
 
 <style scoped>
+
 .header {
   position: sticky;
   top: 0;
@@ -114,10 +127,10 @@ function goToReviews() {
   align-items: center;
   padding: 10px 20px;
 }
+
 .logo img {
   height: 60px;
 }
-
 
 .nav {
   flex: 1;
@@ -126,6 +139,7 @@ function goToReviews() {
   gap: 20px;
   list-style: none;
 }
+
 .nav a,
 .nav button {
   font-weight: 700;
@@ -143,7 +157,6 @@ function goToReviews() {
   cursor: pointer;
   color: inherit;
 }
-
 
 .dropdown-wrap {
   position: relative;
@@ -172,7 +185,6 @@ function goToReviews() {
 .close-btn {
   display: none;
 }
-
 
 @media (max-width: 900px) {
   .open-btn {

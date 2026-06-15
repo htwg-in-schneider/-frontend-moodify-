@@ -1,27 +1,32 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import { computed } from 'vue'
 
 const auth = useAuthStore()
 const router = useRouter()
 
 function handleLogout() {
   auth.logout()
-  router.push('/login')
+  router.push('/')
 }
+
+const greeting = computed(() => {
+  const hour = new Date().getHours()
+
+  if (hour < 12) return 'Morgen'
+  if (hour < 18) return 'Tag'
+  return 'Abend'
+})
 </script>
 
 <template>
   <main class="dashboard">
-    <h1>Dashboard</h1>
 
-  
-    <p v-if="auth.isLoggedIn" class="welcome">
-      Willkommen, {{ auth.user }} 👋
-    </p>
 
-    <p v-else>
-      Bitte einloggen
+    <!-- 👇 Safe User Greeting -->
+    <p v-if="auth.isLoggedIn && auth.user" class="welcome">
+      Guten {{ greeting }}, {{ auth.user?.name || auth.user?.email }} 👋
     </p>
 
     <p>Wähle eine Funktion:</p>
@@ -34,8 +39,8 @@ function handleLogout() {
     </div>
 
     <button class="logout" @click="handleLogout">
-  Logout
-</button>
+      Logout
+    </button>
   </main>
 </template>
 
@@ -63,5 +68,4 @@ a {
   text-decoration: none;
   color: black;
 }
-
 </style>

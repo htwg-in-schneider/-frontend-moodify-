@@ -45,13 +45,6 @@
       "category": "motivation",
       "difficulty": "hard",
       "id": "8"
-    },
-    {
-      "title": "kok",
-      "description": "mo",
-      "category": "motivation",
-      "difficulty": "easy",
-      "id": "uOBV7Tqfquw"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

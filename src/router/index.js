@@ -1,9 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authGuard } from '@auth0/auth0-vue'
+import { authGuard, useAuth0 } from '@auth0/auth0-vue'
 
 import Home from '../views/Home.vue'
-import Callback from '../views/Callback.vue'
-
 import Dashboard from '../views/Dashboard.vue'
 import Admin from '../views/Admin.vue'
 
@@ -20,28 +18,43 @@ import Profile from '../views/Profile.vue'
 import Impressum from '../views/Impressum.vue'
 import Datenschutz from '../views/Datenschutz.vue'
 
+/* 🔐 ADMIN GUARD */
+function adminGuard(to, from, next) {
+  const auth = useAuth0()
+
+  const roles =
+    auth.user.value?.['https://your-app.example.com/roles'] || []
+
+  if (roles.includes('admin')) {
+    next()
+  } else {
+    next('/dashboard')
+  }
+}
+
 const routes = [
-  
   { path: '/', component: Home },
 
   { path: '/impressum', component: Impressum },
   { path: '/datenschutz', component: Datenschutz },
 
+  /* AUTH PROTECTED */
+  { path: '/dashboard', component: Dashboard, beforeEnter: authGuard },
+  { path: '/profile', component: Profile, beforeEnter: authGuard },
 
-  { path: '/callback', component: Callback },
+  /* ADMIN ONLY */
+  { path: '/admin', component: Admin, beforeEnter: adminGuard },
 
-   { path: '/dashboard', component: Dashboard },
-  { path: '/admin', component: Admin },
-
+  /* CHALLENGES (USER + ADMIN) */
   { path: '/challenges', component: Challenges, beforeEnter: authGuard },
   { path: '/challenges/create', component: CreateChallenge, beforeEnter: authGuard },
   { path: '/challenges/:id', component: ChallengeDetail, beforeEnter: authGuard },
   { path: '/challenges/:id/edit', component: EditChallenge, beforeEnter: authGuard },
 
+  /* OTHER FEATURES */
   { path: '/moodtracker', component: MoodTracker, beforeEnter: authGuard },
   { path: '/affirmations', component: Affirmations, beforeEnter: authGuard },
-  { path: '/visionboard', component: VisionBoard, beforeEnter: authGuard },
-  { path: '/profile', component: Profile, beforeEnter: authGuard }
+  { path: '/visionboard', component: VisionBoard, beforeEnter: authGuard }
 ]
 
 export default createRouter({

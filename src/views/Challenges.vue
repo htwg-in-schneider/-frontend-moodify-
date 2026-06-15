@@ -42,33 +42,8 @@ function openDetail(id) {
   router.push({ name: 'challenge-detail', params: { id } })
 }
 
-/* DELETE (ADMIN ONLY) */
-async function deleteChallenge(id) {
-  try {
-    const res = await fetch(`http://localhost:3000/challenges/${id}`, {
-      method: 'DELETE'
-    })
 
-    if (!res.ok) {
-      message.value = 'Fehler beim Löschen'
-      showError.value = true
-      return
-    }
 
-    message.value = 'Challenge gelöscht 🗑️'
-    showSuccess.value = true
-
-    await loadChallenges()
-
-    setTimeout(() => {
-      showSuccess.value = false
-    }, 1200)
-
-  } catch {
-    message.value = 'Server nicht erreichbar'
-    showError.value = true
-  }
-}
 
 /* FILTERED LIST */
 const filteredChallenges = computed(() => {
@@ -93,9 +68,6 @@ onMounted(loadChallenges)
   <main class="challenges">
 
 
-
-    <p>ROLE: {{ role }}</p>
-
     <!-- SUCCESS MODAL -->
     <div v-if="showSuccess" class="overlay">
       <div class="modal">
@@ -116,7 +88,7 @@ onMounted(loadChallenges)
 
     <h1>Challenges ✨</h1>
 
-    <!-- CREATE (ALLE USER) -->
+  
     <RouterLink to="/challenges/create" class="btn create">
       + Neue Challenge
     </RouterLink>
@@ -140,23 +112,7 @@ onMounted(loadChallenges)
 
         <div class="actions">
 
-          <!-- ADMIN ONLY -->
-          <RouterLink
-            v-if="role === 'admin'"
-            :to="{ name: 'challenge-edit', params: { id: c.id } }"
-            class="btn"
-            @click.stop
-          >
-            Bearbeiten
-          </RouterLink>
-
-          <button
-            v-if="role === 'admin'"
-            class="btn delete"
-            @click.stop="deleteChallenge(c.id)"
-          >
-            Löschen
-          </button>
+      
 
         </div>
 
