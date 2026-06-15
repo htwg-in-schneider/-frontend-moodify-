@@ -6,8 +6,8 @@ const router = useRouter()
 
 const title = ref('')
 const description = ref('')
-const category = ref('motivation')
-const difficulty = ref('easy')
+const category = ref('MOTIVATION')
+const difficulty = ref('EASY')
 
 const showModal = ref(false)
 const errorModal = ref(false)
@@ -27,7 +27,7 @@ async function createChallenge() {
   }
 
   try {
-    const res = await fetch('http://localhost:3000/challenges', {
+    const res = await fetch('http://localhost:8081/api/challenge', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -104,22 +104,21 @@ async function createChallenge() {
 
           <div class="field">
             <label>Kategorie</label>
-            <select v-model="category">
-              <option disabled value="">Bitte wählen</option>
-              <option value="motivation">Motivation</option>
-              <option value="entspannung">Entspannung</option>
-              <option value="fokus">Fokus</option>
-              <option value="ablenkung">Ablenkung</option>
-            </select>
+           <select v-model="category">
+        <option value="MOTIVATION">Motivation</option>
+        <option value="ENTSPANNUNG">Entspannung</option>
+        <option value="FOKUS">Fokus</option>
+        <option value="ABLENKUNG">Ablenkung</option>
+      </select>
           </div>
 
           <div class="field">
             <label>Schwierigkeit</label>
-            <select v-model="difficulty">
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
+              <select v-model="difficulty">
+        <option value="EASY">Easy</option>
+        <option value="MITTEL">Mittel</option>
+        <option value="SCHWER">Schwer</option>
+      </select>
           </div>
 
         </div>

@@ -42,21 +42,21 @@
 
           <div class="field">
             <label>Kategorie</label>
-            <select v-model="category">
-              <option value="motivation">Motivation</option>
-              <option value="entspannung">Entspannung</option>
-              <option value="fokus">Fokus</option>
-              <option value="ablenkung">Ablenkung</option>
-            </select>
+               <select v-model="category">
+      <option value="MOTIVATION">Motivation</option>
+      <option value="ENTSPANNUNG">Entspannung</option>
+      <option value="FOKUS">Fokus</option>
+      <option value="ABLENKUNG">Ablenkung</option>
+    </select>
           </div>
 
           <div class="field">
             <label>Schwierigkeit</label>
-            <select v-model="difficulty">
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
+         <select v-model="difficulty">
+      <option value="EASY">Easy</option>
+      <option value="MITTEL">Mittel</option>
+      <option value="SCHWER">Schwer</option>
+    </select>
           </div>
 
         </div>
@@ -91,10 +91,10 @@ const showError = ref(false)
 const errorMessage = ref('')
 const loading = ref(false)
 
-// 🔄 LOAD EXISTING DATA (PRE-FILL FORM)
+
 async function loadChallenge() {
   try {
-    const res = await fetch(`http://localhost:3000/challenges/${id}`)
+    const res = await fetch(`http://localhost:8081/api/challenge/${id}`)
     if (!res.ok) throw new Error()
 
     const data = await res.json()
@@ -124,7 +124,7 @@ async function updateChallenge() {
   loading.value = true
 
   try {
-    const res = await fetch(`http://localhost:3000/challenges/${id}`, {
+    const res = await fetch(`http://localhost:8081/api/challenge/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'

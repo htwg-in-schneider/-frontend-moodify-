@@ -7,7 +7,7 @@ const route = useRoute()
 const challenge = ref(null)
 
 onMounted(async () => {
-  const res = await fetch(`http://localhost:3000/challenges/${route.params.id}`)
+  const res = await fetch(`http://localhost:8081/challenge/${route.params.id}`)
   challenge.value = await res.json()
 })
 </script>

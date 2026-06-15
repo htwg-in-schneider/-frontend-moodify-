@@ -33,7 +33,18 @@ function handleFilterChange(data) {
 
 /* LOAD */
 async function loadChallenges() {
-  const res = await fetch('http://localhost:3000/challenges')
+
+  let url = 'http://localhost:8081/api/challenge'
+  const params = new URLSearchParams()
+
+  if (filter.value.search) params.append('title', filter.value.search)
+  if (filter.value.category) params.append('category', filter.value.category)
+
+  if ([...params].length > 0) {
+    url += `?${params.toString()}`
+  }
+
+  const res = await fetch(url)
   challenges.value = await res.json()
 }
 
@@ -48,14 +59,16 @@ function openDetail(id) {
 /* FILTERED LIST */
 const filteredChallenges = computed(() => {
   return challenges.value.filter(c => {
-    const search = filter.value.search.toLowerCase()
+    const search = (filter.value.search || '').toLowerCase()
 
     const matchesSearch =
-      c.title.toLowerCase().includes(search) ||
-      c.description.toLowerCase().includes(search)
+       (c.title || '').toLowerCase().includes(search) ||
+      (c.description || '').toLowerCase().includes(search)
 
     const matchesCategory =
-      !filter.value.category || c.category === filter.value.category
+      !filter.value.category ||
+      filter.value.category === 'Alle Kategorien' ||
+      c.category === filter.value.category
 
     return matchesSearch && matchesCategory
   })
@@ -108,7 +121,7 @@ onMounted(loadChallenges)
         <p>{{ c.description }}</p>
 
         <p class="tag">Kategorie: {{ c.category }}</p>
-        <p>Schwierigkeit: {{ c.difficulty }}</p>
+        <p>Schwierigkeit: {{ c.difficulty || 'Keine Angabe' }}</p>
 
         <div class="actions">
 

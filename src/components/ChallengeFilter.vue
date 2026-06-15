@@ -22,13 +22,14 @@ watch([search, category], () => {
       placeholder="Suche nach Challenge..."
     />
 
-    <select v-model="category">
+        <select v-model="category">
       <option value="">Alle Kategorien</option>
-      <option value="motivation">Motivation</option>
-      <option value="entspannung">Entspannung</option>
-      <option value="fokus">Fokus</option>
-      <option value="ablenkung">Ablenkung</option>
+      <option value="MOTIVATION">Motivation</option>
+      <option value="ENTSPANNUNG">Entspannung</option>
+      <option value="FOKUS">Fokus</option>
+      <option value="ABLENKUNG">Ablenkung</option>
     </select>
+ 
 
   </div>
 </template>
