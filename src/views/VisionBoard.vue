@@ -198,6 +198,7 @@ input, select {
   color: #6366f1;
 }
 
+
 .delete {
   background: transparent;
   border: none;

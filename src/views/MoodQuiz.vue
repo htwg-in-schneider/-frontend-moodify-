@@ -13,6 +13,7 @@
       </ul>
     </div>
 
+    
     <button class="start-btn" @click="startQuiz">
       🚀 Quiz starten
     </button>

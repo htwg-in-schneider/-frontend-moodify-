@@ -194,6 +194,7 @@ function goDashboard() {
   font-weight: 600;
 }
 
+
 .secondary {
   background: transparent;
   border: 2px solid #6366f1;

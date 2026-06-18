@@ -15,6 +15,8 @@
         <div class="progress-fill" style="width: 20%"></div>
       </div>
 
+      
+
       <!-- Question -->
       <h1>Wie fühlst du dich heute?</h1>
       <p class="subtitle">Wähle die Antwort, die am besten passt.</p>

@@ -60,6 +60,7 @@ const go = (path) => router.push(path)
   transition: 0.2s;
 }
 
+
 .card:hover {
   transform: translateY(-5px);
 }

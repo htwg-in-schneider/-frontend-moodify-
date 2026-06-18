@@ -209,6 +209,8 @@ textarea {
   align-items: center;
 }
 
+
+
 .modal {
   background: white;
   padding: 25px;

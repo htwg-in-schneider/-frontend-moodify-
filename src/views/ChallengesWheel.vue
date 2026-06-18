@@ -263,6 +263,7 @@ select {
   align-items: center;
 }
 
+
 .popup {
   background: white;
   padding: 30px;

@@ -16,12 +16,13 @@ import ChallengesWheel from '../views/ChallengesWheel.vue'
 
 /* MOOD / VISUAL */
 import MoodQuiz from '../views/MoodQuiz.vue'
-import MoodQuizF1 from '@/views/MoodQuizf1.vue'
+
 import MoodQuizF2 from '@/views/MoodQuizF2.vue'
 import MoodQuizF3 from '@/views/MoodQuizF3.vue'
 import MoodQuizF4 from '@/views/MoodQuizF4.vue'
 import MoodQuizF5 from '@/views/MoodQuizF5.vue'
 import MoodQuizResult from '@/views/MoodQuizResult.vue'
+import MoodQuizF1 from '@/views/MoodQuizF1.vue'
 
 import Affirmations from '@/views/Affirmations.vue'
 import VisionBoard from '@/views/VisionBoard.vue'

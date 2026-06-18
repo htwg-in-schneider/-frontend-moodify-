@@ -12,6 +12,8 @@ const role = computed(() => {
   return user.value?.['https://your-app/roles']?.[0] || 'user'
 })
 
+   
+
 
 /* DATA */
 const challenges = ref([])

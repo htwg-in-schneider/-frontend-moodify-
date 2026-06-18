@@ -79,3 +79,4 @@ watch(isAuthenticated, async (loggedIn) => {
     <Footer />
   </div>
 </template>
+

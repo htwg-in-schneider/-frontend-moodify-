@@ -106,6 +106,7 @@ onMounted(loadItem)
   justify-content: center;
 }
 
+
 .btn {
   padding: 10px 14px;
   border: none;

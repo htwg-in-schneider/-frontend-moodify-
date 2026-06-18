@@ -83,6 +83,7 @@ function select(val) {
   selected.value = val
 }
 
+
 function finish() {
 
   router.push('/quiz/result')

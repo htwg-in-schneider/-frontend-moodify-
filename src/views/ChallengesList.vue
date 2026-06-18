@@ -12,6 +12,7 @@ async function load() {
   challenges.value = await res.json()
 }
 
+
 const filtered = computed(() =>
   challenges.value.filter(c =>
     c.title.toLowerCase().includes(search.value.toLowerCase())
