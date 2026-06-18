@@ -1,53 +1,123 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
 
-const { user, isAuthenticated } = useAuth0()
+const { isAuthenticated, getAccessTokenSilently } = useAuth0()
 
-/* EDITABLE FIELDS */
-const name = ref(user.value?.name || '')
-const address = ref(user.value?.address || '')
+/* FORM STATE */
+const name = ref('')
+const address = ref('')
 
-/* MODAL */
+/* UI STATE */
 const showSuccess = ref(false)
 const showError = ref(false)
 const message = ref('')
 
-/* SAVE */
-function saveProfile() {
+/* =========================
+   LOAD PROFILE FROM BACKEND
+   ========================= */
+async function loadProfile() {
   try {
-    console.log('Profil gespeichert:', {
-      name: name.value,
-      address: address.value
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: "https://moodify-api"
+      }
     })
 
-    message.value = 'Profil erfolgreich gespeichert ✔'
+    const res = await fetch("http://localhost:8081/api/profile", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (!res.ok) {
+      console.error("LOAD FAILED:", await res.text())
+      return
+    }
+
+    const data = await res.json()
+
+    name.value = data.name || ''
+    address.value = data.address || ''
+
+  } catch (e) {
+    console.error("LOAD ERROR:", e)
+  }
+}
+
+/* =========================
+   SAVE PROFILE
+   ========================= */
+async function saveProfile() {
+  try {
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: "https://moodify-api"
+      }
+    })
+
+    const res = await fetch("http://localhost:8081/api/profile", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        name: name.value,
+        address: address.value
+      })
+    })
+
+    if (!res.ok) {
+      const err = await res.text()
+      console.error("SAVE FAILED:", err)
+
+      message.value = "Speichern fehlgeschlagen"
+      showError.value = true
+      return
+    }
+
+    const data = await res.json()
+    console.log("PROFILE SAVED:", data)
+
+    message.value = "Profil erfolgreich gespeichert ✔"
     showSuccess.value = true
+
+    // 🔥 reload from backend (important!)
+    await loadProfile()
 
     setTimeout(() => {
       showSuccess.value = false
     }, 1200)
 
   } catch (e) {
-    message.value = 'Fehler beim Speichern'
+    console.error(e)
+    message.value = "Fehler beim Speichern"
     showError.value = true
   }
 }
+
+/* =========================
+   INIT
+   ========================= */
+onMounted(() => {
+  if (isAuthenticated.value) {
+    loadProfile()
+  }
+})
 </script>
 
 <template>
   <main class="page">
 
-    <h1>Profile</h1>
+    <h1>Profil</h1>
 
-    <div v-if="isAuthenticated && user">
+    <div v-if="isAuthenticated">
 
-      <img v-if="user.picture" :src="user.picture" class="avatar" />
-
-      <!-- EDIT FIELDS -->
       <div class="field">
         <label>Name</label>
-        <input v-model="name" />
+        <input v-model="name" placeholder="Dein Name" />
       </div>
 
       <div class="field">
@@ -59,30 +129,23 @@ function saveProfile() {
         Speichern
       </button>
 
-      <hr />
-
-      <h3>Debug</h3>
-      <pre>{{ user }}</pre>
-
     </div>
 
     <div v-else>
       <p>Nicht eingeloggt</p>
     </div>
 
-    <!-- SUCCESS MODAL -->
+    <!-- SUCCESS -->
     <div v-if="showSuccess" class="overlay">
       <div class="modal">
-        <div class="icon">✔</div>
-        <p>{{ message }}</p>
+        ✔ {{ message }}
       </div>
     </div>
 
-    <!-- ERROR MODAL -->
+    <!-- ERROR -->
     <div v-if="showError" class="overlay">
       <div class="modal error">
-        <div class="icon">✖</div>
-        <p>{{ message }}</p>
+        ✖ {{ message }}
       </div>
     </div>
 
@@ -94,18 +157,10 @@ function saveProfile() {
   padding: 20px;
 }
 
-.avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
-
 .field {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
 }
 
 input {
@@ -115,19 +170,18 @@ input {
 }
 
 .btn {
-  margin-top: 10px;
   padding: 10px;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #C3D0C2;
   cursor: pointer;
+  margin-top: 10px;
 }
 
-/* MODAL */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,15 +190,10 @@ input {
 .modal {
   background: white;
   padding: 20px;
-  border-radius: 20px;
-  text-align: center;
+  border-radius: 15px;
 }
 
-.modal.error .icon {
+.modal.error {
   color: red;
-}
-
-.icon {
-  font-size: 30px;
 }
 </style>

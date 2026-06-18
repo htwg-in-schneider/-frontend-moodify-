@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const router = useRouter()
+const { getAccessTokenSilently } = useAuth0()
 
 const title = ref('')
 const description = ref('')
@@ -12,6 +14,11 @@ const difficulty = ref('EASY')
 const showModal = ref(false)
 const errorModal = ref(false)
 const errorMessage = ref('')
+
+/* BACK BUTTON */
+function goBack() {
+  router.push('/challenges')
+}
 
 async function createChallenge() {
 
@@ -27,10 +34,13 @@ async function createChallenge() {
   }
 
   try {
+    const token = await getAccessTokenSilently()
+
     const res = await fetch('http://localhost:8081/api/challenge', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify({
         title: title.value,
@@ -41,7 +51,10 @@ async function createChallenge() {
     })
 
     if (!res.ok) {
-      errorMessage.value = 'Fehler beim Speichern der Challenge.'
+      const msg = await res.text()
+      console.log('Backend Error:', msg)
+
+      errorMessage.value = msg || 'Fehler beim Speichern der Challenge.'
       errorModal.value = true
       return
     }
@@ -54,6 +67,7 @@ async function createChallenge() {
     }, 1200)
 
   } catch (err) {
+    console.error(err)
     errorMessage.value = 'Server nicht erreichbar.'
     errorModal.value = true
   }
@@ -63,7 +77,12 @@ async function createChallenge() {
 <template>
   <main class="page">
 
+    <!-- BACK BUTTON -->
+    <button class="back-btn" @click="goBack">
+      ← Zurück
+    </button>
 
+    <!-- SUCCESS MODAL -->
     <div v-if="showModal" class="overlay">
       <div class="modal">
         <div class="icon">✔</div>
@@ -72,7 +91,7 @@ async function createChallenge() {
       </div>
     </div>
 
-  
+    <!-- ERROR MODAL -->
     <div v-if="errorModal" class="overlay" @click="errorModal = false">
       <div class="modal error">
         <div class="icon">✖</div>
@@ -81,6 +100,7 @@ async function createChallenge() {
       </div>
     </div>
 
+    <!-- FORM -->
     <div class="form-wrapper">
 
       <header class="header">
@@ -104,21 +124,21 @@ async function createChallenge() {
 
           <div class="field">
             <label>Kategorie</label>
-           <select v-model="category">
-        <option value="MOTIVATION">Motivation</option>
-        <option value="ENTSPANNUNG">Entspannung</option>
-        <option value="FOKUS">Fokus</option>
-        <option value="ABLENKUNG">Ablenkung</option>
-      </select>
+            <select v-model="category">
+              <option value="MOTIVATION">Motivation</option>
+              <option value="ENTSPANNUNG">Entspannung</option>
+              <option value="FOKUS">Fokus</option>
+              <option value="ABLENKUNG">Ablenkung</option>
+            </select>
           </div>
 
           <div class="field">
             <label>Schwierigkeit</label>
-              <select v-model="difficulty">
-        <option value="EASY">Easy</option>
-        <option value="MITTEL">Mittel</option>
-        <option value="SCHWER">Schwer</option>
-      </select>
+            <select v-model="difficulty">
+              <option value="EASY">Easy</option>
+              <option value="MITTEL">Mittel</option>
+              <option value="SCHWER">Schwer</option>
+            </select>
           </div>
 
         </div>
@@ -141,6 +161,24 @@ async function createChallenge() {
   align-items: center;
   background: #fff;
   padding: 20px;
+  position: relative;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #6366f1;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
 }
 
 .form-wrapper {

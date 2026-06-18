@@ -1,10 +1,15 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const auth = useAuthStore()
 const router = useRouter()
+
+const { getAccessTokenSilently } = useAuth0()
+
+const profileName = ref('')
 
 function handleLogout() {
   auth.logout()
@@ -18,15 +23,55 @@ const greeting = computed(() => {
   if (hour < 18) return 'Tag'
   return 'Abend'
 })
+
+async function loadProfile() {
+  try {
+    const token = await getAccessTokenSilently({
+      authorizationParams: {
+        audience: 'https://moodify-api'
+      }
+    })
+
+    const res = await fetch('http://localhost:8081/api/profile', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (!res.ok) {
+      console.error(await res.text())
+      return
+    }
+
+    const data = await res.json()
+
+    profileName.value =
+      data.name ||
+      data.username ||
+      auth.user?.name ||
+      'User'
+
+  } catch (e) {
+    console.error('Profile load failed:', e)
+
+    profileName.value =
+      auth.user?.name ||
+      'User'
+  }
+}
+
+onMounted(() => {
+  if (auth.isLoggedIn) {
+    loadProfile()
+  }
+})
 </script>
 
 <template>
   <main class="dashboard">
 
-
-    <!-- 👇 Safe User Greeting -->
-    <p v-if="auth.isLoggedIn && auth.user" class="welcome">
-      Guten {{ greeting }}, {{ auth.user?.name || auth.user?.email }} 👋
+    <p v-if="auth.isLoggedIn" class="welcome">
+      Guten {{ greeting }}, {{ profileName }} 👋
     </p>
 
     <p>Wähle eine Funktion:</p>
@@ -34,13 +79,14 @@ const greeting = computed(() => {
     <div class="links">
       <RouterLink to="/visionboard">Vision Board</RouterLink>
       <RouterLink to="/challenges">Challenges</RouterLink>
-      <RouterLink to="/moodtracker">Mood Tracker</RouterLink>
+      <RouterLink to="/moodquiz">Mood Quiz</RouterLink>
       <RouterLink to="/affirmations">Affirmations</RouterLink>
     </div>
 
     <button class="logout" @click="handleLogout">
       Logout
     </button>
+
   </main>
 </template>
 
@@ -67,5 +113,13 @@ a {
   border-radius: 10px;
   text-decoration: none;
   color: black;
+}
+
+.logout {
+  margin-top: 20px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
 </style>

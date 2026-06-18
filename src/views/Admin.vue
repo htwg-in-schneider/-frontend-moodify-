@@ -7,12 +7,12 @@ const router = useRouter()
 const challenges = ref([])
 
 async function loadChallenges() {
-  const res = await fetch('http://localhost:3000/challenges')
+  const res = await fetch('http://localhost:8081/api/challenge')
   challenges.value = await res.json()
 }
 
 async function deleteChallenge(id) {
-  await fetch(`http://localhost:3000/challenges/${id}`, {
+  await fetch(`http://localhost:8081/api/challenge/${id}`, {
     method: 'DELETE'
   })
 

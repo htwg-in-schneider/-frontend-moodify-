@@ -8,7 +8,7 @@ const props = defineProps({
 const reviews = ref([])
 
 async function loadReviews() {
-  const res = await fetch(`http://localhost:3000/challenges/${props.id}`)
+  const res = await fetch(`http://localhost:8081/api/challenge/${props.id}`)
   const data = await res.json()
   reviews.value = data.reviews || []
 }
