@@ -8,6 +8,7 @@ const challenges = ref([])
 const loading = ref(true)
 
 async function loadData() {
+    
   try {
     loading.value = true
 

@@ -25,6 +25,7 @@ if (!challengeId) {
   console.error("❌ NO CHALLENGE ID IN URL")
 }
 
+
 /* SUBMIT */
 async function submit() {
   if (finished.value === null || !mood.value) return
