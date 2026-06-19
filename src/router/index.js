@@ -14,6 +14,8 @@ import ChallengeDetail from '../views/ChallengeDetail.vue'
 import EditChallenge from '../views/EditChallenge.vue'
 import ChallengesWheel from '../views/ChallengesWheel.vue'
 
+import ChallengeTracker from '@/views/ChallengeTracker.vue'
+
 /* MOOD / VISUAL */
 import MoodQuiz from '../views/MoodQuiz.vue'
 
@@ -89,6 +91,18 @@ const routes = [
   name: 'challenges-completed',
   component: CompletedChallenges,
 
+},
+
+
+{
+  path: '/challenges/list',
+  component: ChallengesList,
+  beforeEnter: authGuard
+},
+{
+  path: '/challenge/tracker',
+  component: ChallengeTracker,
+  beforeEnter: authGuard
 },
 
   // DETAIL

@@ -1,9 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const router = useRouter()
 const route = useRoute()
+const auth0 = useAuth0()
 
 /* STATE */
 const finished = ref(null)
@@ -16,29 +18,45 @@ const popupMessage = ref('')
 /* ID aus Wheel */
 const challengeId = route.query.id
 
-function submit() {
+/* SUBMIT (FINAL + BACKEND + AUTH0) */
+async function submit() {
   if (finished.value === null || !mood.value) return
 
-  // Popup Text
   popupMessage.value = finished.value
     ? '🔥 Stark! Du hast die Challenge abgeschlossen. Weiter so!'
     : '💡 Kein Problem. Morgen ist eine neue Chance!'
 
   showPopup.value = true
 
-  /* OPTIONAL: Backend Save vorbereiten */
-  /*
-  fetch('http://localhost:8081/api/user-challenges', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      challengeId,
-      finished: finished.value,
-      mood: mood.value,
-      review: review.value
-    })
+  try {
+    const token = await auth0.getAccessTokenSilently({
+  authorizationParams: {
+    audience: "https://moodify-api"
+  }
+})
+
+console.log("challengeId:", challengeId)
+console.log("token:", token)
+
+    const res = await fetch('http://localhost:8081/api/user-challenges', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`
+  },
+  body: JSON.stringify({
+    challengeId: challengeId.value,
+    finished: finished.value,
+    mood: mood.value,
+    review: review.value
   })
-  */
+})
+
+    console.log('SAVE STATUS:', res.status)
+
+  } catch (e) {
+    console.error('SAVE ERROR:', e)
+  }
 
   setTimeout(() => {
     showPopup.value = false
@@ -68,53 +86,34 @@ function goHome() {
     <h1>🏁 Challenge abgeschlossen?</h1>
     <p class="subtitle">Reflektiere deine Erfahrung</p>
 
-    <!-- FINISHED -->
     <div class="card">
       <h2>Hast du die Challenge beendet?</h2>
 
       <div class="options">
-        <button :class="{ active: finished === true }" @click="finished = true">
-          Ja
-        </button>
-
-        <button :class="{ active: finished === false }" @click="finished = false">
-          Nein
-        </button>
+        <button :class="{ active: finished === true }" @click="finished = true">Ja</button>
+        <button :class="{ active: finished === false }" @click="finished = false">Nein</button>
       </div>
     </div>
 
-    <!-- MOOD -->
     <div class="card">
       <h2>Wie fühlst du dich jetzt?</h2>
 
       <div class="options">
-        <button :class="{ active: mood === 'besser' }" @click="mood = 'besser'">
-          😊 Besser
-        </button>
-
-        <button :class="{ active: mood === 'gleich' }" @click="mood = 'gleich'">
-          😐 Gleich
-        </button>
-
-        <button :class="{ active: mood === 'schlechter' }" @click="mood = 'schlechter'">
-          😔 Schlechter
-        </button>
+        <button :class="{ active: mood === 'besser' }" @click="mood = 'besser'">😊 Besser</button>
+        <button :class="{ active: mood === 'gleich' }" @click="mood = 'gleich'">😐 Gleich</button>
+        <button :class="{ active: mood === 'schlechter' }" @click="mood = 'schlechter'">😔 Schlechter</button>
       </div>
     </div>
 
-    <!-- REVIEW -->
     <div class="card">
       <h2>Kurzes Review</h2>
-      <textarea
-        v-model="review"
-        placeholder="Wie war die Challenge? Was hast du gelernt?"
-      />
+      <textarea v-model="review" placeholder="Wie war die Challenge? Was hast du gelernt?" />
     </div>
 
-    <!-- ACTIONS -->
-    <button class="submit" @click="submit">
-      Speichern
-    </button>
+    <button class="submit" @click="submit">Speichern</button>
+<button @click="$router.push('/challenge/tracker')">
+  Meine Challenges
+</button>
 
     <div class="links">
       <button @click="goList">📁 Alle Challenges</button>
@@ -167,7 +166,6 @@ button.active {
   color: white;
 }
 
-/* TEXTAREA */
 textarea {
   width: 100%;
   height: 100px;
@@ -177,7 +175,6 @@ textarea {
   padding: 10px;
 }
 
-/* SUBMIT */
 .submit {
   margin-top: 20px;
   background: #22c55e;
@@ -186,7 +183,6 @@ textarea {
   border-radius: 12px;
 }
 
-/* LINKS */
 .links {
   margin-top: 15px;
   display: flex;
@@ -199,7 +195,6 @@ textarea {
   border: 1px solid #ddd;
 }
 
-/* POPUP */
 .overlay {
   position: fixed;
   inset: 0;
@@ -208,8 +203,6 @@ textarea {
   justify-content: center;
   align-items: center;
 }
-
-
 
 .modal {
   background: white;

@@ -12,9 +12,9 @@ function goProfile() {
 function handleLogout() {
   logout({
     logoutParams: {
-      returnTo: window.location.origin + '/-frontend-moodify-/'
+      returnTo: window.location.origin
     }
-  })
+  });
 }
 </script>
 

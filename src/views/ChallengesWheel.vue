@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const router = useRouter()
+const auth0 = useAuth0()
 
 /* DATA */
 const challenges = ref([])
@@ -23,11 +25,22 @@ function goBack() {
 
 /* LOAD */
 async function loadChallenges() {
-  const res = await fetch('http://localhost:8081/api/challenge')
+  const token = await auth0.getAccessTokenSilently({
+    authorizationParams: {
+      audience: "https://moodify-api"
+    }
+  })
+
+  const res = await fetch('http://localhost:8081/api/challenge', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+
   challenges.value = await res.json()
 }
 
-/* FILTER */
+/* FILTER (MUSS AUSSERHALB SEIN!) */
 const filteredChallenges = computed(() => {
   return challenges.value.filter(c => {
     const matchCategory = !category.value || c.category === category.value
@@ -53,21 +66,20 @@ function spin() {
   }, 1000)
 }
 
-/* ACCEPT (FIXED FLOW) */
+/* ACCEPT */
 function acceptChallenge() {
   if (!selected.value) return
 
-  // 1. Ergebnis ausblenden
   showResult.value = false
-
-  // 2. Popup anzeigen
   showAcceptPopup.value = true
 
-  // 3. nach 2 Sekunden → completed page
   setTimeout(() => {
     showAcceptPopup.value = false
 
-    router.push('/challenges/completed')
+    router.push({
+      path: '/challenges/completed',
+      query: { id: selected.value.id }
+    })
   }, 2000)
 }
 

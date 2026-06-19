@@ -18,10 +18,10 @@ app.use(pinia)
 
 app.use(
   createAuth0({
-    domain: import.meta.env.VITE_AUTH0_DOMAIN,
-    clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
+    domain: "dev-5l3w1yvav5vmutet.us.auth0.com",
+    clientId: "f517AmsI8R90cmdb0614ixEo3Z1Wj2eO",
     authorizationParams: {
-      redirect_uri: window.location.origin + '/-frontend-moodify-/'
+      redirect_uri: window.location.origin
     }
   })
 )
