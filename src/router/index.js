@@ -93,7 +93,12 @@ const routes = [
 
 },
 
-
+{
+  path: '/challenges/:id/status',
+  name: 'challenge-status',
+  component: () => import('@/views/ChallengeStatus.vue'),
+  beforeEnter: authGuard
+},
 {
   path: '/challenges/list',
   component: ChallengesList,

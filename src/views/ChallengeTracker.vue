@@ -7,41 +7,51 @@ const auth0 = useAuth0()
 const challenges = ref([])
 const loading = ref(true)
 
-/* LOAD + MERGE DATA */
+/* LOAD DATA */
 async function loadData() {
   try {
-    const token = await auth0.getAccessTokenSilently({
-  authorizationParams: {
-    audience: "https://moodify-api"
-  }
-})
+    loading.value = true
 
-    // 1. User Challenges laden
-    const resUser = await fetch('http://localhost:8081/api/user-challenges', {
-      headers: {
-        Authorization: `Bearer ${token}`
+    const token = await auth0.getAccessTokenSilently({
+      authorizationParams: {
+        audience: "https://moodify-api"
       }
     })
 
-    const userChallenges = await resUser.json()
+    // 1. User Challenges (nur aktueller User)
+   const resUser = await fetch('http://localhost:8081/api/user-challenges/me', {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+})
 
-    // 2. Alle Challenges laden
+    const userChallenges = resUser.ok ? await resUser.json() : []
+
+    // 2. Alle Challenges (öffentlich)
     const resAll = await fetch('http://localhost:8081/api/challenge')
-    const allChallenges = await resAll.json()
+    const allChallenges = resAll.ok ? await resAll.json() : []
 
-    // 3. MAPPING (ID → echte Daten)
+    // 3. Mapping: user data + challenge details
     challenges.value = userChallenges.map(uc => {
-      const match = allChallenges.find(c => c.id === uc.challengeId)
+      const match = allChallenges.find(c => c.id == uc.challengeId)
 
       return {
-        ...uc,
+        id: uc.id,
+        challengeId: uc.challengeId,
+        finished: uc.finished,
+        mood: uc.mood,
+        review: uc.review,
+
         title: match?.title || 'Unknown Challenge',
-        description: match?.description || ''
+        description: match?.description || '',
+        category: match?.category || '',
+        difficulty: match?.difficulty || ''
       }
     })
 
   } catch (e) {
     console.error('Load error:', e)
+    challenges.value = []
   } finally {
     loading.value = false
   }
@@ -53,20 +63,27 @@ onMounted(loadData)
 <template>
   <main class="page">
 
-    <h1>📁 Meine Challenges</h1>
+    <h1>📁 Mein Challenge Tracker</h1>
 
-    <p v-if="loading" class="loading">Lade deine Daten...</p>
+    <p v-if="loading" class="loading">
+      Lade deine Challenges...
+    </p>
+
+    <div v-else-if="challenges.length === 0" class="empty">
+      Noch keine angenommenen Challenges 🎯
+    </div>
 
     <div v-else class="grid">
 
-      <div
-        v-for="c in challenges"
-        :key="c.id"
-        class="card"
-      >
+      <div v-for="c in challenges" :key="c.id" class="card">
 
         <h2 class="title">{{ c.title }}</h2>
         <p class="desc">{{ c.description }}</p>
+
+        <div class="tags">
+          <span class="tag">{{ c.category }}</span>
+          <span class="tag">{{ c.difficulty }}</span>
+        </div>
 
         <p class="status">
           Status:
@@ -75,10 +92,12 @@ onMounted(loadData)
           </span>
         </p>
 
-        <p class="mood">😊 Mood: {{ c.mood }}</p>
+        <p class="mood">
+          😊 Mood: {{ c.mood || '—' }}
+        </p>
 
         <p v-if="c.review" class="review">
-          📝 "{{ c.review }}"
+          📝 {{ c.review }}
         </p>
 
       </div>
@@ -90,15 +109,17 @@ onMounted(loadData)
 
 <style scoped>
 .page {
+  min-height: 100vh;
   padding: 40px;
   font-family: sans-serif;
   background: linear-gradient(135deg, #f8fafc, #eef2ff);
-  min-height: 100vh;
 }
 
-.loading {
+.loading,
+.empty {
   text-align: center;
   color: #666;
+  margin-top: 40px;
 }
 
 .grid {
@@ -114,11 +135,6 @@ onMounted(loadData)
   padding: 20px;
   border-radius: 18px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
 }
 
 /* TEXT */
@@ -131,7 +147,21 @@ onMounted(loadData)
 .desc {
   font-size: 13px;
   color: #666;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+}
+
+/* TAGS */
+.tags {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.tag {
+  font-size: 12px;
+  background: #eee;
+  padding: 4px 10px;
+  border-radius: 12px;
 }
 
 /* STATUS */
