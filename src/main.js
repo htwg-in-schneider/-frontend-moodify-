@@ -9,12 +9,13 @@ import { createAuth0 } from '@auth0/auth0-vue'
 
 const app = createApp(App)
 
-const pinia = createPinia()
+/* 1. Pinia zuerst */
+app.use(createPinia())
 
-
+/* 2. Router */
 app.use(router)
-app.use(pinia)
 
+/* 3. Auth0 */
 app.use(
   createAuth0({
     domain: "dev-5l3w1yvav5vmutet.us.auth0.com",
@@ -25,6 +26,5 @@ app.use(
     }
   })
 )
-
 
 app.mount('#app')

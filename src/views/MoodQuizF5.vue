@@ -1,72 +1,30 @@
-
 <template>
   <div class="quiz-page">
     <div class="quiz-card">
 
-      <!-- Progress -->
       <div class="top-bar">
         <button class="back" @click="goBack">← Zurück</button>
-
-        <div class="progress-text">
-          Frage 5 von 5
-        </div>
+        <div class="progress-text">Frage 5 von 5</div>
       </div>
 
       <div class="progress-bar">
         <div class="progress-fill" style="width: 100%"></div>
       </div>
 
-      <!-- Question -->
-      <h1>Was brauchst du jetzt am meisten?</h1>
-      <p class="subtitle">Letzte Frage – wähle ehrlich.</p>
+      <h1>Wie fühlst du dich insgesamt?</h1>
 
-      <!-- Answers -->
       <div class="answers">
 
-        <div
-          class="answer"
-          :class="{ selected: selected === 'rest' }"
-          @click="select('rest')"
-        >
-          🛌 <span>Ruhe</span>
-          <div v-if="selected === 'rest'" class="check">✔</div>
-        </div>
-
-        <div
-          class="answer"
-          :class="{ selected: selected === 'energy' }"
-          @click="select('energy')"
-        >
-          ⚡ <span>Energie</span>
-          <div v-if="selected === 'energy'" class="check">✔</div>
-        </div>
-
-        <div
-          class="answer"
-          :class="{ selected: selected === 'focus' }"
-          @click="select('focus')"
-        >
-          🧠 <span>Fokus</span>
-          <div v-if="selected === 'focus'" class="check">✔</div>
-        </div>
-
-        <div
-          class="answer"
-          :class="{ selected: selected === 'motivation' }"
-          @click="select('motivation')"
-        >
-          🚀 <span>Motivation</span>
-          <div v-if="selected === 'motivation'" class="check">✔</div>
-        </div>
+        <div class="answer" :class="{ selected: selected === 'happy' }" @click="select('happy')">😊 Glücklich</div>
+        <div class="answer" :class="{ selected: selected === 'calm' }" @click="select('calm')">😌 Ruhig</div>
+        <div class="answer" :class="{ selected: selected === 'sad' }" @click="select('sad')">😔 Traurig</div>
+        <div class="answer" :class="{ selected: selected === 'stressed' }" @click="select('stressed')">😵 Gestresst</div>
 
       </div>
 
-      <!-- Buttons -->
-      <div class="actions">
-        <button class="next" :disabled="!selected" @click="finish">
-          Ergebnis anzeigen 🎉
-        </button>
-      </div>
+      <button class="next" :disabled="!selected" @click="next">
+        Ergebnis
+      </button>
 
     </div>
   </div>
@@ -75,17 +33,18 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuizStore } from '@/stores/quizStore'
 
 const router = useRouter()
+const quiz = useQuizStore()
 const selected = ref(null)
 
-function select(val) {
-  selected.value = val
+function select(v) {
+  selected.value = v
 }
 
-
-function finish() {
-
+function next() {
+  quiz.setAnswer(4, selected.value)
   router.push('/quiz/result')
 }
 
@@ -93,6 +52,7 @@ function goBack() {
   router.push('/quiz/question/4')
 }
 </script>
+
 <style scoped>
 .quiz-page {
   min-height: 100vh;
@@ -105,48 +65,49 @@ function goBack() {
 
 .quiz-card {
   width: 100%;
-  max-width: 700px;
+  max-width: 650px;
   background: white;
   border-radius: 20px;
   padding: 30px;
   box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  text-align: center;
 }
 
 .top-bar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  margin-bottom: 10px;
 }
 
 .back {
   background: none;
   border: none;
-  cursor: pointer;
-  font-size: 14px;
   color: #6366f1;
+  cursor: pointer;
 }
 
 .progress-bar {
+  width: 100%;
   height: 8px;
   background: #e5e7eb;
   border-radius: 999px;
-  margin: 15px 0;
+  margin: 15px 0 25px;
 }
 
 .progress-fill {
+  width: 100%;
   height: 100%;
   background: #6366f1;
   border-radius: 999px;
-  transition: 0.3s;
 }
 
 h1 {
-  margin-top: 20px;
+  margin-bottom: 8px;
 }
 
 .subtitle {
   color: #6b7280;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .answers {
@@ -156,12 +117,9 @@ h1 {
 }
 
 .answer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 15px;
   border-radius: 12px;
-  border: 2px solid #eee;
+  border: 2px solid #e5e7eb;
   cursor: pointer;
   transition: 0.2s;
 }
@@ -176,16 +134,8 @@ h1 {
   background: #eef2ff;
 }
 
-.check {
-  color: #6366f1;
-  font-weight: bold;
-}
-
-.actions {
+button {
   margin-top: 25px;
-}
-
-.next {
   width: 100%;
   padding: 12px;
   border: none;
@@ -195,8 +145,7 @@ h1 {
   cursor: pointer;
 }
 
-.next:disabled {
+button:disabled {
   background: #ccc;
-  cursor: not-allowed;
 }
 </style>

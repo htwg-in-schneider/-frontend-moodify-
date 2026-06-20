@@ -13,7 +13,7 @@
       </ul>
     </div>
 
-    
+
     <button class="start-btn" @click="startQuiz">
       🚀 Quiz starten
     </button>
@@ -26,7 +26,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 function startQuiz() {
-  router.push('/quiz/run') 
+  router.push('/quiz/question/1')
 }
 </script>
 

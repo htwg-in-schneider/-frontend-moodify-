@@ -13,19 +13,19 @@ import CreateChallenge from '../views/CreateChallenge.vue'
 import ChallengeDetail from '../views/ChallengeDetail.vue'
 import EditChallenge from '../views/EditChallenge.vue'
 import ChallengesWheel from '../views/ChallengesWheel.vue'
-
 import ChallengeTracker from '@/views/ChallengeTracker.vue'
+import CompletedChallenges from '@/views/CompletedChallenges.vue'
 
-/* MOOD / VISUAL */
+/* MOOD */
 import MoodQuiz from '../views/MoodQuiz.vue'
-
+import MoodQuizF1 from '@/views/MoodQuizF1.vue'
 import MoodQuizF2 from '@/views/MoodQuizF2.vue'
 import MoodQuizF3 from '@/views/MoodQuizF3.vue'
 import MoodQuizF4 from '@/views/MoodQuizF4.vue'
 import MoodQuizF5 from '@/views/MoodQuizF5.vue'
 import MoodQuizResult from '@/views/MoodQuizResult.vue'
-import MoodQuizF1 from '@/views/MoodQuizF1.vue'
 
+import MoodTracker from '@/views/MoodTracker.vue'
 import Affirmations from '@/views/Affirmations.vue'
 import VisionBoard from '@/views/VisionBoard.vue'
 import VisionDetail from '@/views/VisionDetail.vue'
@@ -34,8 +34,6 @@ import Profile from '@/views/Profile.vue'
 /* LEGAL */
 import Impressum from '@/views/Impressum.vue'
 import Datenschutz from '@/views/Datenschutz.vue'
-
-import CompletedChallenges from '@/views/CompletedChallenges.vue'
 
 /* ---------------------------
    ADMIN GUARD
@@ -63,88 +61,45 @@ const routes = [
   { path: '/impressum', component: Impressum },
   { path: '/datenschutz', component: Datenschutz },
 
-  /* AUTH REQUIRED */
+  /* AUTH */
   { path: '/dashboard', component: Dashboard, beforeEnter: authGuard },
   { path: '/profile', component: Profile, beforeEnter: authGuard },
 
   /* ADMIN */
   { path: '/admin', component: Admin, beforeEnter: adminGuard },
 
-  /* ---------------------------
-     CHALLENGES SYSTEM (MAIN FLOW)
-  ----------------------------*/
-
-  // HUB (Startseite für Challenges)
+  /* CHALLENGES */
   { path: '/challenges', component: ChallengesHub, beforeEnter: authGuard },
-
-  // LIST (alle Challenges)
   { path: '/challenges/list', component: ChallengesList, beforeEnter: authGuard },
-
-  // CREATE
   { path: '/challenges/create', component: CreateChallenge, beforeEnter: authGuard },
-
-  // WHEEL (Random Generator)
   { path: '/challenges/wheel', component: ChallengesWheel, beforeEnter: authGuard },
+  { path: '/challenges/completed', component: CompletedChallenges, beforeEnter: authGuard },
+  { path: '/challenges/:id', component: ChallengeDetail, beforeEnter: authGuard },
+  { path: '/challenges/:id/edit', component: EditChallenge, beforeEnter: authGuard },
+  { path: '/challenges/:id/status', component: () => import('@/views/ChallengeStatus.vue'), beforeEnter: authGuard },
+  { path: '/challenge/tracker', component: ChallengeTracker, beforeEnter: authGuard },
 
-  {
-  path: '/challenges/completed',
-  name: 'challenges-completed',
-  component: CompletedChallenges,
+  /* MOOD TRACKER */
+  { path: '/moodtracker', component: MoodTracker, beforeEnter: authGuard },
 
-},
-
-{
-  path: '/challenges/:id/status',
-  name: 'challenge-status',
-  component: () => import('@/views/ChallengeStatus.vue'),
-  beforeEnter: authGuard
-},
-{
-  path: '/challenges/list',
-  component: ChallengesList,
-  beforeEnter: authGuard
-},
-{
-  path: '/challenge/tracker',
-  component: ChallengeTracker,
-  beforeEnter: authGuard
-},
-
-  // DETAIL
-  {
-    path: '/challenges/:id',
-    name: 'challenge-detail',
-    component: ChallengeDetail,
-    beforeEnter: authGuard
-  },
-
-  // EDIT
-  {
-    path: '/challenges/:id/edit',
-    component: EditChallenge,
-    beforeEnter: authGuard
-  },
-
-  /* ---------------------------
-     VISUAL / PERSONAL GROWTH
-  ----------------------------*/
-  { path: '/affirmations', component: Affirmations, beforeEnter: authGuard },
-  { path: '/visionboard', component: VisionBoard, beforeEnter: authGuard },
-  { path: '/visionboard/:id', component: VisionDetail, beforeEnter: authGuard },
-  /* ---------------------------
-     MOOD QUIZ FLOW
-  ----------------------------*/
+  /* MOOD QUIZ FLOW (FIXED) */
   { path: '/moodquiz', component: MoodQuiz, beforeEnter: authGuard },
 
-  { path: '/quiz/run', component: MoodQuizF1, beforeEnter: authGuard },
+  { path: '/quiz/question/1', component: MoodQuizF1, beforeEnter: authGuard },
   { path: '/quiz/question/2', component: MoodQuizF2, beforeEnter: authGuard },
   { path: '/quiz/question/3', component: MoodQuizF3, beforeEnter: authGuard },
   { path: '/quiz/question/4', component: MoodQuizF4, beforeEnter: authGuard },
   { path: '/quiz/question/5', component: MoodQuizF5, beforeEnter: authGuard },
-  { path: '/quiz/result', component: MoodQuizResult, beforeEnter: authGuard }
+
+  { path: '/quiz/result', component: MoodQuizResult, beforeEnter: authGuard },
+
+  /* VISUAL */
+  { path: '/affirmations', component: Affirmations, beforeEnter: authGuard },
+  { path: '/visionboard', component: VisionBoard, beforeEnter: authGuard },
+  { path: '/visionboard/:id', component: VisionDetail, beforeEnter: authGuard }
 ]
 
 export default createRouter({
-  history: createWebHistory('/-frontend-moodify-/'),
+  history: createWebHistory(),
   routes
 })

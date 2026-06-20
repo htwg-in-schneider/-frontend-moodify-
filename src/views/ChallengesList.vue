@@ -20,6 +20,11 @@ const filtered = computed(() =>
 )
 
 onMounted(load)
+
+/* BACK */
+function goBack() {
+  router.back()
+}
 </script>
 
 <template>
@@ -32,7 +37,7 @@ onMounted(load)
 
       <div class="buttons">
         <button @click="router.push('/challenges/create')">➕ Neu</button>
-        <button @click="router.push('/challenges')">🏠 Hub</button>
+        <button @click="goBack">← Zurück</button>
       </div>
     </div>
 

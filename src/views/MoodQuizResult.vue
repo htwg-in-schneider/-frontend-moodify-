@@ -1,48 +1,32 @@
 <template>
-  <div class="result-page">
+  <div class="page">
 
-    <div class="result-card">
+    <div class="card">
 
-      <!-- Header -->
-      <div class="top">
-        <span class="badge">Dein Ergebnis</span>
+      <div class="emoji">{{ mood.emoji }}</div>
+
+      <h1>{{ mood.title }}</h1>
+
+      <p class="text">{{ mood.text }}</p>
+
+      <div class="box">
+        💡 {{ mood.recommendation }}
       </div>
 
-      <!-- Mood Section -->
-      <div class="mood-section">
-        <div class="emoji">{{ moodEmoji }}</div>
-        <h1>{{ moodTitle }}</h1>
-        <p>{{ moodText }}</p>
-      </div>
+      <div class="answers" v-if="answers.length">
+        <h3>Deine Antworten</h3>
 
-      <!-- Recommendation Card -->
-      <div class="rec-card">
-        <h3>💡 Empfehlung für dich</h3>
-        <p>{{ recommendation }}</p>
-      </div>
-
-      <!-- Stats -->
-      <div class="stats">
-        <div class="stat">
-          <span>Stimmung</span>
-          <strong>{{ score }}/5</strong>
-        </div>
-        <div class="stat">
-          <span>Level</span>
-          <strong>{{ level }}</strong>
+        <div class="list">
+          <div v-for="(a, i) in answers" :key="i" class="item">
+            <span>Frage {{ i + 1 }}</span>
+            <strong>{{ a }}</strong>
+          </div>
         </div>
       </div>
 
-      <!-- Actions -->
-      <div class="actions">
-        <button class="primary" @click="restart">
-          🔄 Nochmal starten
-        </button>
-
-        <button class="secondary" @click="goDashboard">
-          🏠 Dashboard
-        </button>
-      </div>
+      <button class="btn" @click="restart">
+        🔄 Nochmal starten
+      </button>
 
     </div>
 
@@ -50,157 +34,170 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuizStore } from '@/stores/quizStore'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const router = useRouter()
+const quiz = useQuizStore()
+const auth0 = useAuth0()
 
-// später aus Pinia / Backend
-const score = 4
+const answers = computed(() => quiz.answers || [])
 
-const moodEmoji = computed(() => {
-  if (score <= 2) return '🌧️'
-  if (score <= 3) return '🌤️'
-  return '☀️'
+const moodType = computed(() => quiz.calculateMood())
+
+const mood = computed(() => {
+  switch (moodType.value) {
+
+    case 'sad':
+      return {
+        emoji: '🌧️',
+        title: 'Du brauchst Ruhe',
+        text: 'Deine Energie ist gerade niedrig.',
+        recommendation: 'Mach eine Pause und entspann dich'
+      }
+
+    case 'calm':
+      return {
+        emoji: '🌤️',
+        title: 'Ausgeglichen',
+        text: 'Du bist stabil und ruhig.',
+        recommendation: 'Perfekt für Fokus oder leichte Aufgaben'
+      }
+
+    default:
+      return {
+        emoji: '☀️',
+        title: 'Sehr gute Energie',
+        text: 'Du bist motiviert und aktiv!',
+        recommendation: 'Nutze den Flow für produktive Tasks'
+      }
+  }
 })
 
-const moodTitle = computed(() => {
-  if (score <= 2) return 'Du bist heute eher ruhig'
-  if (score <= 3) return 'Du bist ausgeglichen'
-  return 'Du bist voller Energie'
-})
+onMounted(async () => {
 
-const moodText = computed(() => {
-  if (score <= 2) return 'Nimm dir Zeit für dich und Ruhe.'
-  if (score <= 3) return 'Stabile Stimmung – guter Flow.'
-  return 'Sehr positive Energie heute!'
-})
+  if (!answers.value.length) return
 
-const recommendation = computed(() => {
-  if (score <= 2) return 'Chill Musik & Ruhe helfen dir heute.'
-  if (score <= 3) return 'Lo-Fi oder leichte Beats passen gut.'
-  return 'Energetische Musik & Fokus-Playlist!'
-})
+  try {
+    const token = await auth0.getAccessTokenSilently({
+      authorizationParams: {
+        audience: "https://moodify-api"
+      }
+    })
 
-const level = computed(() => {
-  if (score <= 2) return 'Low Energy'
-  if (score <= 3) return 'Balanced'
-  return 'High Energy'
+    await fetch('http://localhost:8081/api/mood', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        mood: moodType.value,
+        answers: answers.value,
+        date: new Date().toISOString()
+      })
+    })
+
+  } catch (e) {
+    console.error(e)
+  }
 })
 
 function restart() {
-  router.push('/quiz/run')
-}
-
-function goDashboard() {
-  router.push('/dashboard')
+  quiz.resetQuiz()
+  router.push('/quiz/question/1')
 }
 </script>
 
 <style scoped>
-.result-page {
+.page {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at top, #c7d2fe, #eef2ff, #f8fafc);
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
   padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-.result-card {
+.card {
   width: 100%;
   max-width: 520px;
   background: white;
   border-radius: 24px;
-  padding: 35px;
-  box-shadow: 0 25px 70px rgba(0,0,0,0.12);
+  padding: 32px;
   text-align: center;
-}
-
-.badge {
-  background: #eef2ff;
-  color: #4f46e5;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.mood-section {
-  margin-top: 25px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+  animation: fadeIn 0.4s ease;
 }
 
 .emoji {
-  font-size: 60px;
+  font-size: 64px;
   margin-bottom: 10px;
 }
 
-.mood-section h1 {
+h1 {
   font-size: 26px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.mood-section p {
+.text {
   color: #6b7280;
+  margin-bottom: 20px;
 }
 
-.rec-card {
-  margin-top: 25px;
-  background: #f8fafc;
+.box {
+  background: #eef2ff;
   border-left: 4px solid #6366f1;
-  padding: 15px;
+  padding: 14px;
   border-radius: 12px;
+  margin-bottom: 25px;
   text-align: left;
 }
 
-.stats {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 25px;
+.answers {
+  text-align: left;
+  margin-top: 20px;
 }
 
-.stat {
-  background: #f1f5f9;
-  padding: 12px;
-  border-radius: 12px;
-  width: 48%;
-}
-
-.stat span {
-  font-size: 12px;
-  color: #6b7280;
-}
-
-.stat strong {
-  display: block;
-  font-size: 18px;
-  margin-top: 5px;
-}
-
-.actions {
-  margin-top: 30px;
+.list {
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
-.primary {
+.item {
+  display: flex;
+  justify-content: space-between;
+  background: #f8fafc;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.btn {
+  margin-top: 25px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
   background: #6366f1;
   color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 12px;
+  font-weight: bold;
   cursor: pointer;
-  font-weight: 600;
+  transition: 0.2s;
 }
 
+.btn:hover {
+  background: #4f46e5;
+  transform: translateY(-1px);
+}
 
-.secondary {
-  background: transparent;
-  border: 2px solid #6366f1;
-  color: #6366f1;
-  padding: 12px;
-  border-radius: 12px;
-  cursor: pointer;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
