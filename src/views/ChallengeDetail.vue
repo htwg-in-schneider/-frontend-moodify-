@@ -7,7 +7,7 @@ const route = useRoute()
 const challenge = ref(null)
 
 onMounted(async () => {
-  const res = await fetch(`http://localhost:8081/challenge/${route.params.id}`)
+  const res = await fetch(`http://localhost:8081/api/challenge/${route.params.id}`)
   challenge.value = await res.json()
 })
 </script>
@@ -39,5 +39,9 @@ onMounted(async () => {
   border-radius: 999px;
   background: #e8f5e9;
   color: #2e7d32;
+}
+
+.card {
+  cursor: pointer;
 }
 </style>

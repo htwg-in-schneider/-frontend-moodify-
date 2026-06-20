@@ -12,7 +12,6 @@ const app = createApp(App)
 const pinia = createPinia()
 
 
-
 app.use(router)
 app.use(pinia)
 
@@ -21,7 +20,8 @@ app.use(
     domain: "dev-5l3w1yvav5vmutet.us.auth0.com",
     clientId: "f517AmsI8R90cmdb0614ixEo3Z1Wj2eO",
     authorizationParams: {
-      redirect_uri: window.location.origin
+      redirect_uri: window.location.origin,
+      audience: 'https://moodify-api'
     }
   })
 )

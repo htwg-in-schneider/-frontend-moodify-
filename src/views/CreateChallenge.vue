@@ -34,7 +34,11 @@ async function createChallenge() {
   }
 
   try {
-    const token = await getAccessTokenSilently()
+    const token = await getAccessTokenSilently({
+  authorizationParams: {
+    audience: 'https://moodify-api'
+  }
+})
 
     const res = await fetch('http://localhost:8081/api/challenge', {
       method: 'POST',

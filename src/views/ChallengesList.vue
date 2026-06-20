@@ -41,6 +41,7 @@ onMounted(load)
         v-for="c in filtered"
         :key="c.id"
         class="card"
+        @click="router.push({ name: 'challenge-detail', params: { id: c.id } })" 
       >
         <h3>{{ c.title }}</h3>
         <p>{{ c.description }}</p>
