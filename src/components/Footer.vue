@@ -20,7 +20,7 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .footer {
-  background: linear-gradient(135deg, #ffb6c1, #ff8fa3);
+   background: rgba(244, 206, 232, 0.75);
   color: white;
   text-align: center;
   padding: 60px 20px; /* kleiner statt clamp */

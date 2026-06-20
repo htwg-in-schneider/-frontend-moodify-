@@ -8,6 +8,9 @@ import { useAuth0 } from '@auth0/auth0-vue'
 const auth0 = useAuth0()
 const router = useRouter()
 
+const isOpen = ref(false)
+const showFeatures = ref(false)
+
 function handleLogin() {
   auth0.loginWithRedirect()
 }
@@ -22,10 +25,8 @@ const isAdmin = computed(() => roles.value.includes('admin'))
 
 function go(path) {
   router.push(path)
+  closeMenu()
 }
-
-const isOpen = ref(false)
-const showFeatures = ref(false)
 
 function openMenu() {
   isOpen.value = true
@@ -42,11 +43,9 @@ function toggleFeatures() {
 
 function goToReviews() {
   closeMenu()
-
   router.push('/').then(() => {
     setTimeout(() => {
-      const el = document.getElementById('reviews')
-      if (el) el.scrollIntoView({ behavior: 'smooth' })
+      document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' })
     }, 50)
   })
 }
@@ -54,6 +53,10 @@ function goToReviews() {
 
 <template>
   <header class="header">
+
+    <!-- BACKDROP (separat, kein ::before mehr) -->
+    <div v-if="isOpen" class="backdrop" @click="closeMenu"></div>
+
     <nav class="navbar">
 
       <div class="logo">
@@ -84,25 +87,16 @@ function goToReviews() {
 
         <li><a @click="goToReviews">Reviews</a></li>
 
-        <!--  USER BUTTON -->
         <li v-if="isAuthenticated && !isAdmin">
-          <button class="login-btn" @click="go('/dashboard')">
-            Dashboard
-          </button>
+          <button class="login-btn" @click="go('/dashboard')">Dashboard</button>
         </li>
 
-        <!-- ADMIN BUTTON -->
         <li v-if="isAuthenticated && isAdmin">
-          <button class="login-btn" @click="go('/admin')">
-            Admin
-          </button>
+          <button class="login-btn" @click="go('/admin')">Admin</button>
         </li>
 
-        <!-- LOGIN BUTTON -->
         <li v-if="!isAuthenticated">
-          <button class="login-btn" @click="handleLogin">
-            Login
-          </button>
+          <button class="login-btn" @click="handleLogin">Login</button>
         </li>
 
       </ul>
@@ -114,99 +108,119 @@ function goToReviews() {
 </template>
 
 <style scoped>
-
 .header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(254, 204, 212, 0.9);
-  backdrop-filter: blur(8px);
+  background: rgba(244, 206, 232, 0.75);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
+/* BACKDROP FIX */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 40;
+}
+
+/* NAV */
 .navbar {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 14px 22px;
 }
 
+/* LOGO */
 .logo img {
   height: 60px;
 }
 
+/* DESKTOP NAV */
 .nav {
   flex: 1;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 24px;
   list-style: none;
+  align-items: center;
 }
 
+/* LINKS */
 .nav a,
 .nav button {
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 15px;
   background: none;
   border: none;
   cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
 }
 
+.nav a:hover,
+.nav button:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+/* LOGIN */
 .login-btn {
-  font-weight: 700;
-  font-size: 16px;
-  background: none;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 10px;
   border: none;
-  cursor: pointer;
-  color: inherit;
 }
 
-.dropdown-wrap {
-  position: relative;
-}
-
+/* DROPDOWN */
 .dropdown {
   position: absolute;
-  top: 30px;
-  left: 0;
   background: white;
   padding: 10px;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
 }
 
+/* MOBILE */
 .open-btn {
   display: none;
-  font-size: 28px;
-  background: none;
-  border: none;
 }
 
 .close-btn {
   display: none;
 }
 
+
 @media (max-width: 900px) {
+
   .open-btn {
     display: block;
+    font-size: 28px;
+    background: none;
+    border: none;
   }
 
   .nav {
     position: fixed;
     top: 0;
     right: 0;
-    width: 280px;
     height: 100vh;
+    width: 300px;
     background: white;
     flex-direction: column;
-    padding: 70px 20px;
-    transform: translateX(100%);
-    transition: 0.3s;
+    justify-content: flex-start;
+    padding: 80px 20px;
+    gap: 16px;
+
+
+    display: none;
+    z-index: 50;
   }
 
   .nav.open {
-    transform: translateX(0);
+    display: flex;
   }
 
   .close-btn {
@@ -214,10 +228,13 @@ function goToReviews() {
     position: absolute;
     top: 15px;
     right: 15px;
-    font-size: 26px;
-    cursor: pointer;
-    background: none;
-    border: none;
+    font-size: 24px;
+  }
+
+  .dropdown {
+    position: static;
+    box-shadow: none;
+    padding: 0;
   }
 }
 </style>
