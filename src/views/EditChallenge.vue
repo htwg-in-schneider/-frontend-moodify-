@@ -75,9 +75,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const router = useRouter()
 const route = useRoute()
+
+const auth0 = useAuth0()
 
 const id = route.params.id
 
@@ -124,10 +127,17 @@ async function updateChallenge() {
   loading.value = true
 
   try {
+    const token = await auth0.getAccessTokenSilently({
+      authorizationParams: {
+        audience: 'https://moodify-api'
+      }
+    })
+
     const res = await fetch(`http://localhost:8081/api/challenge/${id}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         title: title.value,
@@ -138,7 +148,16 @@ async function updateChallenge() {
     })
 
     if (!res.ok) {
-      errorMessage.value = 'Speichern fehlgeschlagen.'
+      console.error('Speichern fehlgeschlagen:', res.status, await res.text())
+
+      if (res.status === 401) {
+        errorMessage.value = 'Du bist nicht eingeloggt oder dein Login ist abgelaufen.'
+      } else if (res.status === 403) {
+        errorMessage.value = 'Du hast keine Admin-Rechte.'
+      } else {
+        errorMessage.value = 'Speichern fehlgeschlagen.'
+      }
+
       showError.value = true
       return
     }
@@ -147,16 +166,18 @@ async function updateChallenge() {
 
     setTimeout(() => {
       showSuccess.value = false
-      router.push('/challenges')
+      router.push('/challenges/admin')
     }, 1200)
 
-  } catch {
+  } catch (err) {
+    console.error('SAVE ERROR:', err)
     errorMessage.value = 'Server nicht erreichbar.'
     showError.value = true
   } finally {
     loading.value = false
   }
 }
+
 </script>
 
 <style scoped>

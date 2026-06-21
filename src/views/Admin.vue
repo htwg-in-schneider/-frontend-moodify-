@@ -28,7 +28,7 @@ async function loadProfile() {
 
     const data = await res.json()
 
-    // 🧠 Name aus Backend (priority), fallback safe
+    
     adminName.value =
       data.name ||
       data.username ||
@@ -55,8 +55,10 @@ function logout() {
   })
 }
 
+
 onMounted(loadProfile)
 </script>
+
 
 <template>
   <main class="admin">
