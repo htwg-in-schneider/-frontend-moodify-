@@ -35,14 +35,18 @@ import Profile from '@/views/Profile.vue'
 import Impressum from '@/views/Impressum.vue'
 import Datenschutz from '@/views/Datenschutz.vue'
 
+import ChallengeDelete from '@/views/ChallengeDelete.vue'
+import AffirmationsAdmin from '@/views/AffirmationsAdmin.vue'
+
+import MoodQuizAdmin from '@/views/MoodQuizAdmin.vue'
 /* ---------------------------
-   ADMIN GUARD
+   SAFE ADMIN GUARD (FIXED)
 ----------------------------*/
 function adminGuard(to, from, next) {
   const auth = useAuth0()
 
   const roles =
-    auth.user.value?.['https://your-app.example.com/roles'] || []
+    auth?.user?.value?.['https://your-app.example.com/roles'] ?? []
 
   if (roles.includes('admin')) {
     next()
@@ -79,18 +83,19 @@ const routes = [
   { path: '/challenges/:id/status', component: () => import('@/views/ChallengeStatus.vue'), beforeEnter: authGuard },
   { path: '/challenge/tracker', component: ChallengeTracker, beforeEnter: authGuard },
 
-  /* MOOD TRACKER */
+  /* MOOD */
   { path: '/moodtracker', component: MoodTracker, beforeEnter: authGuard },
 
-  /* MOOD QUIZ FLOW (FIXED) */
+  { path: '/challenges/admin', component: ChallengeDelete, beforeEnter: authGuard },
+  { path: '/affirmations/admin', component: AffirmationsAdmin, beforeEnter: authGuard },
+  { path: '/moodquiz/admin', component: MoodQuizAdmin, beforeEnter: authGuard },
+  /* QUIZ */
   { path: '/moodquiz', component: MoodQuiz, beforeEnter: authGuard },
-
   { path: '/quiz/question/1', component: MoodQuizF1, beforeEnter: authGuard },
   { path: '/quiz/question/2', component: MoodQuizF2, beforeEnter: authGuard },
   { path: '/quiz/question/3', component: MoodQuizF3, beforeEnter: authGuard },
   { path: '/quiz/question/4', component: MoodQuizF4, beforeEnter: authGuard },
   { path: '/quiz/question/5', component: MoodQuizF5, beforeEnter: authGuard },
-
   { path: '/quiz/result', component: MoodQuizResult, beforeEnter: authGuard },
 
   /* VISUAL */
@@ -101,5 +106,8 @@ const routes = [
 
 export default createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior() {
+    return { top: 0 }
+  }
 })

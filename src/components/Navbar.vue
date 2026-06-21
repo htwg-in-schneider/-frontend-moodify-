@@ -79,7 +79,6 @@ function goToReviews() {
           <div v-show="showFeatures" class="dropdown">
             <a @click="go('/moodtracker')">Mood Tracker</a>
             <a @click="go('/challenges')">Challenges</a>
-            <a @click="go('/visionboard')">Vision Board</a>
             <a @click="go('/affirmations')">Affirmations</a>
             <a @click="go('/moodquiz')">Mood Quiz</a>
           </div>

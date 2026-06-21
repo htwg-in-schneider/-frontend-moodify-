@@ -1,25 +1,45 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
-const affirmations = ref([
-  "Ich bin genug, so wie ich bin.",
-  "Ich vertraue dem Prozess meines Lebens.",
-  "Ich bin ruhig, stark und fokussiert.",
-  "Heute ist ein guter Tag, um zu wachsen.",
-  "Ich verdiene Glück und Erfolg."
-])
+const affirmations = ref([])
+const current = ref('')
 
-const current = ref(affirmations.value[0])
+/* LOAD FROM BACKEND */
+async function loadAffirmations() {
+  try {
+    const res = await fetch('http://localhost:8081/api/affirmations')
 
-function newAffirmation() {
-  const randomIndex = Math.floor(Math.random() * affirmations.value.length)
-  current.value = affirmations.value[randomIndex]
+    if (!res.ok) {
+      console.error('API ERROR:', res.status)
+      return
+    }
+
+    const data = await res.json()
+    affirmations.value = data
+
+    if (affirmations.value.length > 0) {
+      current.value = affirmations.value[0].text
+    }
+
+  } catch (err) {
+    console.error('FETCH ERROR:', err)
+  }
 }
+
+/* RANDOM AFFIRMATION */
+function newAffirmation() {
+  if (!affirmations.value.length) return
+
+  const randomIndex = Math.floor(Math.random() * affirmations.value.length)
+  current.value = affirmations.value[randomIndex].text
+}
+
+onMounted(loadAffirmations)
 </script>
 
 <template>
   <main class="affirmations">
-    <h1>Affirmationss</h1>
+    <h1>Affirmations</h1>
     <p>Deine tägliche Erinnerung:</p>
 
     <div class="card">
@@ -29,8 +49,6 @@ function newAffirmation() {
     <button class="btn" @click="newAffirmation">
       Neue Affirmation ✨
     </button>
-
-
   </main>
 </template>
 

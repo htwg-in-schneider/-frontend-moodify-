@@ -1,85 +1,233 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const router = useRouter()
+const auth0 = useAuth0()
 
-const challenges = ref([])
+const adminName = ref('Admin')
 
-async function loadChallenges() {
-  const res = await fetch('http://localhost:8081/api/challenge')
-  challenges.value = await res.json()
+
+async function loadProfile() {
+  try {
+   
+    const token = await auth0.getAccessTokenSilently({
+      authorizationParams: {
+        audience: 'https://moodify-api'
+      }
+    })
+
+    const res = await fetch('http://localhost:8081/api/profile', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (!res.ok) throw new Error('Profile fetch failed')
+
+    const data = await res.json()
+
+    // 🧠 Name aus Backend (priority), fallback safe
+    adminName.value =
+      data.name ||
+      data.username ||
+      data.email?.split('@')[0] ||
+      'Admin'
+
+  } catch (err) {
+    console.error('PROFILE ERROR:', err)
+    adminName.value = 'Admin'
+  }
 }
 
-async function deleteChallenge(id) {
-  await fetch(`http://localhost:8081/api/challenge/${id}`, {
-    method: 'DELETE'
+/* NAVIGATION */
+function go(path) {
+  router.push(path)
+}
+
+/* LOGOUT */
+function logout() {
+  auth0.logout({
+    logoutParams: {
+      returnTo: window.location.origin
+    }
   })
-
-  loadChallenges()
 }
 
-function editChallenge(id) {
-  router.push(`/challenges/${id}/edit`)
-}
-
-onMounted(loadChallenges)
+onMounted(loadProfile)
 </script>
 
 <template>
   <main class="admin">
 
-    <h1>Admin Panel 🛠️</h1>
+    <!-- HEADER -->
+    <section class="admin-header">
+      <h1>Guten Morgen {{ adminName }} 👋</h1>
+      <p>Admin Control Center – verwalte dein gesamtes System</p>
+    </section>
 
-    <p>Hier kannst du alles verwalten</p>
+    <!-- GRID -->
+    <section class="admin-grid">
 
-    <div class="list">
+      <!-- CHALLENGES -->
+      <div class="admin-card">
+        <h2>🎯 Challenges</h2>
+        <p>Erstellen, bearbeiten & löschen</p>
 
-      <div v-for="c in challenges" :key="c.id" class="card">
-
-        <h3>{{ c.title }}</h3>
-        <p>{{ c.description }}</p>
-
-       <button class="edit" @click="editChallenge(c.id)">
-  Edit
-</button>
-        <button class="delete" @click="deleteChallenge(c.id)">
-          Delete
-        </button>
-
+        <div class="actions">
+          <button @click="go('/challenges/create')">+ Create</button>
+          <button @click="go('/challenges/admin')">Edit / Delete</button>
+          <button @click="go('/challenges')">List</button>
+        </div>
       </div>
 
-    </div>
+      <!-- AFFIRMATIONS -->
+      <div class="admin-card">
+        <h2>💗 Affirmations</h2>
+        <p>Daily Motivation verwalten</p>
+
+        <div class="actions">
+          <button @click="go('/affirmations/admin')">
+            Manage Affirmations
+          </button>
+        </div>
+      </div>
+
+      <!-- MOOD QUIZ -->
+      <div class="admin-card">
+        <h2>🧠 Mood Quiz</h2>
+        <p>Fragen Flow verwalten</p>
+
+        <div class="actions">
+          <button @click="go('/moodquiz/admin')">
+            Manage Questions
+          </button>
+          <button @click="go('/moodquiz')">
+            Preview Quiz
+          </button>
+        </div>
+      </div>
+
+      <!-- SYSTEM -->
+      <div class="admin-card logout">
+        <h2>⚙️ System</h2>
+        <p>Account & Zugriff</p>
+
+        <div class="actions">
+          <button @click="logout">Logout</button>
+        </div>
+      </div>
+
+    </section>
 
   </main>
 </template>
 
 <style scoped>
 .admin {
-  padding: 40px;
+  min-height: 100vh;
+  padding: 80px 24px;
+  background: linear-gradient(180deg, #f9fafb, #eef2ff);
 }
 
-.list {
+.admin-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.admin-header h1 {
+  font-size: 42px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.admin-header p {
+  color: #6b7280;
+  margin-top: 10px;
+}
+
+.admin-grid {
+  max-width: 1100px;
+  margin: auto;
   display: grid;
-  gap: 15px;
-  margin-top: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
 }
 
-.card {
-  padding: 15px;
-  background: #f5f5f5;
+.admin-card {
+  background: white;
+  border-radius: 18px;
+  padding: 26px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.06);
+  transition: 0.25s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+}
+
+.admin-card h2 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.admin-card p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.actions button {
+  padding: 8px 12px;
   border-radius: 10px;
-}
-
-.edit {
-  margin-right: 10px;
-}
-
-.delete {
-  background: red;
-  color: white;
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  background: #eef2ff;
+  color: #4f46e5;
+  transition: 0.2s;
+}
+
+.actions button:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+.logout {
+  background: linear-gradient(135deg, #111827, #1f2937);
+  color: white;
+}
+
+.logout p {
+  color: #cbd5e1;
+}
+
+.logout button {
+  background: #ef4444;
+  color: white;
+}
+
+.logout button:hover {
+  background: #dc2626;
+}
+
+@media (max-width: 800px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-header h1 {
+    font-size: 32px;
+  }
 }
 </style>

@@ -10,11 +10,11 @@ export default defineConfig({
     vueDevTools(),
   ],
 
-  base: '/-frontend-moodify-/',
+  base: '/', 
 
   server: {
     port: 5173,
-      strictPort: true
+    strictPort: true
   },
 
   resolve: {
