@@ -101,7 +101,14 @@ const routes = [
   /* VISUAL */
   { path: '/affirmations', component: Affirmations, beforeEnter: authGuard },
   { path: '/visionboard', component: VisionBoard, beforeEnter: authGuard },
-  { path: '/visionboard/:id', component: VisionDetail, beforeEnter: authGuard }
+  { path: '/visionboard/:id', component: VisionDetail, beforeEnter: authGuard },
+
+
+  {
+  path: '/challenges/:id',
+  name: 'challenge-detail',
+  component: () => import('@/views/ChallengeDetail.vue')
+}
 ]
 
 export default createRouter({
