@@ -22,13 +22,38 @@ export const useQuizStore = defineStore('quiz', {
       let score = 0
 
       safe.forEach(a => {
-        if (['happy','energy','focus','motivation','calm','relaxed','music','pop','electronic'].includes(a)) {
-          score++
-        }
 
-        if (['sad','stress','stressed','tired','low'].includes(a)) {
-          score--
-        }
+        if (
+      a.includes('glücklich') ||
+      a.includes('gut') ||
+      a.includes('motiviert') ||
+      a.includes('energie') ||
+      a.includes('fokus') ||
+      a.includes('entspannt') ||
+      a.includes('ruhig') ||
+      a.includes('happy') ||
+      a.includes('voller Energie') ||
+      a.includes('hoch') ||
+      a.includes('calm')
+    ) {
+      score++
+    }
+
+    if (
+      a.includes('traurig') ||
+      a.includes('gestresst') ||
+      a.includes('Stress') ||
+      a.includes('müde') ||
+      a.includes('erschöpft') ||
+      a.includes('schlecht') ||
+      a.includes('Motivation') ||
+      a.includes('sad') ||
+      a.includes('niedrig') ||
+      a.includes('tired')
+    ) {
+      score--
+      }
+       
       })
 
       if (score <= -2) return 'sad'
