@@ -13,7 +13,7 @@ onMounted(async () => {
   challenge.value = await res.json()
 })
 
-/* BACK BUTTON */
+
 function goBack() {
   router.push('/challenges/list')
 }
@@ -33,7 +33,7 @@ function goBack() {
 
     <p>Difficulty: {{ challenge.difficulty }}</p>
 
-    <!-- REVIEWS -->
+    
     <ChallengeReviews :id="challenge.id" />
 
   </main>

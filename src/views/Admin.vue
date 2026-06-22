@@ -124,6 +124,18 @@ onMounted(loadProfile)
   </div>
 </div>
 
+
+<div class="admin-card">
+  <h2>🌈 Visionboards</h2>
+  <p>Visionboards aller Nutzer ansehen & löschen</p>
+
+  <div class="actions">
+    <button @click="go('/admin/visionboards')">
+      Verwalten
+    </button>
+  </div>
+</div>
+
       
       <div class="admin-card logout">
         <h2>⚙️ System</h2>

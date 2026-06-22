@@ -1,209 +1,190 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const router = useRouter()
+const { getAccessTokenSilently } = useAuth0()
 
-/* STATE */
-const ideas = ref([])
+const boards = ref([])
+const search = ref('')
+const category = ref('')
 
-const newTitle = ref('')
-const newDescription = ref('')
-const category = ref('MINDSET')
-
-/* LOAD */
-onMounted(() => {
-  ideas.value = [
-    {
-      id: 1,
-      title: "Reise nach Japan",
-      description: "Ich möchte neue Kulturen entdecken.",
-      category: "LIFESTYLE"
-    },
-    {
-      id: 2,
-      title: "Mehr Selbstliebe",
-      description: "Achtsamkeit im Alltag.",
-      category: "MINDSET"
+async function getToken() {
+  return await getAccessTokenSilently({
+    authorizationParams: {
+      audience: 'https://moodify-api'
     }
-  ]
-})
-
-/* NAV */
-function openDetail(id) {
-  router.push(`/visionboard/${id}`)
+  })
 }
 
-/* ADD */
-function addIdea() {
-  if (!newTitle.value || !newDescription.value) return
+async function loadBoards() {
+  const token = await getToken()
 
-  ideas.value.unshift({
-    id: Date.now(),
-    title: newTitle.value,
-    description: newDescription.value,
-    category: category.value
+  const res = await fetch('http://localhost:8081/api/visionboard', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
   })
 
-  newTitle.value = ''
-  newDescription.value = ''
+  if (!res.ok) {
+    console.log('LOAD BOARDS ERROR:', res.status, await res.text())
+    return
+  }
+
+  boards.value = await res.json()
 }
 
-/* DELETE */
-function removeIdea(id) {
-  ideas.value = ideas.value.filter(i => i.id !== id)
+const filteredBoards = computed(() => {
+  return boards.value.filter(b => {
+    const title = (b.title || '').toLowerCase()
+    const matchesSearch = title.includes(search.value.toLowerCase())
+    const matchesCategory = !category.value || b.category === category.value
+
+    return matchesSearch && matchesCategory
+  })
+})
+
+async function deleteBoard(id) {
+  const token = await getToken()
+
+  const res = await fetch(`http://localhost:8081/api/visionboard/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+
+  if (res.ok) {
+    await loadBoards()
+  }
 }
+
+onMounted(loadBoards)
 </script>
 
 <template>
   <main class="page">
+    <h1>🌈 Visionboards</h1>
 
-    <h1>🌈 Vision Board</h1>
-    <p class="subtitle">Visualisiere deine Ziele ✨</p>
+    <button class="create" @click="router.push('/visionboard/create')">
+      + Neues Visionboard
+    </button>
 
-    <!-- FORM -->
-    <div class="form">
-
-      <input v-model="newTitle" placeholder="Titel (z.B. Fitness Ziel)" />
-      <input v-model="newDescription" placeholder="Beschreibung" />
+    <div class="filters">
+      <input v-model="search" placeholder="Suche nach Visionboard..." />
 
       <select v-model="category">
-        <option value="MINDSET">Mindset</option>
-        <option value="FITNESS">Fitness</option>
-        <option value="CAREER">Career</option>
-        <option value="LIFESTYLE">Lifestyle</option>
+        <option value="">Alle Kategorien</option>
+        <option value="MOTIVATION">Motivation</option>
+        <option value="ENTSPANNUNG">Entspannung</option>
+        <option value="FOKUS">Fokus</option>
+        <option value="ABLENKUNG">Ablenkung</option>
       </select>
-
-      <button class="btn" @click="addIdea">
-        + Hinzufügen
-      </button>
-
     </div>
 
-    <!-- EMPTY STATE -->
-    <div v-if="ideas.length === 0" class="empty">
-      Noch keine Visionen ✨<br />
-      Füge dein erstes Ziel hinzu
-    </div>
-
-    <!-- GRID -->
     <div class="grid">
-
       <div
+        v-for="b in filteredBoards"
+        :key="b.id || b.ID"
         class="card"
-        v-for="i in ideas"
-        :key="i.id"
-        @click="openDetail(i.id)"
+        @click="router.push(`/visionboard/${b.id || b.ID}`)"
       >
+        <h2>{{ b.title }}</h2>
+        <p>Kategorie: {{ b.category }}</p>
 
-        <div class="top">
-          <span class="tag">{{ i.category }}</span>
-
-          <button class="delete" @click.stop="removeIdea(i.id)">
-            ✕
-          </button>
+        <div class="preview">
+          <img
+            v-for="img in b.images"
+            :key="img.id"
+            :src="img.imageUrl"
+          />
         </div>
 
-        <h2>{{ i.title }}</h2>
-        <p>{{ i.description }}</p>
+        <div class="actions">
+          <button @click.stop="router.push(`/visionboard/${b.id || b.ID}/edit`)">
+            Bearbeiten
+          </button>
 
+          <button class="delete" @click.stop="deleteBoard(b.id || b.ID)">
+            Löschen
+          </button>
+        </div>
       </div>
-
     </div>
-
   </main>
 </template>
 
 <style scoped>
 .page {
-  min-height: 100vh;
   padding: 40px;
-  text-align: center;
-  background: linear-gradient(135deg, #eef2ff, #f8fafc);
-  font-family: sans-serif;
 }
 
-.subtitle {
-  color: #666;
+.create {
+  background: #C3D0C2;
+  padding: 12px 18px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
-/* FORM */
-.form {
-  max-width: 420px;
-  margin: 20px auto;
+.filters {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  margin-bottom: 30px;
 }
 
-input, select {
+input,
+select {
   padding: 12px;
   border-radius: 12px;
   border: 1px solid #ddd;
-  outline: none;
 }
 
-/* BUTTON */
-.btn {
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: #6366f1;
-  color: white;
-  cursor: pointer;
-}
-
-/* EMPTY */
-.empty {
-  margin-top: 30px;
-  color: #888;
-  font-size: 14px;
-}
-
-/* GRID */
 .grid {
-  margin-top: 30px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
 }
 
-/* CARD */
 .card {
   background: white;
-  border-radius: 16px;
-  padding: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  text-align: left;
+  padding: 22px;
+  border-radius: 22px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.07);
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.card:hover {
-  transform: translateY(-3px);
-}
-
-/* TOP */
-.top {
+.preview {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 16px 0;
 }
 
-.tag {
-  font-size: 12px;
+.preview img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
   background: #eef2ff;
-  padding: 4px 10px;
-  border-radius: 10px;
-  color: #6366f1;
 }
-
 
 .delete {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  color: #ef4444;
+  background: #ffcccc !important;
 }
 </style>

@@ -1,32 +1,33 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const route = useRoute()
 const router = useRouter()
+const { getAccessTokenSilently } = useAuth0()
 
-const item = ref(null)
+const board = ref(null)
 
-/* LOAD ONE ITEM */
 async function loadItem() {
-  const id = route.params.id
+  const token = await getAccessTokenSilently({
+    authorizationParams: {
+      audience: 'https://moodify-api'
+    }
+  })
 
-  // später Backend:
-  // const res = await fetch(`http://localhost:8081/api/vision-board/${id}`)
-  // item.value = await res.json()
+  const res = await fetch(`http://localhost:8081/api/visionboard/${route.params.id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
 
-  // aktuell (Frontend Demo):
-  const mock = [
-    { id: 1, title: "Reise nach Japan", description: "Ich möchte reisen", category: "LIFESTYLE" },
-    { id: 2, title: "Mehr Selbstliebe", description: "Achtsamkeit", category: "MINDSET" },
-    { id: 3, title: "Fitness Routine", description: "Sport machen", category: "FITNESS" }
-  ]
+  if (!res.ok) {
+    console.log('DETAIL ERROR:', res.status, await res.text())
+    return
+  }
 
-  item.value = mock.find(i => i.id == id)
-}
-
-function goBack() {
-  router.push('/visionboard')
+  board.value = await res.json()
 }
 
 onMounted(loadItem)
@@ -34,27 +35,31 @@ onMounted(loadItem)
 
 <template>
   <main class="page">
+    <button class="back" @click="router.push('/visionboard')">
+      ← Zurück
+    </button>
 
-    <button class="back" @click="goBack">← Zurück</button>
+    <div v-if="board" class="card">
+      <span class="tag">{{ board.category }}</span>
 
-    <div v-if="item" class="card">
+      <h1>{{ board.title }}</h1>
 
-      <span class="tag">{{ item.category }}</span>
-
-      <h1>{{ item.title }}</h1>
-      <p>{{ item.description }}</p>
-
-      <div class="actions">
-        <button class="btn">✏ Edit (später)</button>
-        <button class="btn danger">🗑 Delete (später)</button>
+      <div class="board-images">
+        <img
+          v-for="img in board.images"
+          :key="img.id"
+          :src="img.imageUrl"
+        />
       </div>
 
+      <button class="btn" @click="router.push(`/visionboard/${board.id || board.ID}/edit`)">
+        ✏ Bearbeiten
+      </button>
     </div>
 
     <div v-else>
       Loading...
     </div>
-
   </main>
 </template>
 
@@ -64,10 +69,8 @@ onMounted(loadItem)
   padding: 40px;
   background: linear-gradient(135deg, #eef2ff, #f8fafc);
   text-align: center;
-  font-family: sans-serif;
 }
 
-/* BACK */
 .back {
   position: absolute;
   top: 20px;
@@ -79,17 +82,15 @@ onMounted(loadItem)
   cursor: pointer;
 }
 
-/* CARD */
 .card {
-  max-width: 500px;
+  max-width: 800px;
   margin: 80px auto;
   background: white;
-  padding: 25px;
-  border-radius: 18px;
+  padding: 28px;
+  border-radius: 22px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.1);
 }
 
-/* TAG */
 .tag {
   background: #eef2ff;
   color: #6366f1;
@@ -98,24 +99,27 @@ onMounted(loadItem)
   font-size: 12px;
 }
 
-/* ACTIONS */
-.actions {
-  margin-top: 20px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
+.board-images {
+  margin-top: 25px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
 }
 
+.board-images img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 18px;
+}
 
 .btn {
-  padding: 10px 14px;
+  margin-top: 25px;
+  padding: 12px 18px;
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
+  background: #C3D0C2;
   cursor: pointer;
-}
-
-.danger {
-  background: #ef4444;
-  color: white;
+  font-weight: 700;
 }
 </style>

@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-/* STATE */
+
 const finished = ref(null)
 const mood = ref('')
 
@@ -18,7 +18,7 @@ function goBack() {
 function submitStatus() {
   if (finished.value === null || !mood.value) return
 
-  // 👉 Hier später Backend Save möglich
+  
   console.log('STATUS:', {
     finished: finished.value,
     mood: mood.value
@@ -32,7 +32,7 @@ function submitStatus() {
 
   setTimeout(() => {
     showPopup.value = false
-    router.push('/challenges/list') // nicer Flow
+    router.push('/challenges/list') 
   }, 2000)
 }
 
@@ -44,10 +44,10 @@ function goToFinished() {
 <template>
   <main class="page">
 
-    <!-- BACK -->
+   
     <button class="back" @click="goBack">← Zurück</button>
 
-    <!-- POPUP -->
+   
     <div v-if="showPopup" class="overlay">
       <div class="modal">
         <h2>✔ Status gespeichert</h2>
@@ -58,7 +58,7 @@ function goToFinished() {
     <h1>🧠 Challenge Status</h1>
     <p class="subtitle">Reflektiere deine Aufgabe</p>
 
-    <!-- DONE -->
+    
     <div class="card">
       <h2>Hast du deine Challenge beendet?</h2>
 
@@ -79,12 +79,12 @@ function goToFinished() {
       </div>
     </div>
 
-    <!-- LINK -->
+    
     <button class="link" @click="goToFinished">
       📁 Alle Challenges ansehen
     </button>
 
-    <!-- MOOD -->
+   
     <div class="card">
       <h2>Wie fühlst du dich jetzt?</h2>
 
@@ -103,7 +103,7 @@ function goToFinished() {
       </div>
     </div>
 
-    <!-- SUBMIT -->
+    
     <button
       class="submit"
       @click="submitStatus"
@@ -124,7 +124,7 @@ function goToFinished() {
   font-family: sans-serif;
 }
 
-/* BACK */
+
 .back {
   position: absolute;
   top: 20px;
@@ -135,13 +135,13 @@ function goToFinished() {
   cursor: pointer;
 }
 
-/* TEXT */
+
 .subtitle {
   color: #666;
   margin-bottom: 20px;
 }
 
-/* CARD */
+
 .card {
   background: white;
   padding: 20px;
@@ -158,7 +158,7 @@ function goToFinished() {
   margin-top: 15px;
 }
 
-/* BUTTONS */
+
 button {
   padding: 10px 14px;
   border-radius: 12px;
@@ -178,7 +178,6 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* LINK */
 .link {
   margin-top: 10px;
   background: none;
@@ -186,7 +185,6 @@ button:disabled {
   text-decoration: underline;
 }
 
-/* SUBMIT */
 .submit {
   margin-top: 20px;
   background: #22c55e;
@@ -195,7 +193,6 @@ button:disabled {
   border-radius: 12px;
 }
 
-/* POPUP */
 .overlay {
   position: fixed;
   inset: 0;
@@ -204,8 +201,6 @@ button:disabled {
   justify-content: center;
   align-items: center;
 }
-
-
 
 .modal {
   background: white;

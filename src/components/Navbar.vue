@@ -81,6 +81,7 @@ function goToReviews() {
             <a @click="go('/challenges')">Challenges</a>
             <a @click="go('/affirmations')">Affirmations</a>
             <a @click="go('/moodquiz')">Mood Quiz</a>
+             <a @click="go('visionboard')">Visionboard</a>
           </div>
         </li>
 

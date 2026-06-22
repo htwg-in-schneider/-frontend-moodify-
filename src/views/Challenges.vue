@@ -13,9 +13,6 @@ const role = computed(() => {
 })
 
    
-
-
-/* DATA */
 const challenges = ref([])
 
 const filter = ref({
@@ -23,17 +20,17 @@ const filter = ref({
   category: ''
 })
 
-/* MODALS */
+
 const showSuccess = ref(false)
 const showError = ref(false)
 const message = ref('')
 
-/* FILTER */
+
 function handleFilterChange(data) {
   filter.value = data
 }
 
-/* LOAD */
+
 async function loadChallenges() {
 
   let url = 'http://localhost:8081/api/challenge'
@@ -50,15 +47,13 @@ async function loadChallenges() {
   challenges.value = await res.json()
 }
 
-/* NAVIGATION */
+
 function openDetail(id) {
   router.push({ name: 'challenge-detail', params: { id } })
 }
 
 
 
-
-/* FILTERED LIST */
 const filteredChallenges = computed(() => {
   return challenges.value.filter(c => {
     const search = (filter.value.search || '').toLowerCase()
@@ -83,7 +78,7 @@ onMounted(loadChallenges)
   <main class="challenges">
 
 
-    <!-- SUCCESS MODAL -->
+    
     <div v-if="showSuccess" class="overlay">
       <div class="modal">
         <div class="icon">✔</div>
@@ -92,7 +87,7 @@ onMounted(loadChallenges)
       </div>
     </div>
 
-    <!-- ERROR MODAL -->
+    
     <div v-if="showError" class="overlay" @click="showError = false">
       <div class="modal error">
         <div class="icon">✖</div>
@@ -195,7 +190,7 @@ onMounted(loadChallenges)
   margin-top: 10px;
 }
 
-/* MODAL */
+
 .overlay {
   position: fixed;
   inset: 0;

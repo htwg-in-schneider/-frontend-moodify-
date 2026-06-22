@@ -27,8 +27,6 @@ import MoodQuizResult from '@/views/MoodQuizResult.vue'
 
 import MoodTracker from '@/views/MoodTracker.vue'
 import Affirmations from '@/views/Affirmations.vue'
-import VisionBoard from '@/views/VisionBoard.vue'
-import VisionDetail from '@/views/VisionDetail.vue'
 import Profile from '@/views/Profile.vue'
 import UserAdmin from '@/views/UserAdmin.vue'
 
@@ -40,9 +38,16 @@ import ChallengeDelete from '@/views/ChallengeDelete.vue'
 import AffirmationsAdmin from '@/views/AffirmationsAdmin.vue'
 
 import MoodQuizAdmin from '@/views/MoodQuizAdmin.vue'
-/* ---------------------------
-   SAFE ADMIN GUARD (FIXED)
-----------------------------*/
+
+
+import VisionBoard from '@/views/VisionBoard.vue'
+import CreateVisionBoard from '@/views/CreateVisionBoard.vue'
+import EditVisionBoard from '@/views/EditVisionBoard.vue'
+import VisionDetail from '@/views/VisionDetail.vue'
+import AdminVisionboards from '@/views/AdminVisionboards.vue'
+
+
+
 function adminGuard(to, from, next) {
   const auth = useAuth0()
 
@@ -101,19 +106,30 @@ const routes = [
 
   /* VISUAL */
   { path: '/affirmations', component: Affirmations, beforeEnter: authGuard },
-  { path: '/visionboard', component: VisionBoard, beforeEnter: authGuard },
-  { path: '/visionboard/:id', component: VisionDetail, beforeEnter: authGuard },
+
 
   {
   path: '/users/admin',
   component: UserAdmin,
   beforeEnter: adminGuard
+
 },
+
+{ path: '/visionboard', component: VisionBoard, beforeEnter: authGuard },
+{ path: '/visionboard/create', component: CreateVisionBoard, beforeEnter: authGuard },
+{ path: '/visionboard/:id', component: VisionDetail, beforeEnter: authGuard },
+{ path: '/visionboard/:id/edit', component: EditVisionBoard, beforeEnter: authGuard },
 
   {
   path: '/challenges/:id',
   name: 'challenge-detail',
   component: () => import('@/views/ChallengeDetail.vue')
+},
+
+  {
+  path: '/admin/visionboards',
+  component: AdminVisionboards,
+  beforeEnter: adminGuard
 }
 ]
 
