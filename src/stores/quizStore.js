@@ -37,7 +37,7 @@ export const useQuizStore = defineStore('quiz', {
       a.includes('voller Energie') ||
       a.includes('Menschen treffen') ||
       a.includes('hoch') ||
-      a.includes('calm')
+    
     ) {
       score++
     }
