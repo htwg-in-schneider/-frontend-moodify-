@@ -54,7 +54,7 @@ function goToReviews() {
 <template>
   <header class="header">
 
-    <!-- BACKDROP (separat, kein ::before mehr) -->
+    
     <div v-if="isOpen" class="backdrop" @click="closeMenu"></div>
 
     <nav class="navbar">
@@ -108,6 +108,7 @@ function goToReviews() {
 </template>
 
 <style scoped>
+
 .header {
   position: sticky;
   top: 0;
@@ -117,7 +118,7 @@ function goToReviews() {
   border-bottom: 1px solid rgba(0,0,0,0.06);
 }
 
-/* BACKDROP FIX */
+
 .backdrop {
   position: fixed;
   inset: 0;
@@ -125,7 +126,7 @@ function goToReviews() {
   z-index: 40;
 }
 
-/* NAV */
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -133,12 +134,12 @@ function goToReviews() {
   padding: 14px 22px;
 }
 
-/* LOGO */
+
 .logo img {
   height: 60px;
 }
 
-/* DESKTOP NAV */
+
 .nav {
   flex: 1;
   display: flex;
@@ -148,7 +149,7 @@ function goToReviews() {
   align-items: center;
 }
 
-/* LINKS */
+
 .nav a,
 .nav button {
   font-weight: 600;
@@ -165,7 +166,7 @@ function goToReviews() {
   background: rgba(99, 102, 241, 0.08);
 }
 
-/* LOGIN */
+
 .login-btn {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
@@ -174,8 +175,10 @@ function goToReviews() {
   border: none;
 }
 
-/* DROPDOWN */
+
 .dropdown {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   background: white;
   padding: 10px;
@@ -183,7 +186,7 @@ function goToReviews() {
   box-shadow: 0 20px 40px rgba(0,0,0,0.12);
 }
 
-/* MOBILE */
+
 .open-btn {
   display: none;
 }

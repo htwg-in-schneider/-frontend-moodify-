@@ -135,14 +135,14 @@ function spinWheel() {
     </section>
 
     <section class="frame4-box">
-  <h2 class="frame4-title">Personalized Challenges</h2>
+  <h2 class="frame4-title">Personalisierte  Challenges</h2>
 
   <div class="box4">
 
     <div class="box4text">
 
       <h3 class="frame4-subtitle">
-        Challenges based on your mood
+        Challenges basierend auf deiner Stimmung
       </h3>
 
       <p class="frame4-description">
@@ -151,7 +151,7 @@ function spinWheel() {
       </p>
 
       <Button class="cta" variant="accent" @click="goToLogin">
-        Get Your Challenge →
+        Zu den Challenges✨
       </Button>
     </div>
 
@@ -173,7 +173,7 @@ function spinWheel() {
   </div>
 
   <p class="label">
-    {{ result ? result.text : 'Tap to spin your challenge' }}
+    {{ result ? result.text : 'Tippe zum Drehen' }}
   </p>
 
 </div>
@@ -360,7 +360,7 @@ function spinWheel() {
   
   background: linear-gradient(
     180deg,
-    #444e97 0%,
+    #ddceff 0%,
     #eef2ff 60%,
     #f9fafb 100%
   );
@@ -514,7 +514,7 @@ function spinWheel() {
 
 .frame4-box {
   padding: 140px 24px;
-  background: linear-gradient(180deg, #ffffff, #444e97);
+  background: linear-gradient(180deg, #ffffff, #ddceff);
   height: 700px;
 }
 

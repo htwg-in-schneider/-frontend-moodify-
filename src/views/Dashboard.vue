@@ -79,7 +79,7 @@ onMounted(() => {
     <p>Wähle eine Funktion:</p>
 
     <div class="links">
-      <RouterLink to="/visionboard">Vision Board</RouterLink>
+      <RouterLink to="/visionboard">Visionboard</RouterLink>
       <RouterLink to="/challenges">Challenges</RouterLink>
       <RouterLink to="/moodquiz">Mood Quiz</RouterLink>
       <RouterLink to="/affirmations">Affirmations</RouterLink>
@@ -105,8 +105,14 @@ onMounted(() => {
 .links {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 17px;
   margin-top: 20px;
+  background: white;
+  border-radius: 18px;
+  padding: 26px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 12px 35px rgba(0,0,0,0.06);
+  transition: 0.25s ease;
 }
 
 a {
@@ -118,10 +124,21 @@ a {
 }
 
 .logout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 20px;
   padding: 10px 16px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  background-color: red;
+  color: white;
+}
+
+p{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
