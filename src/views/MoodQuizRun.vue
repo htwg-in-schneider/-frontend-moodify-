@@ -66,6 +66,7 @@ function goBack() {
   }
 }
 
+
 onMounted(loadQuestions)
 </script>
 
