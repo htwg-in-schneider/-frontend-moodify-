@@ -30,6 +30,7 @@ import Affirmations from '@/views/Affirmations.vue'
 import VisionBoard from '@/views/VisionBoard.vue'
 import VisionDetail from '@/views/VisionDetail.vue'
 import Profile from '@/views/Profile.vue'
+import UserAdmin from '@/views/UserAdmin.vue'
 
 /* LEGAL */
 import Impressum from '@/views/Impressum.vue'
@@ -103,6 +104,11 @@ const routes = [
   { path: '/visionboard', component: VisionBoard, beforeEnter: authGuard },
   { path: '/visionboard/:id', component: VisionDetail, beforeEnter: authGuard },
 
+  {
+  path: '/users/admin',
+  component: UserAdmin,
+  beforeEnter: adminGuard
+},
 
   {
   path: '/challenges/:id',

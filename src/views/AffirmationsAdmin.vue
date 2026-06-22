@@ -10,7 +10,7 @@ const newText = ref('')
 const editingId = ref(null)
 const editingText = ref('')
 
-/* ---------------- LOAD ---------------- */
+
 async function loadAffirmations() {
   try {
     const token = await getAccessTokenSilently()
@@ -32,7 +32,7 @@ async function loadAffirmations() {
   }
 }
 
-/* ---------------- ADD ---------------- */
+
 async function addAffirmation() {
   if (!newText.value.trim()) return
 
@@ -51,7 +51,7 @@ async function addAffirmation() {
   loadAffirmations()
 }
 
-/* ---------------- DELETE ---------------- */
+
 async function deleteAffirmation(id) {
   const token = await getAccessTokenSilently()
 
@@ -65,13 +65,13 @@ async function deleteAffirmation(id) {
   loadAffirmations()
 }
 
-/* ---------------- EDIT START ---------------- */
+
 function startEdit(a) {
   editingId.value = a.id || a._id
   editingText.value = a.text
 }
 
-/* ---------------- SAVE EDIT ---------------- */
+
 async function saveEdit(id) {
   const token = await getAccessTokenSilently()
 
@@ -98,7 +98,7 @@ onMounted(loadAffirmations)
     <h1>💗 Affirmations Admin</h1>
     <p class="sub">Add, edit & delete daily affirmations</p>
 
-    <!-- ADD -->
+  
     <div class="add-box">
       <input
         v-model="newText"
@@ -107,7 +107,7 @@ onMounted(loadAffirmations)
       <button @click="addAffirmation">+ Add</button>
     </div>
 
-    <!-- LIST -->
+
     <div class="list">
 
       <div
@@ -116,7 +116,7 @@ onMounted(loadAffirmations)
         class="card"
       >
 
-        <!-- EDIT MODE -->
+      
         <div v-if="editingId === (a.id || a._id)">
           <input v-model="editingText" />
           <div class="actions">
@@ -125,7 +125,7 @@ onMounted(loadAffirmations)
           </div>
         </div>
 
-        <!-- VIEW MODE -->
+     
         <div v-else class="row">
           <p>{{ a.text }}</p>
 
@@ -186,7 +186,7 @@ button {
   font-weight: 600;
 }
 
-/* LIST */
+
 .list {
   display: grid;
   gap: 12px;
@@ -198,14 +198,14 @@ button {
   border-radius: 12px;
 }
 
-/* ROW */
+
 .row {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* ACTIONS */
+
 .actions {
   display: flex;
   gap: 8px;

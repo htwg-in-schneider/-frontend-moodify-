@@ -15,7 +15,7 @@ const showModal = ref(false)
 const errorModal = ref(false)
 const errorMessage = ref('')
 
-/* BACK BUTTON */
+
 function goBack() {
   router.push('/challenges')
 }
@@ -81,12 +81,12 @@ async function createChallenge() {
 <template>
   <main class="page">
 
-    <!-- BACK BUTTON -->
+    
     <button class="back-btn" @click="goBack">
       ← Zurück
     </button>
 
-    <!-- SUCCESS MODAL -->
+    
     <div v-if="showModal" class="overlay">
       <div class="modal">
         <div class="icon">✔</div>
@@ -95,7 +95,7 @@ async function createChallenge() {
       </div>
     </div>
 
-    <!-- ERROR MODAL -->
+    
     <div v-if="errorModal" class="overlay" @click="errorModal = false">
       <div class="modal error">
         <div class="icon">✖</div>
@@ -104,7 +104,7 @@ async function createChallenge() {
       </div>
     </div>
 
-    <!-- FORM -->
+    
     <div class="form-wrapper">
 
       <header class="header">
@@ -168,7 +168,7 @@ async function createChallenge() {
   position: relative;
 }
 
-/* BACK BUTTON */
+
 .back-btn {
   position: absolute;
   top: 20px;

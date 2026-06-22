@@ -58,7 +58,6 @@ function spinWheel() {
     <section class="hero-section">
   <div class="hero-container">
 
-    <!-- TEXT -->
     <div class="hero-details">
       <h1 class="subtitle">
         Dein täglicher Boost<br />
@@ -81,7 +80,7 @@ function spinWheel() {
       </div>
     </div>
 
-    <!-- IMAGE -->
+
     <div class="hero-image">
       <div class="image-glass">
         <img src="../assets/image 122.png" alt="Moodify Hero" />
@@ -140,9 +139,7 @@ function spinWheel() {
 
   <div class="box4">
 
-    <!-- LEFT -->
     <div class="box4text">
-      <div class="badge">AI POWERED</div>
 
       <h3 class="frame4-subtitle">
         Challenges based on your mood
@@ -185,7 +182,6 @@ function spinWheel() {
   </div>
 </section>
 
-    <!-- VISION -->
   <section class="vision-section">
   <div class="vision-grid">
 
@@ -271,7 +267,6 @@ function spinWheel() {
   align-items: center;
 }
 
-/* TEXT */
 .hero-details {
   animation: fadeUp 0.8s ease;
 }
@@ -292,7 +287,6 @@ function spinWheel() {
   max-width: 520px;
 }
 
-/* BUTTONS */
 .buttons {
   margin-top: 28px;
   display: flex;
@@ -308,7 +302,7 @@ function spinWheel() {
   background: rgba(17,24,39,0.04);
 }
 
-/* IMAGE */
+
 .hero-image {
   display: flex;
   justify-content: center;
@@ -317,8 +311,6 @@ function spinWheel() {
 
 
 
-
-/* ANIMATION */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -330,7 +322,7 @@ function spinWheel() {
   }
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 900px) {
   .hero-container {
     grid-template-columns: 1fr;
@@ -357,7 +349,7 @@ function spinWheel() {
   gap: 20px;
 }
 
-/* VISION FINAL */
+
 .vision-section {
   padding: 140px 24px;
   height: 700px;
@@ -365,7 +357,7 @@ function spinWheel() {
   position: relative;
   overflow: hidden;
 
-  /* REVERSED GRADIENT */
+  
   background: linear-gradient(
     180deg,
     #444e97 0%,
@@ -373,7 +365,7 @@ function spinWheel() {
     #f9fafb 100%
   );
 }
-/* GRID */
+
 .vision-grid {
   max-width: 1200px;
   margin: auto;
@@ -385,7 +377,7 @@ function spinWheel() {
   gap: 80px;
 }
 
-/* IMAGE SIDE */
+
 .vision-left {
   display: flex;
   justify-content: center;
@@ -407,15 +399,13 @@ function spinWheel() {
 }
 
 
-
-
 .vs {
   width: 85%;
   object-fit: contain;
   filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
 }
 
-/* TEXT SIDE */
+
 .vision-text {
   max-width: 520px;
 }
@@ -443,7 +433,7 @@ function spinWheel() {
   box-shadow: 0 18px 45px rgba(99,102,241,0.25);
 }
 
-/* RESPONSIVE */
+
 @media (max-width: 900px) {
   .vision-grid {
     grid-template-columns: 1fr;
@@ -461,7 +451,7 @@ function spinWheel() {
   }
 }
 
-/* AFFIRMATION SECTION FIX */
+
 .affirmation-section {
   padding: 140px 24px;
   background: linear-gradient(180deg, #fff, #ffe4f1);
@@ -470,13 +460,13 @@ function spinWheel() {
   margin: 0; /* WICHTIG: entfernt gap */
 }
 
-/* verhindert spacing zwischen sections */
+
 .affirmation-section,
 .vision-section {
   margin-bottom: 0;
 }
 
-/* INNER WRAPPER (falls nicht vorhanden) */
+
 .affirmation-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -487,7 +477,7 @@ function spinWheel() {
   gap: 80px;
 }
 
-/* TEXT */
+
 .affirmation-textbox {
   max-width: 520px;
 }
@@ -499,7 +489,7 @@ function spinWheel() {
   margin-bottom: 28px;
 }
 
-/* IMAGE */
+
 .affirmation-image {
   width: 100%;
   max-width: 360px;
@@ -507,7 +497,7 @@ function spinWheel() {
   filter: drop-shadow(0 20px 40px rgba(0,0,0,0.12));
 }
 
-/* SOFT PINK GLOW (Apple style) */
+
 .affirmation-section::after {
   content: "";
   position: absolute;
@@ -521,7 +511,7 @@ function spinWheel() {
 
   pointer-events: none;
 }
-/* challenge */
+
 .frame4-box {
   padding: 140px 24px;
   background: linear-gradient(180deg, #ffffff, #444e97);
@@ -546,22 +536,11 @@ function spinWheel() {
   align-items: center;
 }
 
-/* LEFT */
+
 .box4text {
   padding: 10px;
 }
 
-.badge {
-  display: inline-block;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(99,102,241,0.12);
-  color: #4f46e5;
-  margin-bottom: 14px;
-}
 
 .frame4-subtitle {
   font-size: 28px;
@@ -586,7 +565,7 @@ function spinWheel() {
   align-items: center;
 }
 
-/* OUTER WHEEL */
+
 .wheel {
   width: 260px;
   height: 260px;
@@ -609,7 +588,7 @@ function spinWheel() {
   box-shadow: 0 30px 80px rgba(0,0,0,0.15);
 }
 
-/* POINTER (top arrow) */
+
 .pointer {
   position: absolute;
   top: -10px;
@@ -624,7 +603,7 @@ function spinWheel() {
   border-bottom: 20px solid #111827;
 }
 
-/* CENTER */
+
 .center {
   position: absolute;
   top: 50%;
@@ -646,7 +625,7 @@ function spinWheel() {
   border: 1px solid rgba(0,0,0,0.08);
 }
 
-/* LABEL */
+
 .label {
   margin-top: 16px;
   font-size: 14px;

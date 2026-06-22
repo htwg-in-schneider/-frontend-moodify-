@@ -18,14 +18,14 @@ async function loadData() {
   }
 })
 
-// USER
+
 const resUser = await fetch('http://localhost:8081/api/user-challenges/me', {
   headers: {
     Authorization: `Bearer ${token}`
   }
 })
 
-// ALL (FIXED)
+
 const resAll = await fetch('http://localhost:8081/api/challenge', {
   headers: {
     Authorization: `Bearer ${token}`
@@ -35,7 +35,7 @@ const resAll = await fetch('http://localhost:8081/api/challenge', {
 const userChallenges = resUser.ok ? await resUser.json() : []
 const allChallenges = resAll.ok ? await resAll.json() : []
 
-    // 3. Mapping
+    
     challenges.value = userChallenges.map(uc => {
       const match = allChallenges.find(c => c.id == uc.challengeId)
 

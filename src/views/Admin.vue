@@ -63,55 +63,68 @@ onMounted(loadProfile)
 <template>
   <main class="admin">
 
-    <!-- HEADER -->
+    
     <section class="admin-header">
       <h1>Guten Morgen {{ adminName }} 👋</h1>
       <p>Admin Control Center – verwalte dein gesamtes System</p>
     </section>
 
-    <!-- GRID -->
+    
     <section class="admin-grid">
 
-      <!-- CHALLENGES -->
+      
       <div class="admin-card">
         <h2>🎯 Challenges</h2>
         <p>Erstellen, bearbeiten & löschen</p>
 
         <div class="actions">
-          <button @click="go('/challenges/create')">+ Create</button>
-          <button @click="go('/challenges/admin')">Edit / Delete</button>
-          <button @click="go('/challenges')">List</button>
+          <button @click="go('/challenges/create')">+ Erstellen</button>
+          <button @click="go('/challenges/admin')">Bearbieten/Löschen</button>
+          <button @click="go('/challenges')">Liste</button>
         </div>
       </div>
 
-      <!-- AFFIRMATIONS -->
+      
       <div class="admin-card">
         <h2>💗 Affirmations</h2>
         <p>Daily Motivation verwalten</p>
 
         <div class="actions">
           <button @click="go('/affirmations/admin')">
-            Manage Affirmations
+            Verwalten
           </button>
         </div>
       </div>
 
-      <!-- MOOD QUIZ -->
+      
       <div class="admin-card">
         <h2>🧠 Mood Quiz</h2>
         <p>Fragen Flow verwalten</p>
 
         <div class="actions">
           <button @click="go('/moodquiz/admin')">
-            Manage Questions
+            Verwalten
           </button>
           <button @click="go('/moodquiz')">
-            Preview Quiz
+            Preview 
           </button>
         </div>
       </div>
 
-      <!-- SYSTEM -->
+
+     
+<div class="admin-card">
+  <h2>👤 Nutzer</h2>
+  <p>User verwalten & Rollen bearbeiten</p>
+
+  <div class="actions">
+    <button @click="go('/users/admin')">
+      Verwalten
+    </button>
+  </div>
+</div>
+
+      
       <div class="admin-card logout">
         <h2>⚙️ System</h2>
         <p>Account & Zugriff</p>

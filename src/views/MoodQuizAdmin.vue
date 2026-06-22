@@ -11,7 +11,7 @@ const editingText = ref('')
 
 const API = 'http://localhost:8081/api/moodquiz'
 
-/* LOAD */
+
 async function loadQuestions() {
   loading.value = true
   error.value = null
@@ -87,26 +87,26 @@ onMounted(loadQuestions)
       <p>Fragen verwalten (Create / Edit / Delete)</p>
     </header>
 
-    <!-- LOADING -->
+    
     <div v-if="loading">Loading...</div>
 
-    <!-- ERROR -->
+    
     <div v-if="error" class="error">
       {{ error }}
     </div>
 
-    <!-- CREATE -->
+    
     <div class="create">
       <input v-model="newQuestion" placeholder="Neue Frage..." />
       <button @click="addQuestion">+ Add</button>
     </div>
 
-    <!-- EMPTY STATE -->
+    
     <div v-if="!loading && questions.length === 0">
       Keine Fragen vorhanden.
     </div>
 
-    <!-- LIST -->
+    
     <div class="list">
       <div v-for="q in questions" :key="q.id" class="card">
 

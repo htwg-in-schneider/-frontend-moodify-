@@ -1,30 +1,26 @@
 <template>
   <div class="tracker">
 
-    <!-- HEADER -->
     <div class="header">
       <h1>📊 Mood Intelligence</h1>
       <p>Deine emotionale Entwicklung der letzten Tage</p>
     </div>
 
-    <!-- LOADING -->
+
     <div v-if="loading" class="state">
       ⏳ Lade Daten...
     </div>
 
-    <!-- EMPTY -->
     <div v-else-if="!moods.length" class="state">
       Keine Mood-Daten vorhanden
     </div>
 
     <div v-else>
 
-      <!-- INSIGHT -->
       <div class="insight">
         {{ insight }}
       </div>
 
-      <!-- STATS -->
       <div class="stats">
 
         <div class="card">
@@ -44,7 +40,7 @@
 
       </div>
 
-      <!-- CHART -->
+
       <div class="chart">
         <div
           v-for="(m, i) in last7Days"
@@ -62,7 +58,7 @@
         </div>
       </div>
 
-      <!-- LIST -->
+
       <div class="list">
 
         <div v-for="(m, i) in moods" :key="i" class="entry">
@@ -98,9 +94,7 @@ const auth0 = useAuth0()
 const moods = ref([])
 const loading = ref(true)
 
-/* =========================
-   LOAD FROM BACKEND
-========================= */
+
 async function load() {
   try {
     const token = await auth0.getAccessTokenSilently({
@@ -128,9 +122,7 @@ async function load() {
 
 onMounted(load)
 
-/* =========================
-   HELPERS
-========================= */
+
 function score(mood) {
   if (mood === 'happy') return 3
   if (mood === 'calm') return 2
@@ -148,9 +140,7 @@ function formatDate(date) {
   return new Date(date).toLocaleDateString()
 }
 
-/* =========================
-   LAST 7 DAYS
-========================= */
+
 const last7Days = computed(() => {
   return [...moods.value]
     .slice(-7)
@@ -159,9 +149,6 @@ const last7Days = computed(() => {
     }))
 })
 
-/* =========================
-   STATS
-========================= */
 const averageMood = computed(() => {
   if (!moods.value.length) return '-'
 
@@ -209,9 +196,7 @@ const insight = computed(() => {
   return "🧠 Du brauchst mehr Balance"
 })
 
-/* =========================
-   UI
-========================= */
+
 function barHeight(s) {
   return s * 35
 }

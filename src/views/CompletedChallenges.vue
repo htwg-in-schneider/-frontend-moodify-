@@ -7,7 +7,7 @@ const router = useRouter()
 const route = useRoute()
 const auth0 = useAuth0()
 
-/* STATE */
+
 const finished = ref(null)
 const mood = ref('')
 const review = ref('')
@@ -26,7 +26,7 @@ if (!challengeId) {
 }
 
 
-/* SUBMIT */
+
 async function submit() {
   if (finished.value === null || !mood.value) return
 
@@ -104,7 +104,7 @@ async function submit() {
       Speichern
     </button>
 
-    <!-- POPUP -->
+  
     <div v-if="showPopup" class="overlay">
       <div class="modal">
         <h2>✔ Gespeichert</h2>
@@ -166,7 +166,7 @@ button {
   transition: all 0.2s ease;
 }
 
-/* Auswahl Buttons */
+
 .card button {
   padding: 12px 18px;
   margin-right: 10px;
@@ -190,7 +190,7 @@ button {
   box-shadow: 0 10px 20px rgba(99, 102, 241, 0.25);
 }
 
-/* Review Feld */
+
 textarea {
   width: 100%;
   min-height: 140px;
@@ -213,7 +213,7 @@ textarea:focus {
   box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
-/* Speichern Button */
+
 .submit {
   margin-top: 15px;
 
@@ -238,7 +238,7 @@ textarea:focus {
   transform: scale(0.98);
 }
 
-/* Popup */
+
 .overlay {
   position: fixed;
   inset: 0;

@@ -6,16 +6,16 @@ import { useAuth0 } from '@auth0/auth0-vue'
 const router = useRouter()
 const auth0 = useAuth0()
 
-/* DATA */
+
 const challenges = ref([])
 const selected = ref(null)
 
-/* UI */
+
 const spinning = ref(false)
 const showResult = ref(false)
 const showAcceptPopup = ref(false)
 
-/* FILTER */
+
 const category = ref('')
 const difficulty = ref('')
 
@@ -23,7 +23,7 @@ function goBack() {
   router.push('/challenges')
 }
 
-/* LOAD */
+
 async function loadChallenges() {
   const token = await auth0.getAccessTokenSilently({
     authorizationParams: {
@@ -40,7 +40,7 @@ async function loadChallenges() {
   challenges.value = await res.json()
 }
 
-/* FILTER (MUSS AUSSERHALB SEIN!) */
+
 const filteredChallenges = computed(() => {
   return challenges.value.filter(c => {
     const matchCategory = !category.value || c.category === category.value
@@ -49,7 +49,7 @@ const filteredChallenges = computed(() => {
   })
 })
 
-/* SPIN */
+
 function spin() {
   if (filteredChallenges.value.length === 0) return
 
@@ -66,7 +66,7 @@ function spin() {
   }, 1000)
 }
 
-/* ACCEPT */
+
 function acceptChallenge() {
   if (!selected.value) return
 
@@ -83,13 +83,13 @@ function acceptChallenge() {
   }, 2000)
 }
 
-/* REJECT */
+
 function rejectChallenge() {
   selected.value = null
   showResult.value = false
 }
 
-/* AGAIN */
+
 function spinAgain() {
   spin()
 }
@@ -100,7 +100,7 @@ onMounted(loadChallenges)
 <template>
   <main class="page">
 
-    <!-- BACK -->
+
     <button class="back" @click="goBack">
       ← Zurück
     </button>
@@ -108,7 +108,7 @@ onMounted(loadChallenges)
     <h1>🎡 Challenge Wheel</h1>
     <p class="subtitle">Wähle Filter & spinne deine Challenge</p>
 
-    <!-- FILTER -->
+
     <div class="filters">
       <select v-model="category">
         <option value="">Alle Kategorien</option>
@@ -126,7 +126,7 @@ onMounted(loadChallenges)
       </select>
     </div>
 
-    <!-- WHEEL -->
+
     <div class="wheel" :class="{ spinning }">
       🎯
     </div>
@@ -135,7 +135,7 @@ onMounted(loadChallenges)
       {{ spinning ? 'Spinning...' : 'Spin 🎡' }}
     </button>
 
-    <!-- RESULT -->
+    
     <div v-if="showResult && selected" class="result">
 
       <h2>🎯 Deine Challenge</h2>
@@ -163,7 +163,7 @@ onMounted(loadChallenges)
       </div>
     </div>
 
-    <!-- ACCEPT POPUP -->
+   
     <div v-if="showAcceptPopup" class="popup-overlay">
       <div class="popup">
         <h2>🔥 Challenge angenommen</h2>
@@ -187,7 +187,7 @@ onMounted(loadChallenges)
   position: relative;
 }
 
-/* BACK */
+
 .back {
   position: absolute;
   top: 20px;
@@ -201,7 +201,7 @@ onMounted(loadChallenges)
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* FILTER */
+
 .filters {
   display: flex;
   justify-content: center;
@@ -215,7 +215,7 @@ select {
   border: 1px solid #ddd;
 }
 
-/* WHEEL */
+
 .wheel {
   width: 150px;
   height: 150px;
@@ -234,7 +234,7 @@ select {
   transform: rotate(720deg);
 }
 
-/* BUTTON */
+
 .spin-btn {
   padding: 12px 20px;
   border: none;
@@ -243,7 +243,7 @@ select {
   color: white;
 }
 
-/* RESULT */
+
 .result {
   margin-top: 30px;
   background: white;
@@ -265,7 +265,7 @@ select {
 .reject { background: #ef4444; color: white; padding: 10px; border-radius: 10px; border: none; }
 .again { background: #6366f1; color: white; padding: 10px; border-radius: 10px; border: none; }
 
-/* POPUP */
+
 .popup-overlay {
   position: fixed;
   inset: 0;

@@ -4,20 +4,15 @@ import { useAuth0 } from '@auth0/auth0-vue'
 
 const { isAuthenticated, getAccessTokenSilently } = useAuth0()
 
-/* FORM STATE */
+
 const name = ref('')
 const address = ref('')
 
-/* UI STATE */
+
 const showSuccess = ref(false)
 const showError = ref(false)
 const message = ref('')
 
-
-
-/* =========================
-   LOAD PROFILE FROM BACKEND
-   ========================= */
 async function loadProfile() {
   try {
     const token = await getAccessTokenSilently({
@@ -48,9 +43,6 @@ async function loadProfile() {
   }
 }
 
-/* =========================
-   SAVE PROFILE
-   ========================= */
 async function saveProfile() {
   try {
     const token = await getAccessTokenSilently({
@@ -86,7 +78,6 @@ async function saveProfile() {
     message.value = "Profil erfolgreich gespeichert ✔"
     showSuccess.value = true
 
-    // 🔥 reload from backend (important!)
     await loadProfile()
 
     setTimeout(() => {
@@ -100,9 +91,6 @@ async function saveProfile() {
   }
 }
 
-/* =========================
-   INIT
-   ========================= */
 onMounted(() => {
   if (isAuthenticated.value) {
     loadProfile()
@@ -137,14 +125,12 @@ onMounted(() => {
       <p>Nicht eingeloggt</p>
     </div>
 
-    <!-- SUCCESS -->
     <div v-if="showSuccess" class="overlay">
       <div class="modal">
         ✔ {{ message }}
       </div>
     </div>
 
-    <!-- ERROR -->
     <div v-if="showError" class="overlay">
       <div class="modal error">
         ✖ {{ message }}

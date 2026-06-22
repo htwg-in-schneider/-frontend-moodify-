@@ -4,7 +4,7 @@ import { ref, onMounted } from 'vue'
 const affirmations = ref([])
 const current = ref('')
 
-/* LOAD FROM BACKEND */
+
 async function loadAffirmations() {
   try {
     const res = await fetch('http://localhost:8081/api/affirmations')
@@ -26,7 +26,7 @@ async function loadAffirmations() {
   }
 }
 
-/* RANDOM AFFIRMATION */
+
 function newAffirmation() {
   if (!affirmations.value.length) return
 
