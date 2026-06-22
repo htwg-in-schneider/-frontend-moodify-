@@ -26,7 +26,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 function startQuiz() {
-  router.push('/quiz/question/1')
+  router.push('/quiz/run');
 }
 </script>
 

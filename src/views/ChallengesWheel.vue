@@ -18,6 +18,7 @@ const showAcceptPopup = ref(false)
 
 const category = ref('')
 const difficulty = ref('')
+const latestMood = ref(null)
 
 function goBack() {
   router.push('/challenges')
@@ -42,16 +43,35 @@ async function loadChallenges() {
 
 
 const filteredChallenges = computed(() => {
-  return challenges.value.filter(c => {
-    const matchCategory = !category.value || c.category === category.value
-    const matchDifficulty = !difficulty.value || c.difficulty === difficulty.value
+  const moodCategory = categoryFromMood(latestMood.value)
+  const activeCategory = category.value || moodCategory
+
+  let result = challenges.value.filter(c => {
+    const matchCategory =
+      !activeCategory || c.category === activeCategory
+
+    const matchDifficulty =
+      !difficulty.value || c.difficulty === difficulty.value
+
     return matchCategory && matchDifficulty
   })
+
+  if (result.length === 0 && moodCategory && !category.value) {
+    result = challenges.value.filter(c => {
+      return !difficulty.value ||
+             c.difficulty === difficulty.value
+    })
+  }
+
+  return result
 })
 
 
 function spin() {
-  if (filteredChallenges.value.length === 0) return
+  if (!filteredChallenges.value || filteredChallenges.value.length === 0) {
+    alert('Keine passende Challenge gefunden.')
+    return
+  }
 
   spinning.value = true
   showResult.value = false
@@ -94,7 +114,50 @@ function spinAgain() {
   spin()
 }
 
-onMounted(loadChallenges)
+async function loadLatestMood() {
+  try {
+    const token = await auth0.getAccessTokenSilently({
+      authorizationParams: {
+        audience: "https://moodify-api"
+      }
+    })
+
+    const res = await fetch('http://localhost:8081/api/mood/latest', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    if (!res.ok) {
+      latestMood.value = null
+      return
+    }
+
+    latestMood.value = await res.json()
+
+  } catch {
+    latestMood.value = null
+  }
+}
+
+function categoryFromMood(mood) {
+  if (!mood) return ''
+
+  const value = (mood.mood || '').toLowerCase()
+
+  if (value === 'sad') return 'ENTSPANNUNG'
+  if (value === 'calm') return 'FOKUS'
+  if (value === 'happy') return 'MOTIVATION'
+
+  return ''
+}
+
+onMounted(async () => {
+  await loadChallenges()
+  await loadLatestMood()
+})
+
+
 </script>
 
 <template>

@@ -107,7 +107,7 @@ onMounted(async () => {
 
 function restart() {
   quiz.resetQuiz()
-  router.push('/quiz/question/1')
+  router.push('/quiz/run')
 }
 </script>
 

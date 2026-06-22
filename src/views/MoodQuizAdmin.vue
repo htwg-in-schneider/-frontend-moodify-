@@ -3,77 +3,114 @@ import { ref, onMounted } from 'vue'
 
 const questions = ref([])
 const newQuestion = ref('')
-const loading = ref(false)
-const error = ref(null)
+const newAnswers = ref(['', '', '', ''])
 
 const editingId = ref(null)
 const editingText = ref('')
+const editingAnswers = ref([])
 
 const API = 'http://localhost:8081/api/moodquiz'
 
-
 async function loadQuestions() {
-  loading.value = true
-  error.value = null
+  const res = await fetch(API)
 
-  try {
-    const res = await fetch(API)
-
-    if (!res.ok) throw new Error(`API Error: ${res.status}`)
-
-    questions.value = await res.json()
-  } catch (err) {
-    error.value = err.message
-    console.error(err)
-  } finally {
-    loading.value = false
+  if (!res.ok) {
+    console.log('LOAD ERROR:', res.status)
+    return
   }
+
+  questions.value = await res.json()
 }
 
-/* CREATE */
 async function addQuestion() {
-  if (!newQuestion.value.trim()) return
+  const answers = newAnswers.value.filter(a => a.trim() !== '')
+
+  if (!newQuestion.value.trim() || answers.length === 0) {
+    alert('Bitte Frage und mindestens eine Antwort eingeben.')
+    return
+  }
 
   await fetch(API, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: newQuestion.value })
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      text: newQuestion.value,
+      answers: answers
+    })
   })
 
   newQuestion.value = ''
-  loadQuestions()
+  newAnswers.value = ['', '', '', '']
+
+  await loadQuestions()
 }
 
-/* DELETE */
+function startEdit(q) {
+  editingId.value = q.id
+  editingText.value = q.text
+  editingAnswers.value = [...(q.answers || [])]
+
+  if (editingAnswers.value.length === 0) {
+    editingAnswers.value = ['']
+  }
+}
+
+async function saveEdit(id) {
+  const answers = editingAnswers.value.filter(a => a.trim() !== '')
+
+  if (!editingText.value.trim() || answers.length === 0) {
+    alert('Bitte Frage und mindestens eine Antwort eingeben.')
+    return
+  }
+
+  await fetch(`${API}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      text: editingText.value,
+      answers: answers
+    })
+  })
+
+  editingId.value = null
+  editingText.value = ''
+  editingAnswers.value = []
+
+  await loadQuestions()
+}
+
 async function deleteQuestion(id) {
   await fetch(`${API}/${id}`, {
     method: 'DELETE'
   })
 
-  loadQuestions()
+  await loadQuestions()
 }
 
-/* EDIT */
-function startEdit(q) {
-  editingId.value = q.id
-  editingText.value = q.text
+function addAnswerField() {
+  newAnswers.value.push('')
 }
 
-async function saveEdit(id) {
-  await fetch(`${API}/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: editingText.value })
-  })
+function removeAnswerField(index) {
+  newAnswers.value.splice(index, 1)
+}
 
-  editingId.value = null
-  editingText.value = ''
-  loadQuestions()
+function addEditAnswerField() {
+  editingAnswers.value.push('')
+}
+
+function removeEditAnswerField(index) {
+  editingAnswers.value.splice(index, 1)
 }
 
 function cancelEdit() {
   editingId.value = null
   editingText.value = ''
+  editingAnswers.value = []
 }
 
 onMounted(loadQuestions)
@@ -81,53 +118,108 @@ onMounted(loadQuestions)
 
 <template>
   <main class="admin">
-
     <header>
       <h1>🧠 Mood Quiz Admin</h1>
-      <p>Fragen verwalten (Create / Edit / Delete)</p>
+      <p>Fragen und Antworten verwalten</p>
     </header>
 
-    
-    <div v-if="loading">Loading...</div>
+    <section class="create-box">
+      <h2>Neue Frage erstellen</h2>
 
-    
-    <div v-if="error" class="error">
-      {{ error }}
-    </div>
+      <input
+        v-model="newQuestion"
+        placeholder="Neue Frage..."
+      />
 
-    
-    <div class="create">
-      <input v-model="newQuestion" placeholder="Neue Frage..." />
-      <button @click="addQuestion">+ Add</button>
-    </div>
+      <h3>Antworten</h3>
 
-    
-    <div v-if="!loading && questions.length === 0">
-      Keine Fragen vorhanden.
-    </div>
+      <div
+        v-for="(answer, index) in newAnswers"
+        :key="index"
+        class="answer-row"
+      >
+        <input
+          v-model="newAnswers[index]"
+          placeholder="Antwort..."
+        />
 
-    
-    <div class="list">
-      <div v-for="q in questions" :key="q.id" class="card">
+        <button
+          v-if="newAnswers.length > 1"
+          class="small danger"
+          @click="removeAnswerField(index)"
+        >
+          ✕
+        </button>
+      </div>
 
+      <button @click="addAnswerField">
+        + Antwort hinzufügen
+      </button>
+
+      <button class="save" @click="addQuestion">
+        + Frage speichern
+      </button>
+    </section>
+
+    <section class="list">
+      <div
+        v-for="q in questions"
+        :key="q.id"
+        class="card"
+      >
         <div v-if="editingId === q.id">
           <input v-model="editingText" />
-          <button @click="saveEdit(q.id)">Save</button>
-          <button @click="cancelEdit">Cancel</button>
-        </div>
 
-        <div v-else class="row">
-          <p>{{ q.text }}</p>
+          <h3>Antworten bearbeiten</h3>
 
-          <div class="actions">
-            <button @click="startEdit(q)">Edit</button>
-            <button class="danger" @click="deleteQuestion(q.id)">Delete</button>
+          <div
+            v-for="(answer, index) in editingAnswers"
+            :key="index"
+            class="answer-row"
+          >
+            <input v-model="editingAnswers[index]" />
+
+            <button
+              v-if="editingAnswers.length > 1"
+              class="small danger"
+              @click="removeEditAnswerField(index)"
+            >
+              ✕
+            </button>
           </div>
+
+          <button @click="addEditAnswerField">
+            + Antwort
+          </button>
+
+          <button class="save" @click="saveEdit(q.id)">
+            Speichern
+          </button>
+
+          <button @click="cancelEdit">
+            Abbrechen
+          </button>
         </div>
 
-      </div>
-    </div>
+        <div v-else>
+          <h2>{{ q.text }}</h2>
 
+          <ul>
+            <li v-for="a in q.answers" :key="a">
+              {{ a }}
+            </li>
+          </ul>
+
+          <button @click="startEdit(q)">
+            Bearbeiten
+          </button>
+
+          <button class="danger" @click="deleteQuestion(q.id)">
+            Löschen
+          </button>
+        </div>
+      </div>
+    </section>
   </main>
 </template>
 
@@ -139,44 +231,42 @@ onMounted(loadQuestions)
 }
 
 header {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
-.create {
-  display: flex;
-  gap: 10px;
+.create-box,
+.card {
+  background: #f8fafc;
+  padding: 22px;
+  border-radius: 16px;
   margin-bottom: 20px;
 }
 
 input {
-  flex: 1;
-  padding: 10px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.answer-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 button {
   padding: 10px 14px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
 }
 
-.list {
-  display: grid;
-  gap: 12px;
-}
-
-.card {
-  padding: 12px;
-  background: #f4f4f4;
-  border-radius: 10px;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
+.save {
+  background: #C3D0C2;
+  font-weight: 700;
 }
 
 .danger {
@@ -184,7 +274,12 @@ button {
   color: white;
 }
 
-.error {
-  color: red;
+.small {
+  width: 45px;
+  padding: 10px;
+}
+
+ul {
+  margin: 12px 0;
 }
 </style>
