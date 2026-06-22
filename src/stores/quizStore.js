@@ -27,12 +27,15 @@ export const useQuizStore = defineStore('quiz', {
       a.includes('glücklich') ||
       a.includes('gut') ||
       a.includes('motiviert') ||
-      a.includes('energie') ||
-      a.includes('fokus') ||
+      a.includes('Energie') ||
+      a.includes('Fokus') ||
+      a.includes('Fit') ||
       a.includes('entspannt') ||
       a.includes('ruhig') ||
+      a.includes('Sehr gut') ||
       a.includes('happy') ||
       a.includes('voller Energie') ||
+      a.includes('Menschen treffen') ||
       a.includes('hoch') ||
       a.includes('calm')
     ) {
@@ -43,12 +46,14 @@ export const useQuizStore = defineStore('quiz', {
       a.includes('traurig') ||
       a.includes('gestresst') ||
       a.includes('Stress') ||
-      a.includes('müde') ||
-      a.includes('erschöpft') ||
+      a.includes('Einfach Ruhe') ||
+      a.includes('Erschöpft') ||
       a.includes('schlecht') ||
       a.includes('Motivation') ||
       a.includes('sad') ||
       a.includes('niedrig') ||
+      a.includes('Zeit für mich') ||
+      a.includes('Überhaupt nicht') ||
       a.includes('tired')
     ) {
       score--
