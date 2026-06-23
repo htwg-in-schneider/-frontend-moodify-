@@ -21,7 +21,7 @@ async function getToken() {
 async function loadBoards() {
   const token = await getToken()
 
-  const res = await fetch('http://localhost:8081/api/visionboard', {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/visionboard`, {
     headers: {
       Authorization: `Bearer ${token}`
     }

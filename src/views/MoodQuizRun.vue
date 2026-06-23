@@ -11,7 +11,7 @@ const currentIndex = ref(0)
 const selected = ref(null)
 const loading = ref(true)
 
-const API = 'http://localhost:8081/api/moodquiz'
+const API = `${import.meta.env.VITE_API_BASE_URL}/api/moodquiz`
 
 
 const currentQuestion = computed(() => questions.value[currentIndex.value])

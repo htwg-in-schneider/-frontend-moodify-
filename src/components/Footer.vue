@@ -23,8 +23,8 @@ import { RouterLink } from 'vue-router'
    background: rgba(244, 206, 232, 0.75);
   color: white;
   text-align: center;
-  padding: 60px 20px; /* kleiner statt clamp */
-  margin-top: 20px;   /* weniger Abstand */
+  padding: 60px 20px; 
+  margin-top: 20px;   
 }
 
 .footer-content {
@@ -32,7 +32,6 @@ import { RouterLink } from 'vue-router'
   margin: 0 auto;
 }
 
-/* kleiner & cleaner */
 .footer h4 {
   font-size: 1.3rem;
   font-weight: 700;

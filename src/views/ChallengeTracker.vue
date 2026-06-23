@@ -19,7 +19,7 @@ async function loadData() {
 })
 
 
-const resUser = await fetch('http://localhost:8081/api/user-challenges/me', {
+const resUser = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user-challenges/me`, {
   headers: {
     Authorization: `Bearer ${token}`
   }

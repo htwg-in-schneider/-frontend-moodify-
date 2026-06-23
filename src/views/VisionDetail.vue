@@ -16,7 +16,7 @@ async function loadItem() {
     }
   })
 
-  const res = await fetch(`http://localhost:8081/api/visionboard/${route.params.id}`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/visionboard/${route.params.id}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }

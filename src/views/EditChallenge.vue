@@ -97,7 +97,7 @@ const loading = ref(false)
 
 async function loadChallenge() {
   try {
-    const res = await fetch(`http://localhost:8081/api/challenge/${id}`)
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/challenge/${id}`)
     if (!res.ok) throw new Error()
 
     const data = await res.json()

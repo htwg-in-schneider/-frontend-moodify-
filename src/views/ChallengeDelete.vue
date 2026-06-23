@@ -16,7 +16,7 @@ function goBack() {
 }
 
 async function loadChallenges() {
-  const res = await fetch('http://localhost:8081/api/challenge')
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/challenge`)
   challenges.value = await res.json()
 }
 

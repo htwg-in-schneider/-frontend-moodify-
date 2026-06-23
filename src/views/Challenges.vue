@@ -33,7 +33,7 @@ function handleFilterChange(data) {
 
 async function loadChallenges() {
 
-  let url = 'http://localhost:8081/api/challenge'
+  let url = `${import.meta.env.VITE_API_BASE_URL}/api/challenge`
   const params = new URLSearchParams()
 
   if (filter.value.search) params.append('title', filter.value.search)

@@ -7,7 +7,6 @@ import { useAuth0 } from '@auth0/auth0-vue'
 
 const reviews = ref(initialReviews)
 
-// Auth0
 const { loginWithRedirect } = useAuth0()
 
 function goToLogin() {
@@ -18,7 +17,6 @@ function openMail() {
   window.location.href = 'mailto:deine@mail.com'
 }
 
-// Wheel / Challenges
 const result = ref(null)
 const spinning = ref(false)
 const rotation = ref(0)

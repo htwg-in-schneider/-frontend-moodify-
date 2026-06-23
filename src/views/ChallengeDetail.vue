@@ -9,7 +9,7 @@ const router = useRouter()
 const challenge = ref(null)
 
 onMounted(async () => {
-  const res = await fetch(`http://localhost:8081/api/challenge/${route.params.id}`)
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/challenge/${route.params.id}`)
   challenge.value = await res.json()
 })
 

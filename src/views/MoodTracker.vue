@@ -112,7 +112,7 @@ async function load() {
       }
     })
 
-    const res = await fetch('http://localhost:8081/api/mood/me', {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/mood/me`, {
       headers: {
         Authorization: `Bearer ${token}`
       }

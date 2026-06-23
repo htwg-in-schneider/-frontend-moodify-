@@ -14,7 +14,7 @@ const search = ref('')
 const roleFilter = ref('')
 const router = useRouter()
 
-const API = 'http://localhost:8081/api/moodquiz'
+const API = `${import.meta.env.VITE_API_BASE_URL}/api/moodquiz`
 
 const { getAccessTokenSilently } = useAuth0()
 

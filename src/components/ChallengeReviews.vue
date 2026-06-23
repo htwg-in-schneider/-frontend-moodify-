@@ -8,7 +8,7 @@ const props = defineProps({
 const reviews = ref([])
 
 async function loadReviews() {
-  const res = await fetch(`http://localhost:8081/api/challenge/${props.id}`)
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/challenge/${props.id}`)
   const data = await res.json()
   reviews.value = data.reviews || []
 }

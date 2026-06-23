@@ -95,7 +95,7 @@ onMounted(async () => {
       }
     })
 
-    await fetch('http://localhost:8081/api/mood', {
+    await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/mood`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -21,13 +21,12 @@ defineProps({
   cursor: pointer;
 }
 
-/* ACCENT = Hauptbutton */
 .accent {
   background: #C3D0C2;
   color: #3E4A62;
 }
 
-/* SECONDARY = Nebenbutton */
+
 .secondary {
   background: white;
   color: #3E4A62;

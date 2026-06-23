@@ -113,7 +113,7 @@ async function deleteUser(id) {
     }
   })
 
-  const res = await fetch(`http://localhost:8081/api/users/${id}`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/${id}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`

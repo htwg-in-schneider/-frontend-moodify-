@@ -4,24 +4,19 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
+const repoName = '/-frontend-moodify-/';
+
+
 export default defineConfig({
+  base: process.env.NODE_ENV === 'production' ? repoName : '/',
   plugins: [
     vue(),
     vueDevTools(),
   ],
-
-  base: '/-frontend-moodify-/',
-
-
-  server: {
-    port: 5173,
-    strictPort: true
-  },
-
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
-
 })
+

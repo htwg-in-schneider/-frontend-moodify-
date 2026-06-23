@@ -9,7 +9,7 @@ const router = useRouter()
 
 async function loadAffirmations() {
   try {
-    const res = await fetch('http://localhost:8081/api/affirmations')
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/affirmations`)
 
     if (!res.ok) {
       console.error('API ERROR:', res.status)

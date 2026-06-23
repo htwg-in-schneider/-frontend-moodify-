@@ -43,7 +43,7 @@ async function submit() {
       }
     })
 
-    const res = await fetch('http://localhost:8081/api/user-challenges', {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user-challenges`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

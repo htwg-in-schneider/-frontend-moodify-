@@ -9,20 +9,20 @@ import { createAuth0 } from '@auth0/auth0-vue'
 
 const app = createApp(App)
 
-/* 1. Pinia zuerst */
 app.use(createPinia())
 
-/* 2. Router */
 app.use(router)
 
-/* 3. Auth0 */
+
 app.use(
   createAuth0({
     domain: "dev-5l3w1yvav5vmutet.us.auth0.com",
     clientId: "f517AmsI8R90cmdb0614ixEo3Z1Wj2eO",
     authorizationParams: {
-      redirect_uri: window.location.origin,
-      audience: 'https://moodify-api'
+authorizationParams: {
+  redirect_uri: window.location.origin + import.meta.env.BASE_URL,
+  audience: import.meta.env.VITE_AUTH0_AUDIENCE
+}
     }
   })
 )

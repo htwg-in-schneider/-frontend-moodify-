@@ -90,7 +90,7 @@ async function createBoard() {
     height: 120
   }))
 
-  const res = await fetch('http://localhost:8081/api/visionboard', {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/visionboard`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

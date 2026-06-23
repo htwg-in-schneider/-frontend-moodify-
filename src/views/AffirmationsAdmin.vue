@@ -20,7 +20,7 @@ async function loadAffirmations() {
   try {
     const token = await getAccessTokenSilently()
 
-    const res = await fetch('http://localhost:8081/api/affirmations', {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/affirmations`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
