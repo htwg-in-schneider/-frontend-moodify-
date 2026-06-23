@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
+import { computed } from 'vue'
 
 const { getAccessTokenSilently } = useAuth0()
 
@@ -9,6 +10,26 @@ const errorMessage = ref('')
 const showError = ref(false)
 const showSuccess = ref(false)
 const successMessage = ref('')
+const search = ref('')
+const roleFilter = ref('')
+
+
+const filteredUsers = computed(() => {
+  const s = search.value.toLowerCase()
+
+  return users.value.filter(u => {
+    const matchesSearch =
+      !s ||
+      (u.name || '').toLowerCase().includes(s) ||
+      (u.username || '').toLowerCase().includes(s) ||
+      (u.email || '').toLowerCase().includes(s)
+
+    const matchesRole =
+      !roleFilter.value || u.role === roleFilter.value
+
+    return matchesSearch && matchesRole
+  })
+})
 
 
 async function loadUsers() {
@@ -53,6 +74,8 @@ async function updateUser(user) {
         username: user.username,
         name: user.name,
         email: user.email,
+        password: user.password,
+        address: user.address,
         role: user.role
       })
     })
@@ -123,8 +146,21 @@ onMounted(loadUsers)
       {{ errorMessage }}
     </div>
 
+    <div class="filters">
+  <input
+    v-model="search"
+    placeholder="Suche nach Name, Username oder E-Mail..."
+  />
+
+  <select v-model="roleFilter">
+    <option value="">Alle Rollen</option>
+    <option value="USER">USER</option>
+    <option value="ADMIN">ADMIN</option>
+  </select>
+  </div>
+
     <div class="user-list">
-      <div v-for="u in users" :key="u.id" class="user-card">
+      <div v-for="u in filteredUsers" :key="u.id" class="user-card">
 
         <div class="field">
           <label>Name</label>
@@ -139,6 +175,16 @@ onMounted(loadUsers)
         <div class="field">
           <label>Email</label>
           <input v-model="u.email" />
+        </div>
+
+        <div class="field">
+          <label>Passwort</label>
+          <input v-model="u.password" />
+        </div>
+
+        <div class="field">
+          <label>Adresse</label>
+          <input v-model="u.address" />
         </div>
 
         <div class="field">
@@ -181,6 +227,20 @@ onMounted(loadUsers)
 h1 {
   margin-bottom: 30px;
   color: #111827;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.filters input {
+  min-width: 320px;
+}
+
+.filters select {
+  min-width: 160px;
 }
 
 .user-list {

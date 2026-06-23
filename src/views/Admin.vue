@@ -79,7 +79,7 @@ onMounted(loadProfile)
 
         <div class="actions">
           <button @click="go('/challenges/create')">+ Erstellen</button>
-          <button @click="go('/challenges/admin')">Bearbieten/Löschen</button>
+          <button @click="go('/challenges/admin')">Bearbeiten/Löschen</button>
           <button @click="go('/challenges')">Liste</button>
         </div>
       </div>

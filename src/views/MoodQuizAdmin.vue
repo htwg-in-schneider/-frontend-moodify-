@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 const questions = ref([])
 const newQuestion = ref('')
@@ -8,6 +8,8 @@ const newAnswers = ref(['', '', '', ''])
 const editingId = ref(null)
 const editingText = ref('')
 const editingAnswers = ref([])
+const search = ref('')
+const roleFilter = ref('')
 
 const API = 'http://localhost:8081/api/moodquiz'
 
@@ -21,6 +23,14 @@ async function loadQuestions() {
 
   questions.value = await res.json()
 }
+
+const filteredQuestions = computed(() => {
+  const s = search.value.toLowerCase()
+
+  return questions.value.filter(q =>
+    !s || (q.text || '').toLowerCase().includes(s)
+  )
+})
 
 async function addQuestion() {
   const answers = newAnswers.value.filter(a => a.trim() !== '')
@@ -123,6 +133,7 @@ onMounted(loadQuestions)
       <p>Fragen und Antworten verwalten</p>
     </header>
 
+
     <section class="create-box">
       <h2>Neue Frage erstellen</h2>
 
@@ -161,9 +172,16 @@ onMounted(loadQuestions)
       </button>
     </section>
 
+        <div class="search-box">
+      <input
+    v-model="search"
+    placeholder="Suche nach Fragen..."
+    />
+    </div>
+
     <section class="list">
       <div
-        v-for="q in questions"
+        v-for="q in filteredQuestions"
         :key="q.id"
         class="card"
       >
@@ -281,5 +299,16 @@ button {
 
 ul {
   margin: 12px 0;
+}
+
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
 }
 </style>

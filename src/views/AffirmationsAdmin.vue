@@ -161,7 +161,6 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* ADD */
 .add-box {
   display: flex;
   gap: 10px;

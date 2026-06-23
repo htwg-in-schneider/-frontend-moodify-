@@ -4,6 +4,26 @@ import { useRouter } from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue'
 import ChallengeFilter from '@/components/ChallengeFilter.vue'
 
+const search = ref('')
+const roleFilter = ref('')
+
+const filteredUsers = computed(() => {
+  const s = search.value.toLowerCase()
+
+  return users.value.filter(u => {
+    const matchesSearch =
+      !s ||
+      (u.name || '').toLowerCase().includes(s) ||
+      (u.username || '').toLowerCase().includes(s) ||
+      (u.email || '').toLowerCase().includes(s)
+
+    const matchesRole =
+      !roleFilter.value || u.role === roleFilter.value
+
+    return matchesSearch && matchesRole
+  })
+})
+
 const { user } = useAuth0()
 
 const router = useRouter()
@@ -20,7 +40,8 @@ const challenges = ref([])
 
 const filter = ref({
   search: '',
-  category: ''
+  category: '',
+  difficulty: ''
 })
 
 
@@ -41,6 +62,7 @@ async function loadChallenges() {
 
   if (filter.value.search) params.append('title', filter.value.search)
   if (filter.value.category) params.append('category', filter.value.category)
+  if (filter.value.difficulty) params.append('difficulty', filter.value.difficulty)
 
   if ([...params].length > 0) {
     url += `?${params.toString()}`
@@ -72,7 +94,12 @@ const filteredChallenges = computed(() => {
       filter.value.category === 'Alle Kategorien' ||
       c.category === filter.value.category
 
-    return matchesSearch && matchesCategory
+      const matchesDifficulty =
+      !filter.value.difficulty ||
+      filter.value.difficulty === 'Alle Level' ||
+      c.difficulty === filter.value.difficulty
+
+    return matchesSearch && matchesCategory && matchesDifficulty
   })
 })
 
@@ -108,7 +135,18 @@ onMounted(loadChallenges)
       + Neue Challenge
     </RouterLink>
 
+    <div class="filter-row">
+
     <ChallengeFilter @filter-change="handleFilterChange" />
+
+    <select v-model="filter.difficulty" class="difficulty-filter">
+     <option value="">Alle Level</option>
+     <option value="EASY">Easy</option>
+     <option value="MITTEL">Mittel</option>
+     <option value="SCHWER">Schwer</option>
+    </select>
+
+    </div>
 
     <div class="challenge-grid">
 
@@ -126,9 +164,7 @@ onMounted(loadChallenges)
         <p>Schwierigkeit: {{ c.difficulty || 'Keine Angabe' }}</p>
 
         <div class="actions">
-
-      
-
+          
         </div>
 
       </div>
@@ -222,5 +258,19 @@ onMounted(loadChallenges)
   font-size: 40px;
   color: green;
   margin-bottom: 10px;
+}
+
+.difficulty-filter {
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 </style>

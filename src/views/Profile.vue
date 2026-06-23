@@ -7,6 +7,9 @@ const { isAuthenticated, getAccessTokenSilently } = useAuth0()
 
 const name = ref('')
 const address = ref('')
+const username = ref('')
+const email = ref('')
+const password = ref('')
 
 
 const showSuccess = ref(false)
@@ -37,6 +40,9 @@ async function loadProfile() {
 
     name.value = data.name || ''
     address.value = data.address || ''
+    username.value = data.username || ''
+    email.value = data.email || ''
+    password.value = data.password || ''
 
   } catch (e) {
     console.error("LOAD ERROR:", e)
@@ -59,7 +65,11 @@ async function saveProfile() {
       },
       body: JSON.stringify({
         name: name.value,
-        address: address.value
+        address: address.value,
+        username: username.value,
+        email: email.value,
+        password: password.value
+
       })
     })
 
@@ -105,9 +115,25 @@ onMounted(() => {
 
     <div v-if="isAuthenticated">
 
+  
       <div class="field">
         <label>Name</label>
         <input v-model="name" placeholder="Dein Name" />
+      </div>
+
+      <div class="field">
+        <label>Nutzername</label>
+        <input v-model="username" placeholder="Dein Nutzername" />
+      </div>
+
+      <div class="field">
+        <label>E-Mail</label>
+        <input v-model="email" placeholder="Deine E-Mail" />
+      </div>
+
+      <div class="field">
+        <label>Passwort</label>
+        <input v-model="password" placeholder="Dein Passwort" />
       </div>
 
       <div class="field">

@@ -1,9 +1,11 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed  } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
 
 const { getAccessTokenSilently } = useAuth0()
 const boards = ref([])
+const search = ref('')
+const categoryFilter = ref('')
 
 async function getToken() {
   return await getAccessTokenSilently({
@@ -12,6 +14,27 @@ async function getToken() {
     }
   })
 }
+
+const filteredBoards = computed(() => {
+  const s = search.value.toLowerCase()
+
+  return boards.value.filter(b => {
+    const userText =
+      b.user?.username ||
+      b.user?.email ||
+      ''
+
+    const matchesSearch =
+      !s ||
+      (b.title || '').toLowerCase().includes(s) ||
+      userText.toLowerCase().includes(s)
+
+    const matchesCategory =
+      !categoryFilter.value || b.category === categoryFilter.value
+
+    return matchesSearch && matchesCategory
+  })
+})
 
 async function loadBoards() {
   const token = await getToken()
@@ -52,8 +75,23 @@ onMounted(loadBoards)
   <main class="page">
     <h1>🌈 Visionboards verwalten</h1>
 
+  <div class="filters">
+  <input
+    v-model="search"
+    placeholder="Suche nach Titel oder Nutzer..."
+  />
+
+  <select v-model="categoryFilter">
+    <option value="">Alle Kategorien</option>
+    <option value="MOTIVATION">Motivation</option>
+    <option value="ENTSPANNUNG">Entspannung</option>
+    <option value="FOKUS">Fokus</option>
+    <option value="ABLENKUNG">Ablenkung</option>
+  </select>
+  </div>
+
     <div class="grid">
-      <div v-for="b in boards" :key="b.id || b.ID" class="card">
+      <div v-for="b in filteredBoards" :key="b.id || b.ID" class="card">
         <h2>{{ b.title }}</h2>
         <p>Kategorie: {{ b.category }}</p>
         <p>Nutzer: {{ b.user?.username || b.user?.email || 'Unbekannt' }}</p>
@@ -109,5 +147,22 @@ onMounted(loadBoards)
   border: none;
   padding: 10px 16px;
   border-radius: 12px;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0 30px;
+}
+
+.filters input,
+.filters select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.filters input {
+  min-width: 320px;
 }
 </style>
