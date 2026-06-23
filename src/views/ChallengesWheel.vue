@@ -145,9 +145,20 @@ function categoryFromMood(mood) {
 
   const value = (mood.mood || '').toLowerCase()
 
-  if (value === 'sad') return 'ENTSPANNUNG'
-  if (value === 'calm') return 'FOKUS'
-  if (value === 'happy') return 'MOTIVATION'
+  if (value === 'sad') {
+    const options = ['MOTIVATION', 'ENTSPANNUNG']
+    return options[Math.floor(Math.random() * options.length)]
+  }
+
+  if (value === 'calm') {
+    const options = ['FOKUS', 'MOTIVATION']
+    return options[Math.floor(Math.random() * options.length)]
+  }
+
+  if (value === 'happy') {
+    const options = ['ABLENKUNG', 'FOKUS']
+    return options[Math.floor(Math.random() * options.length)]
+  }
 
   return ''
 }
