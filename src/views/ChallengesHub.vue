@@ -1,7 +1,13 @@
 <script setup>
 import { useRouter } from 'vue-router'
 
+
 const router = useRouter()
+
+function goBack() {
+  router.back()
+}
+
 
 const go = (path) => router.push(path)
 
@@ -12,6 +18,10 @@ const go = (path) => router.push(path)
 
     <h1>✨ Challenges Hub</h1>
     <p>Wähle deinen Modus</p>
+
+  <button class="back" @click="goBack">
+      ← Zurück
+    </button>
 
     <div class="grid">
 
@@ -68,4 +78,24 @@ const go = (path) => router.push(path)
 .highlight {
   border: 2px solid #6366f1;
 }
+
+.back {
+  position: absolute;
+  top: 170px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
+}
+
 </style>
