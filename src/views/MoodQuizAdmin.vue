@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const questions = ref([])
 const newQuestion = ref('')
@@ -12,6 +13,16 @@ const search = ref('')
 const roleFilter = ref('')
 
 const API = 'http://localhost:8081/api/moodquiz'
+
+const { getAccessTokenSilently } = useAuth0()
+
+async function getToken() {
+  return await getAccessTokenSilently({
+    authorizationParams: {
+      audience: 'https://moodify-api'
+    }
+  })
+}
 
 async function loadQuestions() {
   const res = await fetch(API)
@@ -40,10 +51,14 @@ async function addQuestion() {
     return
   }
 
+  const token = await getToken()
+
   await fetch(API, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+
     },
     body: JSON.stringify({
       text: newQuestion.value,
@@ -75,10 +90,13 @@ async function saveEdit(id) {
     return
   }
 
+  const token = await getToken()
+
   await fetch(`${API}/${id}`, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({
       text: editingText.value,
@@ -94,8 +112,13 @@ async function saveEdit(id) {
 }
 
 async function deleteQuestion(id) {
+  const token = await getToken()
+
   await fetch(`${API}/${id}`, {
-    method: 'DELETE'
+  method: 'DELETE',
+  headers: {
+    Authorization: `Bearer ${token}`
+    }
   })
 
   await loadQuestions()
