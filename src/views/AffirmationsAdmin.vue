@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
+import { useRouter } from 'vue-router'
 
 const { getAccessTokenSilently } = useAuth0()
 
@@ -9,7 +10,11 @@ const newText = ref('')
 
 const editingId = ref(null)
 const editingText = ref('')
+const router = useRouter()
 
+function goBack() {
+  router.push('/admin')
+}
 
 async function loadAffirmations() {
   try {
@@ -94,6 +99,10 @@ onMounted(loadAffirmations)
 
 <template>
   <main class="admin">
+
+    <button class="back" @click="goBack">
+      ← Zurück
+    </button>
 
     <h1>💗 Affirmations Admin</h1>
     <p class="sub">Add, edit & delete daily affirmations</p>
@@ -216,5 +225,24 @@ button {
 
 .delete:hover {
   background: #dc2626;
+}
+
+.back {
+  position: absolute;
+  top: 111px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
 }
 </style>

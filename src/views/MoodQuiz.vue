@@ -1,5 +1,10 @@
 <template>
   <div class="quiz-start">
+
+    <button class="back" @click="goBack">
+      ← Zurück
+    </button>
+
     <h1>🎵 Willkommen zu deinem Mood Quiz</h1>
 
     <p>
@@ -27,6 +32,10 @@ const router = useRouter()
 
 function startQuiz() {
   router.push('/quiz/run');
+}
+
+function goBack() {
+  router.push('/')
 }
 </script>
 
@@ -68,5 +77,24 @@ p {
 
 .start-btn:hover {
   background: #3730a3;
+}
+
+.back {
+  position: absolute;
+  top: 115px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
 }
 </style>

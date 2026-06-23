@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
+import { useRouter } from 'vue-router'
 
 const questions = ref([])
 const newQuestion = ref('')
@@ -11,10 +12,15 @@ const editingText = ref('')
 const editingAnswers = ref([])
 const search = ref('')
 const roleFilter = ref('')
+const router = useRouter()
 
 const API = 'http://localhost:8081/api/moodquiz'
 
 const { getAccessTokenSilently } = useAuth0()
+
+function goBack() {
+  router.push('/admin')
+}
 
 async function getToken() {
   return await getAccessTokenSilently({
@@ -151,6 +157,11 @@ onMounted(loadQuestions)
 
 <template>
   <main class="admin">
+
+    <button class="back" @click="goBack">
+      ← Zurück
+    </button>
+
     <header>
       <h1>🧠 Mood Quiz Admin</h1>
       <p>Fragen und Antworten verwalten</p>
@@ -333,5 +344,24 @@ ul {
   padding: 12px;
   border-radius: 12px;
   border: 1px solid #ddd;
+}
+
+.back {
+  position: absolute;
+  top: 115px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
 }
 </style>

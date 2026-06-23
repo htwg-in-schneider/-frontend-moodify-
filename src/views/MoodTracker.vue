@@ -1,6 +1,10 @@
 <template>
   <div class="tracker">
 
+    <button class="back" @click="goBack">
+      ← Zurück
+    </button>
+
     <div class="header">
       <h1>📊 Mood Intelligence</h1>
       <p>Deine emotionale Entwicklung der letzten Tage</p>
@@ -88,12 +92,17 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
+import { useRouter } from 'vue-router'
 
 const auth0 = useAuth0()
 
 const moods = ref([])
 const loading = ref(true)
+const router = useRouter()
 
+function goBack() {
+  router.push('/')
+}
 
 async function load() {
   try {
@@ -291,5 +300,24 @@ function barHeight(s) {
 
 .score {
   font-weight: bold;
+}
+
+.back {
+  position: absolute;
+  top: 119px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
 }
 </style>

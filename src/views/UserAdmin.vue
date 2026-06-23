@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 
 const { getAccessTokenSilently } = useAuth0()
 
@@ -12,6 +13,11 @@ const showSuccess = ref(false)
 const successMessage = ref('')
 const search = ref('')
 const roleFilter = ref('')
+const router = useRouter()
+
+function goBack() {
+  router.push('/admin')
+}
 
 
 const filteredUsers = computed(() => {
@@ -138,6 +144,10 @@ onMounted(loadUsers)
 
 <template>
   <main class="page">
+
+    <button class="back" @click="goBack">
+      ← Zurück
+    </button>
 
     <h1>👤 Nutzer verwalten</h1>
 
@@ -347,6 +357,25 @@ button {
   background: #dc2626;
 }
 
+.back {
+  position: absolute;
+  top: 111px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
+}
+
 @media (max-width: 900px) {
   .user-card {
     grid-template-columns: 1fr;
@@ -354,6 +383,10 @@ button {
 
   .page {
     padding: 30px;
+  }
+
+  .back{
+    top: 115px;
   }
 }
 </style>

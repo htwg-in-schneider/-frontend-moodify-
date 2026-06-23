@@ -11,6 +11,10 @@ const auth0 = useAuth0()
 const search = ref('')
 const categoryFilter = ref('')
 
+function goBack() {
+  router.push('/admin')
+}
+
 async function loadChallenges() {
   const res = await fetch('http://localhost:8081/api/challenge')
   challenges.value = await res.json()
@@ -69,6 +73,10 @@ onMounted(loadChallenges)
 
 <template>
   <main class="admin">
+
+    <button class="back" @click="goBack">
+      ← Zurück
+    </button>
 
     <h1>Admin Panel 🛠️</h1>
 
@@ -157,5 +165,24 @@ onMounted(loadChallenges)
 
 .filters input {
   min-width: 320px;
+}
+
+.back {
+  position: absolute;
+  top: 112px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
 }
 </style>

@@ -1,12 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { authGuard, useAuth0 } from '@auth0/auth0-vue'
 
-/* PAGES */
 import Home from '../views/Home.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Admin from '../views/Admin.vue'
 
-/* CHALLENGES */
 import ChallengesHub from '../views/ChallengesHub.vue'
 import ChallengesList from '../views/ChallengesList.vue'
 import CreateChallenge from '../views/CreateChallenge.vue'
@@ -16,7 +14,6 @@ import ChallengesWheel from '../views/ChallengesWheel.vue'
 import ChallengeTracker from '@/views/ChallengeTracker.vue'
 import CompletedChallenges from '@/views/CompletedChallenges.vue'
 
-/* MOOD */
 import MoodQuiz from '../views/MoodQuiz.vue'
 import MoodQuizResult from '@/views/MoodQuizResult.vue'
 
@@ -25,7 +22,6 @@ import Affirmations from '@/views/Affirmations.vue'
 import Profile from '@/views/Profile.vue'
 import UserAdmin from '@/views/UserAdmin.vue'
 
-/* LEGAL */
 import Impressum from '@/views/Impressum.vue'
 import Datenschutz from '@/views/Datenschutz.vue'
 
@@ -35,12 +31,14 @@ import AffirmationsAdmin from '@/views/AffirmationsAdmin.vue'
 import MoodQuizAdmin from '@/views/MoodQuizAdmin.vue'
 import MoodQuizRun from '@/views/MoodQuizRun.vue'
 
-
 import VisionBoard from '@/views/VisionBoard.vue'
 import CreateVisionBoard from '@/views/CreateVisionBoard.vue'
 import EditVisionBoard from '@/views/EditVisionBoard.vue'
 import VisionDetail from '@/views/VisionDetail.vue'
 import AdminVisionboards from '@/views/AdminVisionboards.vue'
+
+import Contact from '@/views/Contact.vue'
+
 
 
 
@@ -108,7 +106,9 @@ const routes = [
 
   { path: '/challenges/:id', name: 'challenge-detail', component: () => import('@/views/ChallengeDetail.vue')},
 
-  { path: '/admin/visionboards', component: AdminVisionboards, beforeEnter: adminGuard}
+  { path: '/admin/visionboards', component: AdminVisionboards, beforeEnter: adminGuard},
+
+  { path: '/contact', name: 'contact', component: Contact},
 
 ]
 

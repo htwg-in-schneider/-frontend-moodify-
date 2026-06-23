@@ -12,8 +12,8 @@ function goToLogin() {
   router.push('/login')
 }
 
-function openMail() {
-  window.location.href = 'mailto:deine@mail.com'
+function openContact() {
+  router.push('/contact')
 }
 
 
@@ -74,7 +74,7 @@ function spinWheel() {
           Start ✨
         </Button>
 
-        <Button class="secondary" variant="secondary" @click="openMail">
+        <Button class="secondary" variant="secondary" @click="openContact">
           Contact Us ✉️
         </Button>
       </div>

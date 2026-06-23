@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const go = (path) => router.push(path)
+
 </script>
 
 <template>
@@ -59,7 +60,6 @@ const go = (path) => router.push(path)
   cursor: pointer;
   transition: 0.2s;
 }
-
 
 .card:hover {
   transform: translateY(-5px);

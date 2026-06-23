@@ -25,7 +25,15 @@
       </div>
 
       <button class="btn" @click="restart">
-        🔄 Nochmal starten
+        Nochmal starten
+      </button>
+
+      <button class="btn" @click="goMoodTracker">
+        Zum Moodtracker
+      </button>
+
+      <button class="btn" @click="goBack">
+        Beenden
       </button>
 
     </div>
@@ -108,6 +116,14 @@ onMounted(async () => {
 function restart() {
   quiz.resetQuiz()
   router.push('/quiz/run')
+}
+
+function goBack() {
+  router.push('/')
+}
+
+function goMoodTracker() {
+  router.push('/moodtracker')
 }
 </script>
 

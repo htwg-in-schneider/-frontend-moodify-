@@ -39,6 +39,8 @@ function submitStatus() {
 function goToFinished() {
   router.push('/challenges/list')
 }
+
+
 </script>
 
 <template>

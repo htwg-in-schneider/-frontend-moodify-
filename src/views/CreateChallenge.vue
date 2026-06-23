@@ -171,14 +171,16 @@ async function createChallenge() {
 
 .back-btn {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background: none;
+  top: 28px;
+  left: 28px;
+  background: white;
   border: none;
-  font-size: 14px;
-  color: #6366f1;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
   cursor: pointer;
-  font-weight: 500;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
 }
 
 .back-btn:hover {

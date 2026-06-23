@@ -271,7 +271,7 @@ onMounted(async () => {
   padding: 10px 14px;
   border-radius: 12px;
   cursor: pointer;
-  color: #6366f1;
+  color: #2f3a56;
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 

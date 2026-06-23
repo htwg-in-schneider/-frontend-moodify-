@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 const affirmations = ref([])
 const current = ref('')
+const router = useRouter()
 
 
 async function loadAffirmations() {
@@ -34,11 +36,20 @@ function newAffirmation() {
   current.value = affirmations.value[randomIndex].text
 }
 
+function goBack() {
+  router.push('/')
+}
+
 onMounted(loadAffirmations)
 </script>
 
 <template>
   <main class="affirmations">
+
+    <button class="back" @click="goBack">
+      ← Zurück
+    </button>
+
     <h1>Affirmations</h1>
     <p>Deine tägliche Erinnerung:</p>
 
@@ -53,9 +64,11 @@ onMounted(loadAffirmations)
 </template>
 
 <style scoped>
+
 .affirmations {
   padding: 40px;
   text-align: center;
+  position: relative;
 }
 
 .card {
@@ -75,4 +88,24 @@ onMounted(loadAffirmations)
   cursor: pointer;
   border: none;
 }
+
+.back {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
+}
+
 </style>

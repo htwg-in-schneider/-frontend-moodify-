@@ -60,11 +60,20 @@ async function deleteBoard(id) {
   }
 }
 
+function goBack() {
+  router.push('/')
+}
+
 onMounted(loadBoards)
 </script>
 
 <template>
   <main class="page">
+
+    <button class="back" @click="goBack">
+      ← Zurück
+    </button>
+
     <h1>🌈 Visionboards</h1>
 
     <button class="create" @click="router.push('/visionboard/create')">
@@ -186,5 +195,24 @@ select {
 
 .delete {
   background: #ffcccc !important;
+}
+
+.back {
+  position: absolute;
+  top: 110px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
 }
 </style>

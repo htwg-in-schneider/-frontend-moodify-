@@ -7,6 +7,7 @@ import ChallengeFilter from '@/components/ChallengeFilter.vue'
 const search = ref('')
 const roleFilter = ref('')
 
+
 const filteredUsers = computed(() => {
   const s = search.value.toLowerCase()
 
@@ -31,9 +32,6 @@ const router = useRouter()
 const role = computed(() => {
   return user.value?.['https://your-app/roles']?.[0] || 'user'
 })
-
-   
-
 
 
 const challenges = ref([])
@@ -77,6 +75,10 @@ function openDetail(id) {
   router.push({ name: 'challenge-detail', params: { id } })
 }
 
+function goBack() {
+  router.push('/challenges')
+}
+
 
 
 
@@ -108,6 +110,10 @@ onMounted(loadChallenges)
 
 <template>
   <main class="challenges">
+
+    <button class="back-btn" @click="goBack">
+      ← Zurück
+    </button>
 
 
     
@@ -272,5 +278,21 @@ onMounted(loadChallenges)
   gap: 12px;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.back-btn {
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  color: #2f3a56;
+  font-weight: 600;
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
 }
 </style>

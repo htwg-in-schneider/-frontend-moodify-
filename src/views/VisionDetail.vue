@@ -30,12 +30,17 @@ async function loadItem() {
   board.value = await res.json()
 }
 
+function goBack() {
+  router.push('/visionboard')
+}
+
 onMounted(loadItem)
 </script>
 
 <template>
   <main class="page">
-    <button class="back" @click="router.push('/visionboard')">
+
+    <button class="back" @click="goBack">
       ← Zurück
     </button>
 
@@ -69,17 +74,7 @@ onMounted(loadItem)
   padding: 40px;
   background: linear-gradient(135deg, #eef2ff, #f8fafc);
   text-align: center;
-}
-
-.back {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  border: none;
-  background: white;
-  padding: 10px 14px;
-  border-radius: 12px;
-  cursor: pointer;
+  position: relative;
 }
 
 .card {
@@ -121,5 +116,24 @@ onMounted(loadItem)
   background: #C3D0C2;
   cursor: pointer;
   font-weight: 700;
+}
+
+.back {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
 }
 </style>

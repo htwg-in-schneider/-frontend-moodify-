@@ -1,11 +1,17 @@
 <script setup>
 import { ref, onMounted, computed  } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
+import { useRouter } from 'vue-router'
 
 const { getAccessTokenSilently } = useAuth0()
 const boards = ref([])
 const search = ref('')
 const categoryFilter = ref('')
+const router = useRouter()
+
+function goBack() {
+  router.push('/admin')
+}
 
 async function getToken() {
   return await getAccessTokenSilently({
@@ -73,6 +79,11 @@ onMounted(loadBoards)
 
 <template>
   <main class="page">
+
+    <button class="back" @click="goBack">
+      ← Zurück
+    </button>
+
     <h1>🌈 Visionboards verwalten</h1>
 
   <div class="filters">
@@ -164,5 +175,24 @@ onMounted(loadBoards)
 
 .filters input {
   min-width: 320px;
+}
+
+.back {
+  position: absolute;
+  top: 115px;
+  left: 28px;
+  background: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 14px;
+  color: #2f3a56;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  z-index: 1000;
+}
+
+.back:hover {
+  transform: translateY(-2px);
 }
 </style>
