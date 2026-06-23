@@ -169,7 +169,7 @@ function goToReviews() {
 
 .login-btn {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
+  color: rgb(218, 121, 197);
   padding: 8px 14px;
   border-radius: 10px;
   border: none;

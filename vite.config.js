@@ -10,7 +10,8 @@ export default defineConfig({
     vueDevTools(),
   ],
 
-  base: '/', 
+  base: '/-frontend-moodify-/',
+
 
   server: {
     port: 5173,
@@ -22,4 +23,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+
 })

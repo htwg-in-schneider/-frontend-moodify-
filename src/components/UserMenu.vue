@@ -62,6 +62,7 @@ function handleLogout() {
   border: 2px solid #fff;
   cursor: pointer;
   transition: 0.2s;
+
 }
 
 .avatar:hover {
