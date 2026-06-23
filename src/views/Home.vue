@@ -1,21 +1,24 @@
 <script setup>
-import { useRouter } from 'vue-router'
 import Button from '../components/Button.vue'
 import ReviewCard from '../components/ReviewCard.vue'
 import { ref } from 'vue'
 import { reviews as initialReviews } from '../data.js'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 const reviews = ref(initialReviews)
-const router = useRouter()
+
+// Auth0
+const { loginWithRedirect } = useAuth0()
 
 function goToLogin() {
-  router.push('/login')
+  loginWithRedirect()
 }
 
 function openMail() {
   window.location.href = 'mailto:deine@mail.com'
 }
 
+// Wheel / Challenges
 const result = ref(null)
 const spinning = ref(false)
 const rotation = ref(0)
