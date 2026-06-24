@@ -54,19 +54,17 @@ function handleFilterChange(data) {
 
 
 async function loadChallenges() {
+  const url = `${import.meta.env.VITE_API_BASE_URL}/api/challenge`
 
-  let url = `${import.meta.env.VITE_API_BASE_URL}/api/challenge`
-  const params = new URLSearchParams()
-
-  if (filter.value.search) params.append('title', filter.value.search)
-  if (filter.value.category) params.append('category', filter.value.category)
-  if (filter.value.difficulty) params.append('difficulty', filter.value.difficulty)
-
-  if ([...params].length > 0) {
-    url += `?${params.toString()}`
-  }
+  console.log('CHALLENGE URL:', url)
 
   const res = await fetch(url)
+
+  if (!res.ok) {
+    console.error('LOAD CHALLENGES ERROR:', res.status, await res.text())
+    return
+  }
+
   challenges.value = await res.json()
 }
 
