@@ -57,7 +57,7 @@ async function saveProfile() {
       }
     })
 
-    const res = await fetch("http://localhost:8081/api/profile", {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/profile`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
