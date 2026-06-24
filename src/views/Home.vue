@@ -82,7 +82,7 @@ function spinWheel() {
 
     <div class="hero-image">
       <div class="image-glass">
-        <img src="../assets/image 122.png" alt="Moodify Hero" />
+        <img src="https://opendoodles.s3-us-west-1.amazonaws.com/reading-side.png" alt="Moodify Hero" />
       </div>
     </div>
 
@@ -93,7 +93,7 @@ function spinWheel() {
       <h2 class="frame2-title">Finde heraus wie du dich fühlst</h2>
 
       <div class="display">
-        <img src="../assets/image 119.png" alt="Gefühle teilen" class="frame2-image">
+        <img src="https://opendoodles.s3-us-west-1.amazonaws.com/Doggie.png" alt="Gefühle teilen" class="frame2-image">
 
         <div class="frame2-box2">
           <h2 class="box2-title">Teile deine Gefühle</h2>
@@ -187,7 +187,7 @@ function spinWheel() {
     <div class="vision-left">
       <div class="vision-image-wrap">
 
-        <img src="../assets/visionboardh.png" class="vs" alt="Vision Frame">
+        <img src="https://opendoodles.s3-us-west-1.amazonaws.com/clumsy.png" class="vs" alt="Vision Frame">
       </div>
     </div>
 
@@ -228,7 +228,7 @@ function spinWheel() {
         </div>
 
         <img
-          src="../assets/takebreak.png" alt="Affirmation"  class="affirmation-image" >
+          src="https://opendoodles.s3-us-west-1.amazonaws.com/loving.png" alt="Affirmation"  class="affirmation-image" >
       </div>
     </section>
 
@@ -305,6 +305,7 @@ function spinWheel() {
 .hero-image {
   display: flex;
   justify-content: center;
+
  
 }
 
