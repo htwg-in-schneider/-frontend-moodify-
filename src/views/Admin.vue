@@ -41,16 +41,14 @@ async function loadProfile() {
   }
 }
 
-/* NAVIGATION */
 function go(path) {
   router.push(path)
 }
 
-/* LOGOUT */
 function logout() {
   auth0.logout({
     logoutParams: {
-      returnTo: window.location.origin
+      returnTo: window.location.origin + import.meta.env.BASE_URL
     }
   })
 }
