@@ -11,8 +11,10 @@ const router = useRouter()
 const isOpen = ref(false)
 const showFeatures = ref(false)
 
-function handleLogin() {
-  auth0.loginWithRedirect()
+const { loginWithRedirect } = useAuth0()
+
+const login = () => {
+  loginWithRedirect()
 }
 
 const isAuthenticated = computed(() => auth0.isAuthenticated.value)
@@ -96,7 +98,7 @@ function goToReviews() {
         </li>
 
         <li v-if="!isAuthenticated">
-          <button class="login-btn" @click="handleLogin">Login</button>
+          <button class="login-btn" @click="login">Login</button>
         </li>
 
       </ul>

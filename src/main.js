@@ -14,15 +14,14 @@ app.use(createPinia())
 app.use(router)
 
 
+
+
 app.use(
   createAuth0({
-    domain: "dev-5l3w1yvav5vmutet.us.auth0.com",
-    clientId: "f517AmsI8R90cmdb0614ixEo3Z1Wj2eO",
+    domain: import.meta.env.VITE_AUTH0_DOMAIN,
+    clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
     authorizationParams: {
-authorizationParams: {
-  redirect_uri: window.location.origin + import.meta.env.BASE_URL,
-  audience: import.meta.env.VITE_AUTH0_AUDIENCE
-}
+      redirect_uri: window.location.origin
     }
   })
 )
