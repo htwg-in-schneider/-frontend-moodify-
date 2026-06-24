@@ -83,6 +83,7 @@ onMounted(() => {
       <RouterLink to="/challenges">Challenges</RouterLink>
       <RouterLink to="/moodquiz">Mood Quiz</RouterLink>
       <RouterLink to="/affirmations">Affirmations</RouterLink>
+       <RouterLink to="/moodtracker">Mood Tracker</RouterLink>
     </div>
 
     <button class="logout" @click="handleLogout">

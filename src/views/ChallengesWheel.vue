@@ -238,16 +238,16 @@ onMounted(async () => {
     </div>
 
    
-    <div v-if="showAcceptPopup" class="popup-overlay">
-      <div class="popup">
-        <h2>🔥 Challenge angenommen</h2>
-        <p>
-          Fokussiere dich jetzt vollständig auf deine Aufgabe.<br><br>
-          Kein Multitasking. Kein Scrollen.<br>
-          Nur Fokus. Nur Umsetzung.
-        </p>
-      </div>
-    </div>
+    <div v-if="showAcceptPopup" class="popup-overlay" @click.self="showAcceptPopup = false">
+  <div class="popup">
+    <h2>🔥 Challenge angenommen</h2>
+    <p>
+      Fokussiere dich jetzt vollständig auf deine Aufgabe.<br><br>
+      Kein Multitasking. Kein Scrollen.<br>
+      Nur Fokus. Nur Umsetzung.
+    </p>
+  </div>
+</div>
 
   </main>
 </template>

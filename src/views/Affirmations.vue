@@ -108,4 +108,5 @@ onMounted(loadAffirmations)
   transform: translateY(-2px);
 }
 
+
 </style>

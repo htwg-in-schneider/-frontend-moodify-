@@ -9,7 +9,9 @@
         <RouterLink to="/datenschutz">Datenschutz</RouterLink>
       </div>
 
-      <p class="small">© {{ new Date().getFullYear() }} Moodify. All rights reserved.</p>
+      <p class="small">
+        © {{ new Date().getFullYear() }} Moodify. All rights reserved.
+      </p>
     </div>
   </footer>
 </template>
@@ -20,11 +22,11 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 .footer {
-   background: rgba(244, 206, 232, 0.75);
+  background: rgba(244, 206, 232, 0.75);
   color: white;
   text-align: center;
-  padding: 60px 20px; 
-  margin-top: 20px;   
+  padding: 60px 20px;
+  margin-top: auto;
 }
 
 .footer-content {

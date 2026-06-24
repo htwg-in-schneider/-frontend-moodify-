@@ -12,8 +12,6 @@ const router = useRouter()
 const role = ref(null)
 
 async function fetchRole() {
-  console.log("fetchRole CALLED")
-
   try {
     const token = await getAccessTokenSilently({
       authorizationParams: {
@@ -21,8 +19,6 @@ async function fetchRole() {
         scope: "openid profile email"
       }
     })
-
-    console.log("ACCESS TOKEN:", token)
 
     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/profile`, {
       headers: {
@@ -73,10 +69,30 @@ watch(isAuthenticated, async (loggedIn) => {
 <template>
   <div class="app">
     <Navbar />
+
     <main class="content">
       <router-view />
     </main>
+
     <Footer />
   </div>
 </template>
 
+<style>
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+}
+</style>
