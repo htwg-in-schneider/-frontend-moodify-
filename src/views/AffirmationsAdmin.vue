@@ -18,7 +18,11 @@ function goBack() {
 
 async function loadAffirmations() {
   try {
-    const token = await getAccessTokenSilently()
+    const token = await getAccessTokenSilently({
+  authorizationParams: {
+    audience: import.meta.env.VITE_AUTH0_AUDIENCE
+    }
+  })
 
     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/affirmations`, {
       headers: {
@@ -41,7 +45,11 @@ async function loadAffirmations() {
 async function addAffirmation() {
   if (!newText.value.trim()) return
 
-  const token = await getAccessTokenSilently()
+  const token = await getAccessTokenSilently({
+  authorizationParams: {
+    audience: import.meta.env.VITE_AUTH0_AUDIENCE
+    }
+  })
 
   await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/affirmations`, {
     method: 'POST',
@@ -58,7 +66,11 @@ async function addAffirmation() {
 
 
 async function deleteAffirmation(id) {
-  const token = await getAccessTokenSilently()
+    const token = await getAccessTokenSilently({
+  authorizationParams: {
+    audience: import.meta.env.VITE_AUTH0_AUDIENCE
+    }
+  })
 
   await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/affirmations/${id}`, {
     method: 'DELETE',
@@ -78,7 +90,11 @@ function startEdit(a) {
 
 
 async function saveEdit(id) {
-  const token = await getAccessTokenSilently()
+    const token = await getAccessTokenSilently({
+  authorizationParams: {
+    audience: import.meta.env.VITE_AUTH0_AUDIENCE
+    }
+  })
 
   await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/affirmations/${id}`, {
     method: 'PUT',
