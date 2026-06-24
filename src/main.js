@@ -14,14 +14,16 @@ app.use(createPinia())
 app.use(router)
 
 
-
+const redirectUri = import.meta.env.DEV
+  ? 'http://localhost:5173'
+  : 'https://htwg-in-schneider.github.io/-frontend-moodify-/'
 
 app.use(
   createAuth0({
     domain: import.meta.env.VITE_AUTH0_DOMAIN,
     clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
     authorizationParams: {
-      redirect_uri: window.location.origin
+      redirect_uri: redirectUri
     }
   })
 )
