@@ -113,7 +113,7 @@ function spinWheel() {
 
     <section class="frame3-box">
       <div class="ohne-bild">
-        <h2 class="frame3-title">Track it and have a reflection of it</h2>
+        <h2 class="frame3-title">Tracke deine Stimmung</h2>
 
         <p class="frame3-text">
           Basierend auf deinen Antworten erstellen wir deinen persönlichen Moodtracker.
