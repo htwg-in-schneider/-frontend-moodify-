@@ -127,7 +127,7 @@ function spinWheel() {
       </div>
 
       <img
-        src="../assets/image 64 (1).png"
+        src="../assets/imagep.png"
         alt="Moodtracker auf dem Handy"
         class="frame3-image"
       >

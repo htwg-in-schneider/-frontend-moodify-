@@ -19,7 +19,6 @@ function goBack() {
   router.push('/admin')
 }
 
-
 const filteredUsers = computed(() => {
   const s = search.value.toLowerCase()
 
