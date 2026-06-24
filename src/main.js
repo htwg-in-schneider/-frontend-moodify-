@@ -15,7 +15,7 @@ app.use(router)
 
 
 const redirectUri = import.meta.env.DEV
-  ? 'http://localhost:5173'
+  ? window.location.origin
   : 'https://htwg-in-schneider.github.io/-frontend-moodify-/'
 
 app.use(
