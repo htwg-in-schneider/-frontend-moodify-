@@ -26,7 +26,7 @@ const resUser = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user-chall
 })
 
 
-const resAll = await fetch('http://localhost:8081/api/challenge', {
+const resAll = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/challenge`, {
   headers: {
     Authorization: `Bearer ${token}`
   }

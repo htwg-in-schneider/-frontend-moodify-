@@ -122,7 +122,7 @@ async function loadLatestMood() {
       }
     })
 
-    const res = await fetch('http://localhost:8081/api/mood/latest', {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api//mood/latest`, {
       headers: {
         Authorization: `Bearer ${token}`
       }

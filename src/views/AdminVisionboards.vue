@@ -62,7 +62,7 @@ async function loadBoards() {
 async function deleteBoard(id) {
   const token = await getToken()
 
-  const res = await fetch(`http://localhost:8081/api/visionboard/${id}`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/visionboard/${id}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`

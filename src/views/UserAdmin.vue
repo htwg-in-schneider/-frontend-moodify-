@@ -46,7 +46,7 @@ async function loadUsers() {
       }
     })
 
-    const res = await fetch('http://localhost:8081/api/users', {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -70,7 +70,7 @@ async function updateUser(user) {
       }
     })
 
-    const res = await fetch(`http://localhost:8081/api/users/${user.id}`, {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/users/${user.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

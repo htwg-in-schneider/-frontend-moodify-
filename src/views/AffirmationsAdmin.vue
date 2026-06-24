@@ -43,7 +43,7 @@ async function addAffirmation() {
 
   const token = await getAccessTokenSilently()
 
-  await fetch('http://localhost:8081/api/affirmations', {
+  await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/affirmations`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ async function addAffirmation() {
 async function deleteAffirmation(id) {
   const token = await getAccessTokenSilently()
 
-  await fetch(`http://localhost:8081/api/affirmations/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/affirmations/${id}`, {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${token}`
@@ -80,7 +80,7 @@ function startEdit(a) {
 async function saveEdit(id) {
   const token = await getAccessTokenSilently()
 
-  await fetch(`http://localhost:8081/api/affirmations/${id}`, {
+  await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/affirmations/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

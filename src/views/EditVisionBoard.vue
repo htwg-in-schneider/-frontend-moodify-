@@ -128,7 +128,7 @@ async function updateBoard() {
   }))
 
   try {
-    const res = await fetch(`http://localhost:8081/api/visionboard/${id}`, {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/visionboard/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

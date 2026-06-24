@@ -24,7 +24,7 @@ async function fetchRole() {
 
     console.log("ACCESS TOKEN:", token)
 
-    const res = await fetch("http://localhost:8081/api/profile", {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/profile`, {
       headers: {
         Authorization: `Bearer ${token}`
       }

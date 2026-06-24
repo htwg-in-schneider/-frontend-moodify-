@@ -14,6 +14,7 @@ app.use(createPinia())
 app.use(router)
 
 
+
 const redirectUri = import.meta.env.DEV
   ? window.location.origin
   : 'https://htwg-in-schneider.github.io/-frontend-moodify-/'

@@ -40,8 +40,6 @@ import AdminVisionboards from '@/views/AdminVisionboards.vue'
 import Contact from '@/views/Contact.vue'
 
 
-
-
 function adminGuard(to, from, next) {
   const auth = useAuth0()
 
