@@ -37,7 +37,6 @@ import EditVisionBoard from '@/views/EditVisionBoard.vue'
 import VisionDetail from '@/views/VisionDetail.vue'
 import AdminVisionboards from '@/views/AdminVisionboards.vue'
 
-import Contact from '@/views/Contact.vue'
 
 
 function adminGuard(to, from, next) {
@@ -105,8 +104,6 @@ const routes = [
   { path: '/challenges/:id', name: 'challenge-detail', component: () => import('@/views/ChallengeDetail.vue')},
 
   { path: '/admin/visionboards', component: AdminVisionboards, beforeEnter: adminGuard},
-
-  { path: '/contact', name: 'contact', component: Contact},
 
 ]
 
