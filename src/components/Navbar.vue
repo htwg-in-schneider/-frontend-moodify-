@@ -17,6 +17,7 @@ const login = () => {
   loginWithRedirect()
 }
 
+
 const isAuthenticated = computed(() => auth0.isAuthenticated.value)
 
 const roles = computed(() => {
