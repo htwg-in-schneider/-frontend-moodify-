@@ -51,6 +51,12 @@ function goToReviews() {
     }, 50)
   })
 }
+
+function demoLogin() {
+  alert(
+    "Demo Zugang:\n\nE-Mail: kardelenkantar49@gmail.com\nPasswort:Karege21"
+  )
+}
 </script>
 
 <template>
@@ -88,6 +94,8 @@ function goToReviews() {
         </li>
 
         <li><a @click="goToReviews">Reviews</a></li>
+
+        <li><a @click="demoLogin">🚀 Demo ausprobieren</a></li>
 
         <li v-if="isAuthenticated && !isAdmin">
           <button class="login-btn" @click="go('/dashboard')">Dashboard</button>
